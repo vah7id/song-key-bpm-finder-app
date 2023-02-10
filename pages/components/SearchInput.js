@@ -20,7 +20,6 @@ import SpeedIcon from '@mui/icons-material/Speed';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 
 
-
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -363,11 +362,11 @@ export default function SearchInput() {
             </Divider>
             <Card sx={{ maxWidth: '100%', mt: 8, padding: 4 }}>
               <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                Find The Song Key & Tempo Via File Upload With Our Online Music Key, Tempo Analyzer.
+                <Typography sx={{fontSize: '22px'}} gutterBottom variant="h5" component="div">
+                Find The Song Key & Tempo Via File Upload With Our Online Song Key, Tempo Analyser.
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                Easily find the key of a song by extracting it from a MP3 (mp3 to key) or any other audio file thanks our Online Song Key Finder. Drop your audio file(s) in the song analyzer below and instantly get the Key in which a song was composed by magic. Detected Song Keys are 70-95% accurate depending on the selected option! its FREE, Enjoy :)
+                <Typography sx={{fontSize: '12px'}} variant="subtitle2" color="text.secondary">
+Drop your audio file(s) in the song analyzer below and instantly get the Key in which a song was composed by magic. Detected Song Keys are 70-95% accurate depending on the selected option! its FREE, Enjoy :)
                 </Typography>
                             
                 

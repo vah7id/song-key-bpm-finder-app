@@ -1,10 +1,8 @@
-# SCFetch
+# SONG-KEY-BPM FINDER (songkeyfinder.app)
       
 
-Download High Quality Mp3 (128 & 320 kbps) and WAV (raw) format from Soundcloud Using SCFetch &
-easily trim your audio by crop tool for sampling purposes! Enjoy :)
+Find your track BPM & song key by just typing the song title or<br />you can also upload your track to analyze, if you could not find it in our database!
 
-![Screenshot](https://i.imgur.com/VJ9Rqm0.png)
 
 
 ## Getting Started
@@ -12,7 +10,7 @@ easily trim your audio by crop tool for sampling purposes! Enjoy :)
 Clone project and enter in folder:
 
 ```
-cd scfetch
+cd songkeyfinder
 ```
 
 Run npm install:
@@ -35,13 +33,8 @@ npm run dev
 
 ## ClientID
 
-Replace your soundcloud CLIENT_ID in /api/download.js
+Replace your spotify API CLIENT_ID 
 
-## Upcoming 
-
--  Audio Mixer to adjust more properties for sampling purposes
--  Vocal Remover tool
--  Store Files Provider
 
 ## License
 
