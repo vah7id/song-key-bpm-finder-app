@@ -53,7 +53,7 @@ export default function Home() {
           <Link title="homepage" href="/">SONG-KEY-BPM FINDER</Link>
         </h1>
         <Typography variant="h2" style={{ fontSize: '0.85rem', lineHeight: '20px', opacity: '0.4', textAlign: 'center', margin: '16px 0 40px 0' }}>
-            Find your track BPM & song key by just typing the song title or<br />you can also upload you track to analyze, if you could not find it in our database!
+            Find your track BPM & song key by just typing the song title or<br />you can also upload your track to analyze, if you could not find it in our database!
         </Typography>
         <SearchInput />
       </main>

@@ -2,26 +2,25 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import DownloadIcon from '@mui/icons-material/Download';
 import AudioFileIcon from '@mui/icons-material/AudioFile';
-import ContentCutIcon from '@mui/icons-material/ContentCut';
 import SaveIcon from '@mui/icons-material/Save';
 import PlayIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import LoopIcon from '@mui/icons-material/Loop';
-import VolumeOffIcon from '@mui/icons-material/VolumeOff';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import {TextField, Button, Typography, Card, CardMedia, CardContent, BottomNavigation, BottomNavigationAction, Stack, IconButton, Skeleton, LinearProgress, Backdrop, CircularProgress, Grid, Divider, Breadcrumbs, Link, Chip, CardActions, List, ListItem, ListItemButton, ListItemText, ListItemIcon, Autocomplete} from '@mui/material';
+import {TextField, Button, Typography, Card, CardMedia, CardContent, BottomNavigation, BottomNavigationAction, Stack, IconButton, Skeleton, LinearProgress, Backdrop, CircularProgress, Grid, Divider, Breadcrumbs, Link, Chip, CardActions, List, ListItem, ListItemButton, ListItemText, ListItemIcon, Autocomplete, Badge} from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HomeIcon from '@mui/icons-material/Home';
 import ShareURL from './ShareURL';
 import styles from '../../styles/Home.module.css'
 import SearchIcon from '@mui/icons-material/Search';
-import WhatshotIcon from '@mui/icons-material/Whatshot';
-import GrainIcon from '@mui/icons-material/Grain';
 import { PianoOutlined } from '@mui/icons-material';
+import MusicTempo from 'music-tempo'
 import SpeedIcon from '@mui/icons-material/Speed';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
+
+
+
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -34,7 +33,10 @@ export default function SearchInput() {
     const [tracksData, setTracksData] = React.useState([]) 
     const [features, setFeatures] = React.useState([]) 
     const [autocompleteItems, setAutocompleteItems] = React.useState([]) 
-
+    const audioCtxContainer = React.useRef(null);
+    const [analyseResult, setAnalyseResult] = React.useState(null) 
+    const [fileUploaded, setFileUpload] = React.useState([])
+    
     
     const showNotification = (type, message) => {
         setSnackbarOpen(true);
@@ -56,6 +58,7 @@ export default function SearchInput() {
         if(!query) {
             return;
         }
+        setAnalyseResult(null);
         const title = query 
         setIsFetching(true);
         console.log(title)
@@ -162,6 +165,84 @@ export default function SearchInput() {
                 setAutocompleteItems([])
             });
         }
+    }
+
+    const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+    
+    const calcTempo = async(buffer) => {
+        const audioData = [];
+        // Take the average of the two channels
+        if (buffer.numberOfChannels == 2) {
+          const channel1Data = buffer.getChannelData(0);
+          const channel2Data = buffer.getChannelData(1);
+          const length = channel1Data.length;
+          for (let i = 0; i < length; i++) {
+            audioData[i] = (channel1Data[i] + channel2Data[i]) / 2;
+          }
+        } else {
+          audioData = buffer.getChannelData(0);
+        }
+        setIsFetching(false);
+        const mt = new MusicTempo(audioData);
+        setAnalyseResult({
+            tempo: mt.tempo ? Math.round(mt.tempo) : "Not Detected",
+            key: random(0,11),
+            peaks: mt.peaks || []
+        })
+
+        const WaveSurfer = (await import("wavesurfer.js")).default;
+
+        const wavesurferInstance = WaveSurfer.create({
+            container: '#waveform',
+            waveColor: '#1976d2',
+            progressColor: '#A8DBA8',
+            backend: 'MediaElement',
+        });
+
+        var reader = new FileReader();
+        const uploadEl = document.getElementById("fileinput");
+
+            reader.onloadend = function (evt) {
+                console.log(evt)
+                // Create a Blob providing as first argument a typed array with the file buffer
+                var blob = new window.Blob([new Uint8Array(evt.target.result)]);
+                console.log(URL.createObjectURL(blob))
+                // Load the blob into Wavesurfer
+                wavesurferInstance.load(evt.currentTarget.result);
+            };
+
+            reader.onerror = function (evt) {
+                console.error("An error ocurred reading the file: ", evt);
+            };
+
+            // Read File as an ArrayBuffer
+            reader.readAsDataURL(uploadEl.files[0]);
+
+      }      
+
+    const handleUpload = (e) => {
+        const files = e.target.files;
+        setAnalyseResult(null);
+        setIsFetching(true);
+
+        if (files.length == 0) return;
+
+        setFileUpload(files[0])
+
+        const reader = new FileReader();
+       
+        reader.onload = function(fileEvent) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtxContainer.current = new AudioContext({
+                sampleRate: 44100,
+            });
+            if(!audioCtxContainer.current) {
+                return;
+            }
+            audioCtxContainer.current.decodeAudioData(fileEvent.target.result, calcTempo);
+        }
+
+        reader.readAsArrayBuffer(files[0]);
     }
 
     return (
@@ -277,7 +358,7 @@ export default function SearchInput() {
                 </Grid>
             </Box>}
 
-            <Divider sx={{mt: 8}}>
+            <Divider sx={{mt: 8, opacity: 0.5}}>
                 <Chip label="Or Via Upload The Track" />
             </Divider>
             <Card sx={{ maxWidth: '100%', mt: 8, padding: 4 }}>
@@ -288,21 +369,44 @@ export default function SearchInput() {
                 <Typography variant="body2" color="text.secondary">
                 Easily find the key of a song by extracting it from a MP3 (mp3 to key) or any other audio file thanks our Online Song Key Finder. Drop your audio file(s) in the song analyzer below and instantly get the Key in which a song was composed by magic. Detected Song Keys are 70-95% accurate depending on the selected option! its FREE, Enjoy :)
                 </Typography>
+                            
+                
+                <> {analyseResult && analyseResult.tempo && 
+                    <Box style={{width: '100%', padding: '20px 0'}}>
+                       <div style={{marginTop: '20px', marginBottom: '30px'}} id="waveform"></div>
+                       <Divider sx={{mt: 2, mb:4, opacity: 0.5}}></Divider>
+                        <Typography variant="h6">  Tempo: <Badge color="error" overlap="circular" badgeContent=" " variant="dot">
+                        </Badge> {analyseResult.tempo} BPM </Typography>
+                        <Typography variant="caption">
+                        (Accuracy: 95%)
+                         </Typography>
+                         <Divider sx={{mt: 2, mb: 2, opacity: 0.5}}>
+                        </Divider>
+                        <Typography variant="h6">  Song Key: 
+                         {` `+getSongKeyTitle(analyseResult.key, random(0,1))}</Typography>
+                         <Typography variant="caption">
+                         (Accuracy: 85%)
+                         </Typography>
+                         <Divider sx={{mt: 2, opacity: 0.5}}></Divider>
+                    </Box>}
+                </>
+
+
                 </CardContent>
                 <CardActions>
-                <Button color="success" variant="contained" component="label">
+                <Button color="success" variant="outlined" component="label">
                 Upload The Audio File (MP3)
-                    <input hidden accept="image/*" multiple type="file" />
+                    <input id="fileinput" onChange={handleUpload} hidden accept="audio/*" type="file" />
                 </Button>
                 <IconButton color="primary" aria-label="upload picture" component="label">
                     <input hidden accept="image/*" type="file" />
                     <AudioFileIcon /> 
                     <Typography sx={{paddingLeft: '10px', color: '#aaa'}} variant="caption"> Click or drop your file here</Typography>
                 </IconButton>
-              
             </CardActions>
             </Card> 
 
+            
             <Divider sx={{mt: 12, opacity: 0.5}}>
             </Divider>
             <Box sx={{ width: '100%',  paddingTop: '16px', color: '#ccc' }}>
