@@ -272,7 +272,7 @@ export default function SearchInput() {
                         <Button 
                             onClick={() => handleChange(url)} 
                             size='large'  
-                            style={{ width: '95%', padding: '15px'}} 
+                            style={{ width: '90%', padding: '15px'}} 
                             variant='contained'
                             >
                                 <SearchIcon />
@@ -283,7 +283,7 @@ export default function SearchInput() {
                 
                 <Box sx={{ width: '100%', mt: '10px', opacity: '0.3', fontSize: '14px' }}>
                     <Typography variant="subtitle">
-                    For example: Ice Cube - It was a good day
+                    exp: Ice Cube - It was a good day
                     </Typography>
                 </Box>
                 {isFetching && <Box sx={{ width: '100%', mt: '15px' }}>
@@ -358,10 +358,10 @@ export default function SearchInput() {
                 </Grid>
             </Box>}
 
-            <Divider sx={{mt: 8, opacity: 0.5}}>
+            <Divider sx={{mt: 7, opacity: 0.5}}>
                 <Chip label="Or Via Upload The Track" />
             </Divider>
-            <Card sx={{ maxWidth: '100%', mt: 8, padding: 4 }}>
+            <Card sx={{ maxWidth: '100%', mt: 8, padding: 2 }}>
               <CardContent>
                 <Typography sx={{fontSize: '22px'}} gutterBottom variant="h5" component="div">
                 Find The Song Key & Tempo Via File Upload With Our Online Song Key, Tempo Analyser Tool Using AI.
