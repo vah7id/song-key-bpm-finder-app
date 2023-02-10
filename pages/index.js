@@ -21,7 +21,7 @@ export default function Home() {
     <div lang="en" className={styles.container}>
       <Head> 
         <title>Song key & Tempo BPM Finder Tool</title>
-        <meta name="description" content="Song key & Tempo BPM Finder Tool" />
+        <meta name="description" content="Song key & Tempo BPM Finder Tool, Find the bpm and key of every song" />
         <link rel="icon" href="/favicon3.png" />
         <link rel="alternate" href="http://songkeyfinder.app" hrefLang="en"/>
         <meta name="keywords" content="Song key & Tempo BPM Finder Tool, song key finder, bpm tempo finder" />

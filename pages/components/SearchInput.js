@@ -18,7 +18,7 @@ import { PianoOutlined } from '@mui/icons-material';
 import MusicTempo from 'music-tempo'
 import SpeedIcon from '@mui/icons-material/Speed';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
-
+import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -394,14 +394,14 @@ Drop your audio file(s) in the song analyzer below and instantly get the Key in 
 
                 </CardContent>
                 <CardActions>
-                <Button startIcon={<AudioFileIcon /> }  color="success" variant="outlined" component="label">
-                     Upload Your Audio File (MP3)
+                <Button startIcon={<DriveFolderUploadIcon /> }  color="success" variant="outlined" component="label">
+                     Upload Your Track
                     <input id="fileinput" onChange={handleUpload} hidden accept="audio/mpeg" type="file" />
                 </Button>
                 <IconButton className={styles.uploadBtn} color="primary" aria-label="upload picture" component="label">
                     <input hidden accept="image/*" type="file" />
                     <AudioFileIcon /> 
-                    <Typography sx={{paddingLeft: '10px', color: '#aaa'}} variant="caption"> Click or drop your file here</Typography>
+                    <Typography sx={{paddingLeft: '10px', color: '#aaa'}} variant="caption"> Click or drop your (MP3) file here</Typography>
                 </IconButton>
             </CardActions>
             </Card> 
