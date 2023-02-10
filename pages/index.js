@@ -9,7 +9,7 @@ import { PianoOutlined } from '@mui/icons-material';
 
 export default function Home() {
   useEffect(() => {
-    //install('G-CS3ZP0C44M'); 
+    install('G-LDDJ32MXZ1'); 
     fetch('/api/authSpotify').then(resp => resp.json()).then(resp => {
       console.log('authorized with spotify api!')
     }).catch(err => {
