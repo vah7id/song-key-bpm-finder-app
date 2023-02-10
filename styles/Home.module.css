@@ -203,6 +203,9 @@
   .cardImage {
     display: none !important
   }
+  .uploadBtn {
+    display: none !important;
+  }
   .artwork {
     display: none !important;
   }

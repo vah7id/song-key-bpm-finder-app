@@ -248,10 +248,11 @@ export default function SearchInput() {
         <Box sx={{maxWidth: '768px'}}>
              <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2}>
-                    <Grid item xs={9}>
+                    <Grid item xs={10}>
                     <Autocomplete
                         disablePortal
                         id="combo-box-demo"
+                        freeSolo
                         onKeyUp={handleAutoComplete}
                         onKeyDown={(e) => {
                             if(e.keyCode == 13){
@@ -267,14 +268,14 @@ export default function SearchInput() {
                         />
                     
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={2}>
                         <Button 
                             onClick={() => handleChange(url)} 
                             size='large'  
                             style={{ width: '100%', padding: '15px'}} 
                             variant='contained'
                             >
-                                SEARCH
+                                <SearchIcon />
                         </Button>
                     </Grid>
                 </Grid>
@@ -363,7 +364,7 @@ export default function SearchInput() {
             <Card sx={{ maxWidth: '100%', mt: 8, padding: 4 }}>
               <CardContent>
                 <Typography sx={{fontSize: '22px'}} gutterBottom variant="h5" component="div">
-                Find The Song Key & Tempo Via File Upload With Our Online Song Key, Tempo Analyser.
+                Find The Song Key & Tempo Via File Upload With Our Online Song Key, Tempo Analyser Tool Using AI.
                 </Typography>
                 <Typography sx={{fontSize: '12px'}} variant="subtitle2" color="text.secondary">
 Drop your audio file(s) in the song analyzer below and instantly get the Key in which a song was composed by magic. Detected Song Keys are 70-95% accurate depending on the selected option! its FREE, Enjoy :)
@@ -393,11 +394,11 @@ Drop your audio file(s) in the song analyzer below and instantly get the Key in 
 
                 </CardContent>
                 <CardActions>
-                <Button color="success" variant="outlined" component="label">
-                Upload The Audio File (MP3)
-                    <input id="fileinput" onChange={handleUpload} hidden accept="audio/*" type="file" />
+                <Button  color="success" variant="outlined" component="label">
+                     Upload The Audio File (MP3)
+                    <input id="fileinput" onChange={handleUpload} hidden accept="audio/mpeg" type="file" />
                 </Button>
-                <IconButton color="primary" aria-label="upload picture" component="label">
+                <IconButton className={styles.uploadBtn} color="primary" aria-label="upload picture" component="label">
                     <input hidden accept="image/*" type="file" />
                     <AudioFileIcon /> 
                     <Typography sx={{paddingLeft: '10px', color: '#aaa'}} variant="caption"> Click or drop your file here</Typography>
