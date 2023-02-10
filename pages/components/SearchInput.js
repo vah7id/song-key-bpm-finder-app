@@ -11,7 +11,7 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import {TextField, Button, Typography, Card, CardMedia, CardContent, BottomNavigation, BottomNavigationAction, Stack, IconButton, Skeleton, LinearProgress, Backdrop, CircularProgress, Grid, Divider, Breadcrumbs, Link, Chip, CardActions, List, ListItem, ListItemButton, ListItemText, ListItemIcon} from '@mui/material';
+import {TextField, Button, Typography, Card, CardMedia, CardContent, BottomNavigation, BottomNavigationAction, Stack, IconButton, Skeleton, LinearProgress, Backdrop, CircularProgress, Grid, Divider, Breadcrumbs, Link, Chip, CardActions, List, ListItem, ListItemButton, ListItemText, ListItemIcon, Autocomplete} from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HomeIcon from '@mui/icons-material/Home';
 import ShareURL from './ShareURL';
@@ -33,7 +33,9 @@ export default function SearchInput() {
     const [notification, setNotification] = React.useState({ type: null, message: ""});
     const [tracksData, setTracksData] = React.useState([]) 
     const [features, setFeatures] = React.useState([]) 
+    const [autocompleteItems, setAutocompleteItems] = React.useState([]) 
 
+    
     const showNotification = (type, message) => {
         setSnackbarOpen(true);
         setNotification({
@@ -50,28 +52,18 @@ export default function SearchInput() {
       setSnackbarOpen(false);
     };
 
-    const findSongKeyBpm = (query) => {
-        fetch('/api/findBpm?title='+query).then(resp => resp.json()).then(resp => {
-            console.log(resp);
-            setTrackDetails({
-                tempo: Math.round(resp.tempo),
-                songKey: resp.songKey,
-                duration: resp.duration,
-                mode: resp.mode
-            });
-        });
-    }
-   
-
-
     const handleChange = (query) => {
+        if(!query) {
+            return;
+        }
+        const title = query.label 
         setIsFetching(true);
-
-        if(query === "") {
+        console.log(title)
+        if(title === "") {
             showNotification('error', 'Oops!! Please type your song title first :)')
         }
 
-        fetch(`/api/findBpm?title=${query || ""}`).then(response => response.json()).then(response => {
+        fetch(`/api/findBpm?title=${title || ""}`).then(response => response.json()).then(response => {
             setIsFetching(false);
             if(response.err) {
                 showNotification('error', response.err.message);
@@ -152,8 +144,24 @@ export default function SearchInput() {
         }
     }
 
-    const getArtistTitle = (track) => {
-        return track.artists[0].name;
+
+    const handleAutoComplete = (e) => {
+        setURL(e.target.value)
+        if(e.target.value.length > 3) {
+            fetch(`/api/search?title=${e.target.value || ""}`).then(response => response.json()).then(response => {
+                if(response.err) {
+                    setAutocompleteItems([])
+                } else {
+                    let options = []
+                    response.map((track, index) => {
+                        options[index] = { id: track.id, label: track.artists[0].name  +' - '+track.name   }
+                    })
+                    setAutocompleteItems(options)
+                }
+            }).catch(err => {
+                setAutocompleteItems([])
+            });
+        }
     }
 
     return (
@@ -161,20 +169,22 @@ export default function SearchInput() {
              <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={9}>
-                    <TextField 
-                        value={url} 
-                        onChange={(event) => setURL(event.target.value)} 
-                        id="filled-basic" 
+                    <Autocomplete
+                        disablePortal
+                        id="combo-box-demo"
+                        onKeyUp={handleAutoComplete}
                         onKeyDown={(e) => {
                             if(e.keyCode == 13){
                                 handleChange(e.target.value)
                              }
                         }}
+                        onChange={(e, value) => handleChange(value)}
                         onPaste={handlePaste}
-                        style={{width: '100%'}}
-                        label="Type a song title or artist..." 
-                        variant="filled" 
-                    />
+                        options={autocompleteItems}
+                        sx={{ width: '100%' }}
+                        renderInput={(params) => <TextField {...params} label="Type a song title or artist..." />}
+                        />
+                    
                     </Grid>
                     <Grid item xs={3}>
                         <Button 
@@ -216,10 +226,10 @@ export default function SearchInput() {
                                 <Box sx={{ width: '100%' ,display: 'flex', flexDirection: 'column' }}>
                                     <CardContent sx={{flex: '1 0 auto', paddingLeft: '24px'}}>
                                          <Box sx={{ float: 'left' ,width: '60%', padding: '12px' }}>
-                                        <Typography style={{width: '100%'}} gutterBottom variant="h4" component="div">
+                                        <Typography style={{width: '100%'}} gutterBottom variant="h5" component="div">
                                             {track.artists[0].name}
                                         </Typography>
-                                        <Typography style={{width: '100%', display: 'block', margin: '-10px 0 20px 0'}}  sx={{fontSize: '20px', paddingTop: '0'}} variant="caption" color="text.secondary">
+                                        <Typography style={{width: '100%', display: 'block', margin: '-10px 0 20px 0'}}  sx={{fontSize: '16px', paddingTop: '0'}} variant="caption" color="text.secondary">
                                             {track.name}
                                         </Typography>
                                         <Link target="_blank" href={track.external_urls.spotify}><Button color="success" variant="contained" startIcon={<PlayCircleFilledWhiteIcon />}>
@@ -277,14 +287,14 @@ export default function SearchInput() {
                     Home
                     </Link>
                     <Link
-                        title="Terms"
+                        title="Find song key via file upload"
                         rel={"noopener"}
                         underline="hover"
                         sx={{ display: 'flex', alignItems: 'center' }}
                         color="inherit"
-                        href="/terms"
+                        href="/"
                     >
-                    Terms & Conditions
+                    Find song key via file upload
                     </Link>
                    
                     <Link
@@ -294,11 +304,11 @@ export default function SearchInput() {
                         sx={{ display: 'flex', alignItems: 'center' }}
                         color="inherit"
                         target="_blank"
-                        href="https://github.com/vah7id/scfetch"
+                        href="https://github.com/vah7id/song-key-bpm-finder-app"
                     >
                     Github (V.1.1.2)
                     </Link>
-                    <a href="https://twitter.com/intent/tweet?screen_name=scfetch&ref_src=twsrc%5Etfw" style={{color: '#1d9bf0'}} data-show-count="false">Send Feedback @SCFetch</a><script async src="https://platform.twitter.com/widgets.js"></script>
+                    <a href="https://twitter.com/intent/tweet?screen_name=songkeybpmfinder-app&ref_src=twsrc%5Etfw" style={{color: '#1d9bf0'}} data-show-count="false">Send Feedback</a><script async src="https://platform.twitter.com/widgets.js"></script>
                 </Breadcrumbs>
                 </Box>
                 <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={openSnackbar} autoHideDuration={5000} onClose={handleSnackbarClose}>
