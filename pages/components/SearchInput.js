@@ -56,7 +56,7 @@ export default function SearchInput() {
         if(!query) {
             return;
         }
-        const title = query.label 
+        const title = query 
         setIsFetching(true);
         console.log(title)
         if(title === "") {
@@ -175,10 +175,11 @@ export default function SearchInput() {
                         onKeyUp={handleAutoComplete}
                         onKeyDown={(e) => {
                             if(e.keyCode == 13){
+                                console.log(e.target.value)
                                 handleChange(e.target.value)
                              }
                         }}
-                        onChange={(e, value) => handleChange(value)}
+                        onChange={(e, value) => handleChange(value.label)}
                         onPaste={handlePaste}
                         options={autocompleteItems}
                         sx={{ width: '100%' }}
@@ -209,7 +210,7 @@ export default function SearchInput() {
                 </Box>}
 
             </Box>
-            {tracksData && tracksData.length > 0 && <Box sx={{ width: '100%', mt: '25px' }}>
+            {(tracksData && tracksData.length > 0 && features && features.length > 0) && <Box sx={{ width: '100%', mt: '25px' }}>
                     <Grid  container spacing={2}>
                         {tracksData.map((track, index) => {
                             if(!features[index]) {
@@ -218,6 +219,7 @@ export default function SearchInput() {
                             return (<Grid key={track.id} item xs={12}>
                                 <Card sx={{ display: 'flex' }}>
                                 <CardMedia
+                                    className={styles.cardImage}
                                     component="img"
                                     alt={track.artists[0].name+' - '+track.name}
                                     sx={{ width: 200 }}
@@ -225,20 +227,20 @@ export default function SearchInput() {
                                 />
                                 <Box sx={{ width: '100%' ,display: 'flex', flexDirection: 'column' }}>
                                     <CardContent sx={{flex: '1 0 auto', paddingLeft: '24px'}}>
-                                         <Box sx={{ float: 'left' ,width: '60%', padding: '12px' }}>
+                                         <Box className={styles.cardObject}>
                                         <Typography style={{width: '100%'}} gutterBottom variant="h5" component="div">
                                             {track.artists[0].name}
                                         </Typography>
-                                        <Typography style={{width: '100%', display: 'block', margin: '-10px 0 20px 0'}}  sx={{fontSize: '16px', paddingTop: '0'}} variant="caption" color="text.secondary">
+                                        <Typography style={{width: '100%', display: 'block', margin: '-10px 0 30px 0'}}  sx={{fontSize: '16px', paddingTop: '0'}} variant="caption" color="text.secondary">
                                             {track.name}
                                         </Typography>
-                                        <Link target="_blank" href={track.external_urls.spotify}><Button color="success" variant="contained" startIcon={<PlayCircleFilledWhiteIcon />}>
+                                        <Link target="_blank" href={track.external_urls.spotify}><Button color="success" variant="outlined" startIcon={<PlayCircleFilledWhiteIcon />}>
                                             Listen on Spotify
                                         </Button></Link>
                                         </Box>
-                                        <Box sx={{ float: 'right' ,width: '30%', maxWidth: '300px', bgcolor: 'background.paper' }}>
+                                        <Box className={styles.cardOptions} sx={{ bgcolor: 'background.paper' }}>
                                         <nav>
-                                            <List>
+                                            <List sx={{ flex: '1 1 auto' }}>
                                             <ListItem disablePadding>
                                                 <ListItemButton>
                                                 <ListItemIcon>
@@ -275,8 +277,37 @@ export default function SearchInput() {
                 </Grid>
             </Box>}
 
-            <Box sx={{ width: '100%',  paddingTop: '25px', color: '#ccc' }}>
-                <Breadcrumbs sx={{ width: '100%', fontSize: '12px', marginTop: '250px', marginBottom: '12px', opacity: 0.5 }} aria-label="breadcrumb">
+            <Divider sx={{mt: 8}}>
+                <Chip label="Or Via Upload The Track" />
+            </Divider>
+            <Card sx={{ maxWidth: '100%', mt: 8, padding: 4 }}>
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                Find The Song Key & Tempo Via File Upload With Our Online Music Key, Tempo Analyzer.
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                Easily find the key of a song by extracting it from a MP3 (mp3 to key) or any other audio file thanks our Online Song Key Finder. Drop your audio file(s) in the song analyzer below and instantly get the Key in which a song was composed by magic. Detected Song Keys are 70-95% accurate depending on the selected option! its FREE, Enjoy :)
+                </Typography>
+                </CardContent>
+                <CardActions>
+                <Button color="success" variant="contained" component="label">
+                Upload The Audio File (MP3)
+                    <input hidden accept="image/*" multiple type="file" />
+                </Button>
+                <IconButton color="primary" aria-label="upload picture" component="label">
+                    <input hidden accept="image/*" type="file" />
+                    <AudioFileIcon /> 
+                    <Typography sx={{paddingLeft: '10px', color: '#aaa'}} variant="caption"> Click or drop your file here</Typography>
+                </IconButton>
+              
+            </CardActions>
+            </Card> 
+
+            <Divider sx={{mt: 12, opacity: 0.5}}>
+            </Divider>
+            <Box sx={{ width: '100%',  paddingTop: '16px', color: '#ccc' }}>
+                
+                <Breadcrumbs sx={{ width: '100%', fontSize: '12px', marginTop: '0px', marginBottom: '12px', opacity: 0.5 }} aria-label="breadcrumb">
                     <Link
                         title="Home"
                         underline="hover"
@@ -310,7 +341,11 @@ export default function SearchInput() {
                     </Link>
                     <a href="https://twitter.com/intent/tweet?screen_name=songkeybpmfinder-app&ref_src=twsrc%5Etfw" style={{color: '#1d9bf0'}} data-show-count="false">Send Feedback</a><script async src="https://platform.twitter.com/widgets.js"></script>
                 </Breadcrumbs>
+                
+                
                 </Box>
+
+
                 <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={openSnackbar} autoHideDuration={5000} onClose={handleSnackbarClose}>
                     <Alert onClose={handleSnackbarClose} severity={notification.type || 'error'} sx={{ width: '100%' }}>
                         {notification.message || ''}

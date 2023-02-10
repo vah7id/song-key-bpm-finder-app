@@ -56,6 +56,18 @@
 .title a:active {
   text-decoration: underline;
 }
+
+.cardOptions {
+  width: 40% !important;
+   display: flex
+}
+
+.cardObject {
+  float: left !important; 
+  width: 60% !important;
+  padding: 12px;
+}
+
 .artwork {
   max-width: 150px;
   min-width: 150px;
@@ -179,7 +191,6 @@
     width: 100%;
     flex-direction: column;
   }
-
   
 }
 
@@ -189,7 +200,16 @@
     margin-bottom: 20px !important;
     width: 100% !important;
   }
+  .cardImage {
+    display: none !important
+  }
   .artwork {
     display: none !important;
+  }
+  .cardObject {
+    width: 100% !important;
+  }
+  .cardOptions {
+    width: 100% !important;
   }
 }

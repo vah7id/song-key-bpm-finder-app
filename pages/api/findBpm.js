@@ -27,17 +27,9 @@ export default function handler(req, res) {
     spotifyApi.clientCredentialsGrant().then(
         function(data) {
             spotifyApi.setAccessToken(data.body['access_token']);
-            spotifyApi.search(req.query.title, ['track'], { limit : 10, offset : 1 }).then(function(data) {
+            spotifyApi.search(req.query.title, ['track'], { limit : 20, offset : 1 }).then(function(data) {
                 if(!data.body.tracks || data.body.tracks.items.length === 0) {
-                    res.status(200).json({ 
-                        songKey: -1,
-                        tempo: -1,
-                        duration: "",
-                        artist: "",
-                        title: "",
-                        artwork: "",
-                        spotifyLink: ""
-                    }); 
+                    res.status(200).json({data: []}); 
                 }
         
                 const tracks = data.body.tracks.items;
@@ -51,28 +43,17 @@ export default function handler(req, res) {
                             }
                         })
                     }, 500)
-                    
                 })
                 
                 
               },
               function(err) {
                 console.log(err)
-                res.status(200).json({ 
-                    songKey: -1,
-                    tempo: -1,
-                    duration: -1,
-                    mode: -1
-                });   
+                res.status(400).json({err: err, data: []}); 
              });
         },
         function(err) {
-            res.status(200).json({ 
-                songKey: -1,
-                tempo: -1,
-                duration: -1,
-                mode: -1
-            });   
+            res.status(200).json({err: err, data: []}); 
         });
    
   }

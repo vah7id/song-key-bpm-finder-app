@@ -6,6 +6,8 @@ import SearchInput from './components/SearchInput'
 import { gtag, install } from 'ga-gtag';
 import { useEffect } from 'react'
 import Image from 'next/image'
+import { PianoOutlined } from '@mui/icons-material';
+
 export default function Home() {
   useEffect(() => {
     install('G-CS3ZP0C44M'); 
@@ -47,6 +49,7 @@ export default function Home() {
       <main lang="en" className={styles.main}>
         
         <h1 className={styles.title}>
+          <PianoOutlined color="primary" sx={{fontSize: '42px', verticalAlign: 'middle', margin: '-5px 10px 0 0'}} />
           <Link title="homepage" href="/">SONG-KEY-BPM FINDER</Link>
         </h1>
         <Typography variant="h2" style={{ fontSize: '0.85rem', lineHeight: '20px', opacity: '0.4', textAlign: 'center', margin: '16px 0 40px 0' }}>
