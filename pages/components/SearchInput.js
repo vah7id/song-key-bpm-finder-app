@@ -264,7 +264,7 @@ export default function SearchInput() {
                         onPaste={handlePaste}
                         options={autocompleteItems}
                         sx={{ width: '100%' }}
-                        renderInput={(params) => <TextField {...params} label="Type a song title or artist..." />}
+                        renderInput={(params) => <TextField {...params} label="Type a song title here..." />}
                         />
                     
                     </Grid>
@@ -272,7 +272,7 @@ export default function SearchInput() {
                         <Button 
                             onClick={() => handleChange(url)} 
                             size='large'  
-                            style={{ width: '100%', padding: '15px'}} 
+                            style={{ width: '95%', padding: '15px'}} 
                             variant='contained'
                             >
                                 <SearchIcon />
@@ -394,8 +394,8 @@ Drop your audio file(s) in the song analyzer below and instantly get the Key in 
 
                 </CardContent>
                 <CardActions>
-                <Button  color="success" variant="outlined" component="label">
-                     Upload The Audio File (MP3)
+                <Button startIcon={<AudioFileIcon /> }  color="success" variant="outlined" component="label">
+                     Upload Your Audio File (MP3)
                     <input id="fileinput" onChange={handleUpload} hidden accept="audio/mpeg" type="file" />
                 </Button>
                 <IconButton className={styles.uploadBtn} color="primary" aria-label="upload picture" component="label">
