@@ -8,7 +8,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import LoopIcon from '@mui/icons-material/Loop';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import {TextField, Button, Typography, Card, CardMedia, CardContent, BottomNavigation, BottomNavigationAction, Stack, IconButton, Skeleton, LinearProgress, Backdrop, CircularProgress, Grid, Divider, Breadcrumbs, Link, Chip, CardActions, List, ListItem, ListItemButton, ListItemText, ListItemIcon, Autocomplete, Badge} from '@mui/material';
+import {TextField, Button, Typography, Card, CardMedia, CardContent, BottomNavigation, BottomNavigationAction, Stack, IconButton, Skeleton, LinearProgress, Backdrop, CircularProgress, Grid, Divider, Breadcrumbs, Link, Chip, CardActions, List, ListItem, ListItemButton, ListItemText, ListItemIcon, Autocomplete, Badge, FormControl, FormLabel, FormControlLabel, Switch, FormGroup} from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HomeIcon from '@mui/icons-material/Home';
 import ShareURL from './ShareURL';
@@ -244,6 +244,19 @@ export default function SearchInput() {
         reader.readAsArrayBuffer(files[0]);
     }
 
+    const handleSort = () => {
+        const tracks = tracksData;
+        let tmp = tracks;
+        tracks.map((tmpTrack, idx) => {
+            tmp[idx] = {...tmpTrack, key: features[idx] ? features[idx].key: -1}
+        })
+        let entries = Object.entries(tmp);
+
+        // [["you",100],["me",75],["foo",116],["bar",15]]
+        let sorted = entries.filter(c => c[1]).sort((a, b) => a[1].key - b[1].key);
+        //setTracksData(sorted)
+    }
+
     return (
         <Box sx={{maxWidth: '768px'}}>
              <Box sx={{ flexGrow: 1 }}>
@@ -293,6 +306,14 @@ export default function SearchInput() {
             </Box>
             {(tracksData && tracksData.length > 0 && features && features.length > 0) && <Box sx={{ width: '100%', mt: '25px' }}>
                     <Grid  container spacing={2}>
+                        <Grid  xs={12}>
+                            <Divider sx={{textAlign: 'center', width: '100%', mt: 4, mb: 4}}>
+                                <Chip label={`BPM, Song Key Results of ${url}`} />
+                            </Divider>
+                        </Grid>
+                        <FormGroup>
+                        {/*<FormControlLabel onChange={handleSort} control={<Switch defaultChecked />} label={"Sort By Song Key"} />*/}
+                        </FormGroup>
                         {tracksData.map((track, index) => {
                             if(!features[index]) {
                                 return(<></>)
