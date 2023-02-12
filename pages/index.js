@@ -5,8 +5,9 @@ import styles from '../styles/Home.module.css'
 import SearchInput from './components/SearchInput'
 import { gtag, install } from 'ga-gtag';
 import { useEffect } from 'react'
-import { PianoOutlined } from '@mui/icons-material';
-
+import {  PianoOutlined } from '@mui/icons-material';
+import logo2 from '../public/logo2.jpg'
+import Image from 'next/image'
 export default function Home() {
   useEffect(() => {
     install('G-LDDJ32MXZ1'); 
@@ -47,12 +48,12 @@ export default function Home() {
       </Head>
       <main lang="en" className={styles.main}>
         
+      <Image src={logo2} />
         <h1 className={styles.title}>
-          <PianoOutlined color="primary" sx={{fontSize: '42px', verticalAlign: 'middle', margin: '-5px 10px 0 0'}} />
-          <Link title="homepage" href="/">SONG-KEY-BPM FINDER</Link>
+            Song key bpm finder
         </h1>
-        <Typography variant="h2" style={{ fontSize: '0.85rem', lineHeight: '20px', opacity: '0.4', textAlign: 'center', margin: '16px 0 40px 0' }}>
-            Find your track BPM & song key by just typing the song title or<br />you can also upload your track to analyze, if you could not find it in our database!
+        <Typography variant="h2" style={{ maxWidth: '668px', fontSize: '0.85rem', lineHeight: '20px', opacity: '0.4', textAlign: 'center', margin: '16px 0 40px 0' }}>
+            Find your track BPM & song key by just typing the song title or you can also upload your track to analyze, if you could not find it in our database!
         </Typography>
         <SearchInput />
       </main>

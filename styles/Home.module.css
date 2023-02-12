@@ -46,6 +46,11 @@
   flex-grow: 1;
 }
 
+.title {
+  opacity: 0;
+  height: 0;
+}
+
 .title a {
   color: #0070f3;
   text-decoration: none;

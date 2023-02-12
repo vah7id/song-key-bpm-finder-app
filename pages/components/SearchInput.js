@@ -54,6 +54,7 @@ export default function SearchInput() {
     };
 
     const handleChange = (query) => {
+        console.log(query)
         if(!query) {
             return;
         }
@@ -156,7 +157,7 @@ export default function SearchInput() {
                 } else {
                     let options = []
                     response.map((track, index) => {
-                        options[index] = { id: track.id, label: track.artists[0].name  +' - '+track.name   }
+                        options[index] = { id: track.id, label: track.name   +' '+track.artists[0].name   }
                     })
                     setAutocompleteItems(options)
                 }
@@ -215,7 +216,9 @@ export default function SearchInput() {
             };
 
             // Read File as an ArrayBuffer
-            reader.readAsDataURL(uploadEl.files[0]);
+            if(uploadEl && uploadEl.files[0]) {
+                reader.readAsDataURL(uploadEl.files[0]);
+            }
 
       }      
 
@@ -257,29 +260,49 @@ export default function SearchInput() {
         //setTracksData(sorted)
     }
 
+    const handleSelectAutoComplete = (id, label) => {
+        // fetch track and set data
+        if(id) {
+            setIsFetching(true)
+            fetch(`/api/fetchTrack?id=${id}`).then(response => response.json()).then(response => {
+                setIsFetching(false)
+                if(response.err) {
+                    
+                } else {
+                    console.log(response)
+                    setTracksData([response])
+                    setFeatures([{key: response.key, mode: response.mode, tempo: response.tempo, duration_ms: response.duration_ms}])
+
+                }
+            }).catch(err => {
+                setIsFetching(false)
+            });
+        }
+    }
+
     return (
         <Box sx={{maxWidth: '768px'}}>
              <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={10}>
-                    <Autocomplete
-                        disablePortal
-                        id="combo-box-demo"
-                        freeSolo
-                        onKeyUp={handleAutoComplete}
-                        onKeyDown={(e) => {
-                            if(e.keyCode == 13){
-                                console.log(e.target.value)
-                                handleChange(e.target.value)
-                             }
-                        }}
-                        onChange={(e, value) => handleChange(value.label)}
-                        onPaste={handlePaste}
-                        options={autocompleteItems}
-                        sx={{ width: '100%' }}
-                        renderInput={(params) => <TextField {...params} label="Type a song title here..." />}
-                        />
-                    
+                        <Autocomplete
+                            disablePortal
+                            id="combo-box-demo"
+                            freeSolo
+                            onKeyUp={handleAutoComplete}
+                            onKeyDown={(e) => {
+                                if(e.keyCode == 13){
+                                    console.log(e.target.value)
+                                    handleChange(e.target.value)
+                                }
+                            }}
+                            onChange={(e, value) => value.id ? handleSelectAutoComplete(value.id,value.label) : handleChange(value.label)}
+                            onPaste={handlePaste}
+                            options={autocompleteItems}
+                            sx={{ width: '100%' }}
+                            renderInput={(params) => <TextField {...params} label="Type a song title here..." />}
+                            />
+                        
                     </Grid>
                     <Grid item xs={2}>
                         <Button 
@@ -384,11 +407,11 @@ export default function SearchInput() {
             </Divider>
             <Card sx={{ maxWidth: '100%', mt: 8, padding: 2 }}>
               <CardContent>
-                <Typography sx={{fontSize: '22px'}} gutterBottom variant="h5" component="div">
-                Find The Song Key & Tempo Via File Upload With Our Online Song Key, Tempo Analyser Tool Using AI.
+                <Typography sx={{fontSize: '20px'}} gutterBottom variant="h5" component="div">
+                Find The Song Key & Tempo Via File Upload With Our Song Key, Tempo Analyser Tool Using AI.
                 </Typography>
                 <Typography sx={{fontSize: '12px'}} variant="subtitle2" color="text.secondary">
-Drop your audio file(s) in the song analyzer below and instantly get the Key in which a song was composed by magic. Detected Song Keys are 70-95% accurate depending on the selected option! its FREE, Enjoy :)
+Drop / Upload your audio file below and instantly get the song key & tempo. Detected Song Keys are 70-95% accurate depending on the selected option! its FREE, Enjoy :)
                 </Typography>
                             
                 
@@ -415,15 +438,10 @@ Drop your audio file(s) in the song analyzer below and instantly get the Key in 
 
                 </CardContent>
                 <CardActions>
-                <Button startIcon={<DriveFolderUploadIcon /> }  color="success" variant="outlined" component="label">
-                     Upload Your Track
-                    <input id="fileinput" onChange={handleUpload} hidden accept="audio/mpeg" type="file" />
+                <Button style={{width:'100%', padding: '15px'}} startIcon={<DriveFolderUploadIcon /> }  color="success" variant="outlined" component="label">
+                     Upload Your Track (MP3)
+                    <input id="fileinput" onChange={handleUpload} hidden accept="audio/*" type="file" />
                 </Button>
-                <IconButton className={styles.uploadBtn} color="primary" aria-label="upload picture" component="label">
-                    <input hidden accept="image/*" type="file" />
-                    <AudioFileIcon /> 
-                    <Typography sx={{paddingLeft: '10px', color: '#aaa'}} variant="caption"> Click or drop your (MP3) file here</Typography>
-                </IconButton>
             </CardActions>
             </Card> 
 
