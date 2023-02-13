@@ -14,11 +14,12 @@ import HomeIcon from '@mui/icons-material/Home';
 import ShareURL from './ShareURL';
 import styles from '../../styles/Home.module.css'
 import SearchIcon from '@mui/icons-material/Search';
-import { PianoOutlined } from '@mui/icons-material';
+import { PianoOutlined, Router } from '@mui/icons-material';
 import MusicTempo from 'music-tempo'
 import SpeedIcon from '@mui/icons-material/Speed';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
+import { useRouter } from 'next/router';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -88,7 +89,7 @@ export default function SearchInput() {
     const audioCtxContainer = React.useRef(null);
     const [analyseResult, setAnalyseResult] = React.useState(null) 
     const [fileUploaded, setFileUpload] = React.useState([])
-    
+    const router = useRouter()
     
     const showNotification = (type, message) => {
         setSnackbarOpen(true);
@@ -346,7 +347,7 @@ export default function SearchInput() {
                                 return(<></>)
                             }
                             return (<Grid key={track.id} item xs={12}>
-                                <Card sx={{ display: 'flex' }}>
+                                <Card  className={styles.cardW} onClick={() => router.push('/tracks/'+track.id)} sx={{ display: 'flex' }}>
                                 <CardMedia
                                     className={styles.cardImage}
                                     component="img"
@@ -363,9 +364,6 @@ export default function SearchInput() {
                                         <Typography style={{width: '100%', display: 'block', margin: '-10px 0 30px 0'}}  sx={{fontSize: '16px', paddingTop: '0'}} variant="caption" color="text.secondary">
                                             {track.name}
                                         </Typography>
-                                        <Link target="_blank" href={'/tracks/'+track.id}><Button color="success" variant="outlined" startIcon={<PlayCircleFilledWhiteIcon />}>
-                                            Find Related Key Tracks
-                                        </Button></Link>
                                         <Link target="_blank" href={track.external_urls.spotify}><Button color="success" variant="outlined" startIcon={<PlayCircleFilledWhiteIcon />}>
                                             Listen on Spotify
                                         </Button></Link>

@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../../styles/Home.module.css'
@@ -60,15 +60,20 @@ export default function Home() {
           <meta itemProp="image" content="./favicon3.png" />
       </Head>
       <main lang="en" className={styles.main}>
-        
-      <Image src={logo2} />
-        <h1 className={styles.title}>
-            Song key bpm finder
-        </h1>
+      <Image onClick={() => router.push('/')} src={logo2} />
+
+        <Link href="/">
+          <h1 className={styles.title}>
+              Song key bpm finder
+          </h1>
+        </Link>
         <Typography variant="h2" style={{ maxWidth: '668px', fontSize: '0.85rem', lineHeight: '20px', opacity: '0.4', textAlign: 'center', margin: '16px 0 40px 0' }}>
             Find your track BPM & song key by just typing the song title or you can also upload your track to analyze, if you could not find it in our database!
         </Typography>
-        {track && <TrackDetails track={track} />}
+        {track ? <TrackDetails track={track} /> : 
+        <Box sx={{ display: 'flex' }}>
+          <CircularProgress />
+        </Box>}
         <SearchInput />
       </main>
     </div>

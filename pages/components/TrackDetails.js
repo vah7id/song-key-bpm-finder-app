@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 /* eslint-disable import/no-unresolved, import/extensions, import/no-extraneous-dependencies */
 import { PianoOutlined } from '@mui/icons-material';
-import { Box, Button, Card, CardContent, CardMedia, Grid, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, CardMedia, Chip, Divider, Grid, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import React, { Component } from 'react';
 import SpeedIcon from '@mui/icons-material/Speed';
 import LoopIcon from '@mui/icons-material/Loop';
@@ -12,13 +12,17 @@ import { getSongKeyTitle, msToTime } from './SearchInput';
 
 export default function TrackDetails({track}) {
     console.log(track)
-    if(!track ) {
+    if(!track || !track.artists ) {
         return (<>Loading...</>)
     }
     return (
-      <Box sx={{maxWidth: '768px', mb: 8}}>
-        <Box sx={{ flexGrow: 1 }}>
-                <Card sx={{ width: '100%', display: 'flex' }}>
+      <Box sx={{maxWidth: '768px', width: '100%', mb: 8}}>
+        <Grid  xs={12}>
+                <Divider sx={{textAlign: 'center', width: '100%', mt: 4, mb: 4}}>
+                    <Chip label={`BPM, Song Key of ${track.name} - ${track.artists && track.artists[0].name}`} />
+                </Divider>
+            </Grid>
+                <Card className={styles.cardW} sx={{ width: '100%', display: 'flex' }}>
                     <CardMedia
                         className={styles.cardImage}
                         component="img"
@@ -73,7 +77,9 @@ export default function TrackDetails({track}) {
                     
                     </Box>
                 </Card>
-            </Box>
+                <Divider sx={{textAlign: 'center', width: '100%', mt: 4, mb: 4}}>
+                    <Chip label={`Recommendations for Harmonic Mixing`} />
+                </Divider>
         </Box>
     );
   

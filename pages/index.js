@@ -8,7 +8,9 @@ import { useEffect } from 'react'
 import {  PianoOutlined } from '@mui/icons-material';
 import logo2 from '../public/logo2.jpg'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 export default function Home() {
+  const router = useRouter()
   useEffect(() => {
     install('G-LDDJ32MXZ1'); 
     fetch('/api/authSpotify').then(resp => resp.json()).then(resp => {
@@ -47,11 +49,13 @@ export default function Home() {
           <meta itemProp="image" content="./favicon3.png" />
       </Head>
       <main lang="en" className={styles.main}>
-        
-      <Image src={logo2} />
-        <h1 className={styles.title}>
-            Song key bpm finder
-        </h1>
+        <Image onClick={() => router.push('/')} src={logo2} />
+
+        <Link href="/">
+          <h1 className={styles.title}>
+              Song key bpm finder
+          </h1>
+        </Link>
         <Typography variant="h2" style={{ maxWidth: '668px', fontSize: '0.85rem', lineHeight: '20px', opacity: '0.4', textAlign: 'center', margin: '16px 0 40px 0' }}>
             Find your track BPM & song key by just typing the song title or you can also upload your track to analyze, if you could not find it in our database!
         </Typography>
