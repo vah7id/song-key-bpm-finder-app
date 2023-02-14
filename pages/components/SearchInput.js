@@ -138,14 +138,21 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
         if(!query && (!url || url === "") ) {
             return;
         }
+
         setAnalyseResult(null);
         const title = query || url; 
-
+        setURL(title);
         //setIsFetching(true);
+
         if(title === "") {
             showNotification('error', 'Oops!! Please type your song title first :)')
+            return;
         }
-        console.log(router.query.query)
+        if(title === router.query.query) {
+           
+            return;
+        }
+
         if(router.query.query === title && tracksData.length !== 0) {
             handleNewSearch(false);
             setIsFetching(false);
@@ -158,7 +165,6 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
         router.push('/search?query='+title);
        
     }
-
     
     const handlePaste = (event) => {
         handleChange(event.clipboardData.getData('text/plain'));
@@ -247,16 +253,16 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
 
             </Box>
             {(tracksData && tracksData.length === 1) && <Box sx={{ width: '100%', mt: '25px' }}>
-                    <Grid  container spacing={2}>
-                        <Grid  xs={12}>
-                            <Divider sx={{textAlign: 'center', width: '100%', mt: 4, mb: 4}}>
-                                <Chip label={`BPM, Song Key Results of ${url}`} />
-                            </Divider>
-                        </Grid>
-                        
-                        {tracksData.map((track, index) => {
-                            return (<TrackCard onSelectTrack={selectTrack} key={'tr-'+index} track={track} />) })}
-                     
+                <Grid  container spacing={2}>
+                    <Grid  xs={12}>
+                        <Divider sx={{textAlign: 'center', width: '100%', mt: 4, mb: 4}}>
+                            <Chip label={`BPM, Song Key Results of ${url}`} />
+                        </Divider>
+                    </Grid>
+                    
+                    {tracksData.map((track, index) => {
+                        return (<TrackCard onSelectTrack={selectTrack} key={'tr-'+index} track={track} />) })}
+                    
                 </Grid>
             </Box>}
 

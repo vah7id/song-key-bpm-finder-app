@@ -17,7 +17,7 @@ export default function TrackCard({track, onSelectTrack}) {
     if(!track) {
         return (<></>)
     }
-    const url = (track.artists && track.artists[0].name+' - '+track.name).replace(/ /g, '').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('&','-');
+    const url = (track.artists && track.artists[0].name+'-'+track.name).replace(/ /g, '').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('?','').replace('?','').replace('?','').replace('?','').replace('.','-').replace('.','-').replace('/','').replace('/','').replace('/','').replace('#','').replace('#','').replace('(','').replace('(','').replace('(','').replace('(','').replace(')','').replace(')','').replace(')','').replace(')','').replace(')','').replace('+','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','');
     return (
       <>
         <Card onClick={() => onSelectTrack('/tracks/'+url+'/'+track.id, track)} key={track.id} className={styles.cardW} sx={{ width: '100%', display: 'flex', mb: 2 }}>
