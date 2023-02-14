@@ -86,7 +86,7 @@ export default function TrackDetails({track, isFetching, onSelectTrack}) {
                 The following tracks will sound good when mixed with <Chip color="info" size="small" label={`${track.name} - ${track.artists && track.artists[0].name}`} />  because they have similar tempos, simlar key range, time signature (beat), loudness, energy, mode for djing purposes. Recommendation aligorithms via Spotify API.
             </Typography>
 
-            {(loading) && <><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /></>}
+            {(loading) && <><TrackSkeleton /></>}
 
             {(recommendations && recommendations.length !== 0) && recommendations.map(recommendedTrack => 
                 <TrackCard onSelectTrack={selectTrack} key={recommendedTrack.id} track={recommendedTrack} />)

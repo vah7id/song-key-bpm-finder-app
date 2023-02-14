@@ -19,7 +19,7 @@ export default function Search() {
   const [notification, setNotification] = useState({ type: null, message: ""});
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleOpenSortBy = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -144,14 +144,18 @@ console.log(tracksData && tracksData.length === 0 && !isFetching)
                       </Divider>
                   </Grid>
 
-                  <Grid xs={12} mb={4}>
+                  <Grid xs={6} md={6}>
+                      <Typography style={{textAlign: 'left', padding: '4px 0', opacity: 0.4}} variant="subtitle2">{tracksData.length} result for {router.query.query}</Typography>
+                  </Grid>
+                  <Grid xs={6} md={6} mb={4}>
                     <Button
-                      id="fade-button"
+                      color={'info'}
                       startIcon={<SortRounded />}
+                      style={{float: 'right'}}
                       aria-controls={open ? 'fade-menu' : undefined}
                       aria-haspopup="true"
                       aria-expanded={open ? 'true' : undefined}
-                      onClick={handleClick}
+                      onClick={handleOpenSortBy}
                     >
                       Sort By ...
                     </Button>
@@ -171,6 +175,8 @@ console.log(tracksData && tracksData.length === 0 && !isFetching)
 
                     </Menu>
                   </Grid>
+
+                  
                   
                   {tracksData.map((track, index) => {
                       return (<TrackCard onSelectTrack={selectTrack} key={'tr-'+index} track={track} />) })}

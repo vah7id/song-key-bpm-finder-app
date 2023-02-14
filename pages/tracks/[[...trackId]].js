@@ -25,6 +25,7 @@ export default function Home() {
             fetch('/api/getTrackData?id='+router.query.trackId[router.query.trackId.length-1]).then(resp => resp.json()).then(resp => {
                 setTrack(resp);
                 setCurrentTrackId(resp.id)
+                setLoading(false);
             }).catch(err => {
                 console.log(err)
                 setTrack(null);
@@ -90,6 +91,7 @@ export default function Home() {
             Find your track BPM & song key by just typing the song title or you can also upload your track to analyze, if you could not find it in our database!
         </Typography>
         <SearchInput handleNewSearch={handleNewSearch} isSearching={false} />
+        {loading && <TrackSkeleton />}
         {track && <TrackDetails isFetching={loading} onSelectTrack={selectTrack} track={track} />}
         <UploadTrack />
       </main>
