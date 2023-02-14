@@ -4,9 +4,8 @@ import { Box, Card, CardHeader, Grid, Skeleton } from '@mui/material';
 import React, { Component } from 'react';
 
 export default function TrackSkeleton() {
-    return ( <Box sx={{maxWidth: '768px', width: '100%', mb: 2}}>
-    <Grid xs={12}>
-        <Card sx={{ width: '100%', m: 2 }}>
+    return (<Box sx={{maxWidth: '768px', width: '100%', mb: 2}}>
+        <Card sx={{ width: '100%', mt: 2 }}>
             <CardHeader
             avatar={
                 <Skeleton animation="wave" variant="circle" width={80} height={80} />
@@ -27,6 +26,5 @@ export default function TrackSkeleton() {
             }
             />
     </Card>
-    </Grid>
 </Box>)
 }

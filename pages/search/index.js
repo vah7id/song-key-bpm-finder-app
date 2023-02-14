@@ -1,33 +1,72 @@
-import { Typography } from '@mui/material'
+import { Alert, Backdrop, Box, Chip, CircularProgress, Divider, FormGroup, Grid, Snackbar, Typography } from '@mui/material'
 import Head from 'next/head'
 import Link from 'next/link'
-import styles from '../styles/Home.module.css'
-import SearchInput from './components/SearchInput'
+import styles from '../../styles/Home.module.css'
+import SearchInput from '../components/SearchInput'
 import { gtag, install } from 'ga-gtag';
 import { useEffect, useState } from 'react'
 import {  PianoOutlined, UploadFile } from '@mui/icons-material';
-import logo2 from '../public/logo2.jpg'
+import logo2 from '../../public/logo2.jpg';
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import UploadTrack from './components/UploadTrack'
-export default function Home() {
-  const [isFetching, setIsFetching] = useState(false);
-
+import UploadTrack from '../components/UploadTrack'
+import TrackCard from '../components/TrackCard'
+export default function Search() {
   const router = useRouter()
+  const [isFetching, setIsFetching] = useState(true);
+  const [tracksData, setTracksData] = useState([]) 
+  const [openSnackbar, setSnackbarOpen] = useState(false);
+  const [notification, setNotification] = useState({ type: null, message: ""});
 
   useEffect(() => {
     install('G-LDDJ32MXZ1'); 
     fetch('/api/authSpotify').then(resp => resp.json()).then(resp => {
-      console.log('authorized with spotify api!')
+      if(router.query.query !== "") {
+        fetch(`/api/findBpm?title=${router.query.query || ""}`).then(response => response.json()).then(response => {
+          setIsFetching(false);
+          if(response.err) {
+             
+          } else {
+              setTracksData(response);
+          }
+        }).catch(err => {
+            console.log(err.message)
+            setIsFetching(false);
+            showNotification('error', 'Oops, Unfortunately we cannot fetch the URL!! Please try again!!!');
+        });
+      }
     }).catch(err => {
       console.log(err)
       console.log('cannot authorize with spotify!!!')
     })
-  })
+  }, [router.query.query, router.asPath])
 
   const handleNewSearch = (isFetching) => {
     setIsFetching(isFetching)
   }
+      
+  const showNotification = (type, message) => {
+    setSnackbarOpen(true);
+    setNotification({
+        type: type,
+        message
+    })
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+  
+
+  const selectTrack = (url, track) => {
+    setTracksData([])
+    setIsFetching(true);
+    router.push(url)
+}
 
   return (
     <div lang="en" className={styles.container}>
@@ -45,7 +84,7 @@ export default function Home() {
           <meta name="twitter:title" content="Song key & Tempo BPM Finder Tool" />
           <meta name="twitter:description" content="Song key & Tempo BPM Finder and song analyzer Tool" />
           <meta name="twitter:image:src" content="/favicon3.png" />
-        {/*<meta property="fb:admins" content="100002861414139">
+          {/*<meta property="fb:admins" content="100002861414139">
           <meta property="fb:app_id" content="503426229739677">*/}
           <meta property="og:url" content="https://songkeyfinder.app" />
           <meta property="og:type" content="article" />
@@ -71,6 +110,32 @@ export default function Home() {
             Find your track BPM & song key by just typing the song title or you can also upload your track to analyze, if you could not find it in our database!
         </Typography>
         <SearchInput handleNewSearch={handleNewSearch} isSearching={isFetching} />
+        {(tracksData && tracksData.length > 0) && 
+          <Box sx={{ maxWidth: '768px',width: '100%', mt: '25px' }}>
+              <Grid container spacing={2}>
+                  <Grid xs={12}>
+                      <Divider sx={{textAlign: 'center', width: '100%', mt: 4, mb: 4}}>
+                          <Chip label={`BPM, Song Key Results of ${router.query.query}`} />
+                      </Divider>
+                  </Grid>
+                  
+                  {tracksData.map((track, index) => {
+                      return (<TrackCard onSelectTrack={selectTrack} key={'tr-'+index} track={track} />) })}
+              </Grid>
+          </Box>}
+
+          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={openSnackbar} autoHideDuration={5000} onClose={handleSnackbarClose}>
+                <Alert onClose={handleSnackbarClose} severity={notification.type || 'error'} sx={{ width: '100%' }}>
+                    {notification.message || ''}
+                </Alert>
+            </Snackbar>
+            
+            {isFetching && <Backdrop
+                sx={{ color: '#fff', textAlign: 'center', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={isFetching}
+                >
+                <CircularProgress color="inherit" />
+            </Backdrop>}
         <UploadTrack />
       </main>
     </div>

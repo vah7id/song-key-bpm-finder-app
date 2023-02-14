@@ -196,8 +196,7 @@
 }
 
 .artwork {
-  width: 160px;
-  height: 160px;
+  border-radius: 8px !important;
 }
 
 .exportButton {
@@ -217,10 +216,7 @@
   .trackTitle {
     margin-top: 0;
   }
-  .artwork {
-    width: 50px !important;
-    height: 50px !important;
-  }
+
 }
 
 @media (max-width: 768px) {
@@ -229,6 +225,7 @@
     margin-bottom: 20px !important;
     width: 100% !important;
   }
+
   .cardImage {
     display: none !important
   }

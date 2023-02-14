@@ -78,7 +78,7 @@ export const getSongKeyTitle = (key, mode) => {
     }
 }
 
-export default function SearchInput() {
+export default function SearchInput({isSearching = false, handleNewSearch}) {
     const [url, setURL] = React.useState('');
     const [isFetching, setIsFetching] = React.useState(false);
     const [openSnackbar, setSnackbarOpen] = React.useState(false);
@@ -91,20 +91,22 @@ export default function SearchInput() {
 
     const handleAutoComplete = () => {
         if(url.length > 3) {
-            fetch(`/api/search?title=${url || ""}`).then(response => response.json()).then(response => {
-                if(response.err) {
+            setTimeout(() => {
+                fetch(`/api/search?title=${url || ""}`).then(response => response.json()).then(response => {
+                    if(response.err) {
+                        setAutocompleteItems([])
+                    } else {
+                        let options = []
+                        response.map((track, index) => {
+                            options[index] = { id: track.id, label: track.name   +' '+track.artists[0].name   }
+                        })
+                        console.log(options)
+                        setAutocompleteItems(options)
+                    }
+                }).catch(err => {
                     setAutocompleteItems([])
-                } else {
-                    let options = []
-                    response.map((track, index) => {
-                        options[index] = { id: track.id, label: track.name   +' '+track.artists[0].name   }
-                    })
-                    console.log(options)
-                    setAutocompleteItems(options)
-                }
-            }).catch(err => {
-                setAutocompleteItems([])
-            });
+                });
+            }, 500)
         }
     }
 
@@ -132,8 +134,6 @@ export default function SearchInput() {
     };
 
     const handleChange = (query) => {
-        console.log(query)
-        console.log(url)
 
         if(!query && (!url || url === "") ) {
             return;
@@ -141,23 +141,22 @@ export default function SearchInput() {
         setAnalyseResult(null);
         const title = query || url; 
 
-        setIsFetching(true);
+        //setIsFetching(true);
         if(title === "") {
             showNotification('error', 'Oops!! Please type your song title first :)')
         }
+        console.log(router.query.query)
+        if(router.query.query === title && tracksData.length !== 0) {
+            handleNewSearch(false);
+            setIsFetching(false);
+            console.log('trraaaapppp')
+            return;
+        }
 
-        fetch(`/api/findBpm?title=${title || ""}`).then(response => response.json()).then(response => {
-            setIsFetching(false);
-            if(response.err) {
-                showNotification('error', response.err.message);
-            } else {
-                setTracksData(response);
-            }
-        }).catch(err => {
-            console.log(err.message)
-            setIsFetching(false);
-            showNotification('error', 'Oops, Unfortunately we cannot fetch the URL!! Please try again!!!');
-        });
+        handleNewSearch(true);
+        setTracksData([]);
+        router.push('/search?query='+title);
+       
     }
 
     
@@ -168,6 +167,7 @@ export default function SearchInput() {
     const handleSelectAutoComplete = (id, label) => {
         // fetch track and set data
         if(id) {
+            handleNewSearch(true);
             setIsFetching(true)
             fetch(`/api/fetchTrack?id=${id}`).then(response => response.json()).then(response => {
                 setIsFetching(false)
@@ -176,13 +176,15 @@ export default function SearchInput() {
                 } else {
                     console.log(response)
                     setTracksData([response])
+                    handleNewSearch(false);
+                    setIsFetching(false)
                 }
             }).catch(err => {
                 setIsFetching(false)
             });
         }
     }
-    
+
     const selectTrack = (url, track) => {
         setIsFetching(true);
         router.push(url)
@@ -225,7 +227,7 @@ export default function SearchInput() {
                         <Button 
                             onClick={() => handleChange(url)} 
                             size='large'  
-                            style={{ width: '90%', padding: '15px'}} 
+                            style={{ width: '90%', minWidth: '48px !important', padding: '15px'}} 
                             variant='contained'
                             >
                                 <SearchIcon />
@@ -239,21 +241,19 @@ export default function SearchInput() {
                     exp: Ice Cube - It was a good day
                     </Typography>
                 </Box>
-                {isFetching && <Box sx={{ width: '100%', mt: '15px' }}>
+                {(isFetching || isSearching) && <Box sx={{ width: '100%', mt: '15px' }}>
                     <LinearProgress />
                 </Box>}
 
             </Box>
-            {(tracksData && tracksData.length > 0) && <Box sx={{ width: '100%', mt: '25px' }}>
+            {(tracksData && tracksData.length === 1) && <Box sx={{ width: '100%', mt: '25px' }}>
                     <Grid  container spacing={2}>
                         <Grid  xs={12}>
                             <Divider sx={{textAlign: 'center', width: '100%', mt: 4, mb: 4}}>
                                 <Chip label={`BPM, Song Key Results of ${url}`} />
                             </Divider>
                         </Grid>
-                        <FormGroup>
-                        {/*<FormControlLabel onChange={handleSort} control={<Switch defaultChecked />} label={"Sort By Song Key"} />*/}
-                        </FormGroup>
+                        
                         {tracksData.map((track, index) => {
                             return (<TrackCard onSelectTrack={selectTrack} key={'tr-'+index} track={track} />) })}
                      

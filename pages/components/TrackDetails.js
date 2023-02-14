@@ -50,16 +50,16 @@ export default function TrackDetails({track, isFetching, onSelectTrack}) {
                 console.log('show emoty recommendation')
               })
         }
-    }, [router.asPath])
+    }, [router.asPath, track, router.query, recommendations])
 
     const selectTrack = (url, track) => {
         setLoading(true)
         setRecommendations([])
         onSelectTrack(url, track)
-      }
+    }
       
     if(isFetching || !track || !track.artists ) {
-        return (<TrackSkeleton />)
+        return (<Box sx={{maxWidth: '768px', width: '100%', mb: 8}}><TrackSkeleton /></Box>)
     }
     return (
       <Box sx={{maxWidth: '768px', width: '100%', mb: 8}}>
