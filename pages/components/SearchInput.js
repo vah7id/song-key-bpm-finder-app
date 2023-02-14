@@ -42,13 +42,13 @@ export function msToTime(duration) {
 export const getSongKeyTitle = (key, mode) => {
     let modeTitle = "";
     if(mode === 1) 
-        modeTitle = "Major";
+        modeTitle = "Maj";
     if(mode === 0) 
-        modeTitle = "Minor";
+        modeTitle = "Min";
 
     switch(key) {
         case -1:
-            return "Not Detected";
+            return "N/A";
         case 0:
             return "C " + modeTitle;
         case 1:
@@ -66,9 +66,9 @@ export const getSongKeyTitle = (key, mode) => {
         case 7:
             return "G " + modeTitle;
         case 8:
-            return "G#/A♭ " + modeTitle;
+            return "G#/A♭  " + modeTitle;
         case 9:
-            return "A " + modeTitle;
+            return "A" + modeTitle;
         case 10:
             return "A#/B♭ " + modeTitle;
         case 11:
@@ -173,21 +173,8 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
     const handleSelectAutoComplete = (id, label) => {
         // fetch track and set data
         if(id) {
-            handleNewSearch(true);
-            setIsFetching(true)
-            fetch(`/api/fetchTrack?id=${id}`).then(response => response.json()).then(response => {
-                setIsFetching(false)
-                if(response.err) {
-                    
-                } else {
-                    console.log(response)
-                    setTracksData([response])
-                    handleNewSearch(false);
-                    setIsFetching(false)
-                }
-            }).catch(err => {
-                setIsFetching(false)
-            });
+            const url = label.replace(/ /g, '-').replace('&','').replace('&','').replace('&','').replace('&','').replace('&','-').replace('&','-').replace('&','-').replace('?','').replace('?','').replace('?','').replace('?','').replace('.','-').replace('.','-').replace('/','').replace('/','').replace('/','').replace('#','').replace('#','').replace('(','').replace('(','').replace('(','').replace('(','').replace(')','').replace(')','').replace(')','').replace(')','').replace(')','').replace('+','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','');
+            router.push(`/tracks/${url}/${id}`);
         }
     }
 
@@ -225,7 +212,7 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
                             options={autocompleteItems}
                             disableClearable
                             sx={{ width: '100%' }}
-                            renderInput={(params) => <TextField {...params} label="Type a song title here..." />}
+                            renderInput={(params) => <TextField {...params} label={`${(router.query && router.query.query) ? router.query.query : 'Type another song title here...'}`} />}
                         />
                         
                     </Grid>
@@ -244,7 +231,7 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
                 
                 <Box sx={{ width: '100%', mt: '10px', opacity: '0.3', fontSize: '14px' }}>
                     <Typography variant="subtitle">
-                    exp: Ice Cube - It was a good day
+                    exp: Bob Marley - Ganja :)
                     </Typography>
                 </Box>
                 {(isFetching || isSearching) && <Box sx={{ width: '100%', mt: '15px' }}>

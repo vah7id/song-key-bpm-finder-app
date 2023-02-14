@@ -10,9 +10,9 @@ import logo2 from '../public/logo2.jpg'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import UploadTrack from './components/UploadTrack'
+
 export default function Home() {
   const [isFetching, setIsFetching] = useState(false);
-
   const router = useRouter()
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export default function Home() {
       </Head>
       <main lang="en" className={styles.main}>
         <Link href="/" passHref>
-          <Image style={{ minWidth: "225px", cursor: 'pointer'}} alt="logo" onClick={() => router.push('/')} src={logo2} />
+          <Image style={{ cursor: 'pointer'}} alt="logo" onClick={() => router.push('/')} src={logo2} />
         </Link>
 
         <Link href="/" passHref>

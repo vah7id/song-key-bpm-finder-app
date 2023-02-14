@@ -27,13 +27,11 @@ export default function handler(req, res) {
     spotifyApi.clientCredentialsGrant().then(
         function(data) {
             spotifyApi.setAccessToken(data.body['access_token']);
-            spotifyApi.search(req.query.title, ['track'], { limit : 10, offset : 1 }).then(function(data) {
+            spotifyApi.search(req.query.title, ['track'], { limit : 20, offset : 1 }).then(function(data) {
                 if(!data.body.tracks || data.body.tracks.items.length === 0) {
                     res.status(200).json([]); 
                 }
         
-                const tracks = data.body.tracks.items;
-            
                 res.status(200).json(data.body.tracks.items); 
                 
               },
