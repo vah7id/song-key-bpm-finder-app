@@ -102,11 +102,11 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
     }
 
     React.useEffect(() => {
-        if(url !== "" && autocompleteItems.length === 0) {
+        if(url !== "" && autocompleteItems.length === 0 && ((router.query && url !== router.query.query))) {
             console.log(autocompleteItems)
             handleAutoComplete()
         }
-    }, [url, autocompleteItems])
+    }, [url])
     
     const showNotification = (type, message) => {
         setSnackbarOpen(true);
@@ -203,7 +203,7 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
                             options={autocompleteItems}
                             disableClearable
                             sx={{ width: '100%' }}
-                            renderInput={(params) => <TextField {...params} label={`${(router.query && router.query.query) ? router.query.query : 'Type a song title here...'}`} />}
+                            renderInput={(params) => <TextField {...params} label={`${(router.query && router.query.query && window.location.pathname.indexOf('search') > -1) ? router.query.query : 'Type a song title here...'}`} />}
                         />
                         
                     </Grid>

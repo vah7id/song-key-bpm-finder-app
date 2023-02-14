@@ -27,13 +27,14 @@ export default function TrackDetails({track, isFetching, onSelectTrack}) {
     console.log(router.query.trackId[router.query.trackId.length - 1] !== trackId)
     console.log('=====')
     console.log(recommendations)
+
     useEffect(() => {
         if(router.query.trackId[router.query.trackId.length - 1] !== trackId || recommendations.length === 0) {
             setLoading(true);
             const query = {
                 seed_artists: [track.artists ? track.artists[0].id : ""],
                 seed_tracks: [track.id],
-                limit: 25,
+                limit: 30,
                 min_popularity: 20,
                 max_danceability: track.danceability + 0.2,
                 min_danceability: track.danceability - 0.2,
@@ -69,7 +70,7 @@ export default function TrackDetails({track, isFetching, onSelectTrack}) {
         return (<Box sx={{maxWidth: '768px', width: '100%', mb: 8}}><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /></Box>)
     }
     return (
-      <Box sx={{maxWidth: '768px', width: '100%', mb: 8}}>
+        <Box sx={{maxWidth: '768px', width: '100%', mb: 8}}>
             <Grid xs={12}>
                 <Divider sx={{textAlign: 'center', width: '100%', mt: 4, mb: 4}}>
                     <Chip sx={{ width: '320px'}} label={<Typography style={{width: '300px',fontSize: '0.85rem'}} noWrap>{`BPM, Song Key: ${track.name} - ${track.artists && track.artists[0].name}`}</Typography>} />
@@ -86,12 +87,11 @@ export default function TrackDetails({track, isFetching, onSelectTrack}) {
             </Typography>
 
             {(loading) && <><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /></>}
-           
 
             {(recommendations && recommendations.length !== 0) && recommendations.map(recommendedTrack => 
                 <TrackCard onSelectTrack={selectTrack} key={recommendedTrack.id} track={recommendedTrack} />)
             }
-             </Box>
+        </Box>
     );
   
 }

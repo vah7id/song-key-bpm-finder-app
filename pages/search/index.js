@@ -1,11 +1,11 @@
-import { Alert, Backdrop, Box, Chip, CircularProgress, Divider, FormGroup, Grid, Snackbar, Typography } from '@mui/material'
+import { Alert, Backdrop, Box, Button, Chip, CircularProgress, Divider, FormGroup, Grid, Menu, MenuItem, Snackbar, Typography } from '@mui/material'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../../styles/Home.module.css'
 import SearchInput from '../components/SearchInput'
 import { gtag, install } from 'ga-gtag';
 import { useEffect, useState } from 'react'
-import {  PianoOutlined, UploadFile } from '@mui/icons-material';
+import {  PianoOutlined, SortByAlphaRounded, SortRounded, UploadFile } from '@mui/icons-material';
 import logo2 from '../../public/logo2.jpg';
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -14,25 +14,34 @@ import TrackCard from '../components/TrackCard'
 export default function Search() {
   const router = useRouter()
   const [isFetching, setIsFetching] = useState(true);
-  const [tracksData, setTracksData] = useState([]) 
+  const [tracksData, setTracksData] = useState(null) 
   const [openSnackbar, setSnackbarOpen] = useState(false);
   const [notification, setNotification] = useState({ type: null, message: ""});
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     install('G-LDDJ32MXZ1'); 
+    console.log(router.query.query )
     fetch('/api/authSpotify').then(resp => resp.json()).then(resp => {
-      if(router.query.query !== "") {
+      if(router.query.query !== "" || !tracksData || tracksData.length === 0) {
         fetch(`/api/findBpm?title=${router.query.query || ""}`).then(response => response.json()).then(response => {
-          if(response.err) {
-             
-          } else {
+            if(response.err) {
+            } else {
               setIsFetching(false);
               setTracksData(response);
-          }
+            }
         }).catch(err => {
             console.log(err.message)
+            setTracksData([])
             setIsFetching(false);
-            showNotification('error', 'Oops, Unfortunately we cannot fetch the URL!! Please try again!!!');
+            showNotification('warning', 'Oops!! :( We cannot fetch the song data from our database!! Please enter the correct song title + artist name :)');
         });
       }
     }).catch(err => {
@@ -63,11 +72,24 @@ export default function Search() {
   
 
   const selectTrack = (url, track) => {
-    setTracksData([])
+    setTracksData(null)
     setIsFetching(true);
     router.push(url)
-}
+  }
+  
+  const handleSort = (type) => {
+    const tmp = tracksData;
 
+    if(tmp.length > 0) {
+      let sorted = tmp.slice(0);
+      sorted.sort(function(a,b) {
+          return a[type] - b[type];
+      });
+      setTracksData(sorted);
+    }
+  }
+
+console.log(tracksData && tracksData.length === 0 && !isFetching)
   return (
     <div lang="en" className={styles.container}>
       <Head> 
@@ -109,7 +131,10 @@ export default function Search() {
         <Typography variant="h2" style={{ maxWidth: '668px', fontSize: '0.85rem', lineHeight: '20px', opacity: '0.4', textAlign: 'center', margin: '16px 0 40px 0' }}>
             Find your track BPM & song key by just typing the song title or you can also upload your track to analyze, if you could not find it in our database!
         </Typography>
+
         <SearchInput handleNewSearch={handleNewSearch} isSearching={isFetching} />
+       
+   
         {(tracksData && tracksData.length > 0) && 
           <Box sx={{ maxWidth: '768px',width: '100%', mt: '25px' }}>
               <Grid container spacing={2}>
@@ -118,13 +143,41 @@ export default function Search() {
                           <Chip label={`BPM, Song Key Results of ${router.query.query}`} />
                       </Divider>
                   </Grid>
+
+                  <Grid xs={12} mb={4}>
+                    <Button
+                      id="fade-button"
+                      startIcon={<SortRounded />}
+                      aria-controls={open ? 'fade-menu' : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={open ? 'true' : undefined}
+                      onClick={handleClick}
+                    >
+                      Sort By ...
+                    </Button>
+                    <Menu
+                      id="fade-menu"
+                      MenuListProps={{
+                        'aria-labelledby': 'fade-button',
+                      }}
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={() => handleSort('happiness')}>Sort By Popularity</MenuItem>
+                      <MenuItem onClick={() => handleSort('key')}>Sort By Key</MenuItem>
+                      <MenuItem onClick={() => handleSort('tempo')}>Sort By Tempo</MenuItem>
+                      <MenuItem onClick={() => handleSort('time_signature')}>Sort By Beat</MenuItem>
+
+                    </Menu>
+                  </Grid>
                   
                   {tracksData.map((track, index) => {
                       return (<TrackCard onSelectTrack={selectTrack} key={'tr-'+index} track={track} />) })}
               </Grid>
           </Box>}
 
-          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={openSnackbar} autoHideDuration={5000} onClose={handleSnackbarClose}>
+           <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={openSnackbar} autoHideDuration={5000} onClose={handleSnackbarClose}>
                 <Alert onClose={handleSnackbarClose} severity={notification.type || 'error'} sx={{ width: '100%' }}>
                     {notification.message || ''}
                 </Alert>
