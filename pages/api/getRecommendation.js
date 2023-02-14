@@ -22,33 +22,36 @@ export default function handler(req, res) {
     res.setHeader('Authorization', 'Basic ' + (new Buffer("6233cf5397864e0abb091744ea919486" + ':' + "5d967a86893f46299a46ea4c94695ddf").toString('base64')))
     res.setHeader('Content-Type', 'application/x-www-form-urlencoded')
    
-
+    console.log(req.query.qs)
     // Retrieve an access token.
     spotifyApi.clientCredentialsGrant().then(
         function(data) {
             spotifyApi.setAccessToken(data.body['access_token']);
-            spotifyApi.getTrack(req.query.id).then(function(data) {
-                if(!data.body) {
+            spotifyApi.getRecommendations(JSON.parse(req.query.qs)).then(function(data) {
+                if(!data.body || !data.body.tracks || data.body.tracks.length === 0) {
                     res.status(200).json([]); 
                 }
-                
-                let resp = data.body;
-                
-                spotifyApi.getAudioFeaturesForTrack(data.body.id).then((featuresData) => {
-                    resp.key = featuresData.body.key;
-                    resp.tempo = featuresData.body.tempo;
-                    resp.duration_ms = featuresData.body.duration_ms;
-                    resp.mode = featuresData.body.mode;
-                    resp.danceability = featuresData.body.danceability;
-                    resp.energy = featuresData.body.energy;
-                    resp.loudness = featuresData.body.loudness;
-                    resp.happiness = featuresData.body.valence;
-                    resp.instrumentalness = featuresData.body.instrumentalness
-                    resp.time_signature = featuresData.body.time_signature
+                let resp = data.body.tracks;
 
-                    res.status(200).json(resp); 
+                data.body.tracks.forEach((track, index) => {
+                    spotifyApi.getAudioFeaturesForTrack(track.id).then((featuresData) => {
+                        console.log(featuresData.body)
+                        resp[index].key = featuresData.body.key;
+                        resp[index].tempo = featuresData.body.tempo;
+                        resp[index].duration_ms = featuresData.body.duration_ms;
+                        resp[index].mode = featuresData.body.mode;
+                        resp[index].danceability = featuresData.body.danceability;
+                        resp[index].energy = featuresData.body.energy;
+                        resp[index].loudness = featuresData.body.loudness;
+                        resp[index].happiness = featuresData.body.valence;
+                        resp[index].instrumentalness = featuresData.body.instrumentalness
+                        resp[index].time_signature = featuresData.body.time_signature
+
+                        if(index === resp.length - 1) {
+                            res.status(200).json(resp); 
+                        }
+                    })
                 })
-
               },
               function(err) {
                 console.log(err)

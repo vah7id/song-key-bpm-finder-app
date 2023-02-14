@@ -33,19 +33,26 @@ export default function handler(req, res) {
                 }
         
                 const tracks = data.body.tracks.items;
-                let features = [];
+
                 tracks.forEach((track, index) => {
                     setTimeout(() => {
                         spotifyApi.getAudioFeaturesForTrack(track.id).then((featuresData) => {
-                            features[index] = featuresData.body;
-                            if(index === tracks.length -1) {
-                                res.status(200).json({data: tracks, extra: features}); 
+                            tracks[index].key = featuresData.body.key;
+                            tracks[index].tempo = featuresData.body.tempo;
+                            tracks[index].duration_ms = featuresData.body.duration_ms;
+                            tracks[index].mode = featuresData.body.mode;
+                            tracks[index].danceability = featuresData.body.danceability;
+                            tracks[index].energy = featuresData.body.energy;
+                            tracks[index].loudness = featuresData.body.loudness;
+                            tracks[index].happiness = featuresData.body.valence;
+                            tracks[index].instrumentalness = featuresData.body.instrumentalness
+                            tracks[index].time_signature = featuresData.body.time_signature
+                            if(index === tracks.length - 1) {
+                                res.status(200).json(tracks); 
                             }
                         })
-                    }, 500)
-                })
-                
-                
+                    },500);
+                });
               },
               function(err) {
                 console.log(err)

@@ -5,10 +5,11 @@ import styles from '../styles/Home.module.css'
 import SearchInput from './components/SearchInput'
 import { gtag, install } from 'ga-gtag';
 import { useEffect } from 'react'
-import {  PianoOutlined } from '@mui/icons-material';
+import {  PianoOutlined, UploadFile } from '@mui/icons-material';
 import logo2 from '../public/logo2.jpg'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import UploadTrack from './components/UploadTrack'
 export default function Home() {
   const router = useRouter()
   useEffect(() => {
@@ -49,9 +50,11 @@ export default function Home() {
           <meta itemProp="image" content="./favicon3.png" />
       </Head>
       <main lang="en" className={styles.main}>
-        <Image onClick={() => router.push('/')} src={logo2} />
+        <Link href="/" passHref>
+          <Image style={{ minWidth: "200px"}} alt="logo" onClick={() => router.push('/')} src={logo2} />
+        </Link>
 
-        <Link href="/">
+        <Link href="/" passHref>
           <h1 className={styles.title}>
               Song key bpm finder
           </h1>
@@ -60,6 +63,7 @@ export default function Home() {
             Find your track BPM & song key by just typing the song title or you can also upload your track to analyze, if you could not find it in our database!
         </Typography>
         <SearchInput />
+        <UploadTrack />
       </main>
     </div>
   )

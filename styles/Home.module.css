@@ -46,6 +46,12 @@
   flex-grow: 1;
 }
 
+.artwork2 {
+  border-radius: 100% !important;
+  padding: 10px;
+}
+
+
 .title {
   opacity: 0;
   height: 0;
@@ -53,6 +59,7 @@
 .cardW{
   cursor: pointer;
 }
+
 .cardW:hover {
   opacity: 0.8;
 }
@@ -196,12 +203,18 @@
   margin-top: -42px !important;
 }
 
+.trackTitle {
+  margin-top: 16px;
+}
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;
     flex-direction: column;
   }
-  
+  .trackTitle {
+    margin-top: 0 !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -209,6 +222,9 @@
     margin-top: 20px !important;
     margin-bottom: 20px !important;
     width: 100% !important;
+  }
+  .trackTitle {
+    margin-top: 0 !important;
   }
   .cardImage {
     display: none !important

@@ -11,6 +11,17 @@ function Proxy(options) {
 proxy.exports = Proxy
 
 module.exports = {
+  images: {
+    domains: ['i.scdn.co'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'i.scdn.co',
+        port: '',
+        pathname: '/image/**',
+      },
+    ],
+  },
   reactStrictMode: true,
     async headers() {
       return [

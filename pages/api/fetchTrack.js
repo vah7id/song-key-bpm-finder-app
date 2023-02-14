@@ -28,7 +28,6 @@ export default function handler(req, res) {
         function(data) {
             spotifyApi.setAccessToken(data.body['access_token']);
             spotifyApi.getTrack(req.query.id).then(function(data) {
-                console.log(data)
 
                 if(!data.body) {
                     res.status(400).json({err: 'cant find the track'}); 
@@ -41,12 +40,15 @@ export default function handler(req, res) {
                     resp.tempo = featuresData.body.tempo;
                     resp.duration_ms = featuresData.body.duration_ms;
                     resp.mode = featuresData.body.mode;
+                    resp.danceability = featuresData.body.danceability;
+                    resp.energy = featuresData.body.energy;
+                    resp.loudness = featuresData.body.loudness;
+                    resp.happiness = featuresData.body.valence;
+                    resp.instrumentalness = featuresData.body.instrumentalness
+                    resp.time_signature = featuresData.body.time_signature
 
                     res.status(200).json(resp); 
                 })
-        
-               
-                
               },
               function(err) {
                 console.log(err)
@@ -56,5 +58,4 @@ export default function handler(req, res) {
         function(err) {
             res.status(200).json([]);   
         });
-   
   }

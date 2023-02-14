@@ -10,27 +10,43 @@ import logo2 from '../../public/logo2.jpg'
 import Image from 'next/image'
 import TrackDetails from '../components/TrackDetails'
 import { useRouter } from 'next/router'
+import TrackSkeleton from '../components/TrackSkeleton'
+import UploadTrack from '../components/UploadTrack'
 export default function Home() {
   const router = useRouter()
   const [track, setTrack] = useState(null);
-
+  const [loading,setLoading] = useState(false);
+  const [currentTrackId, setCurrentTrackId] = useState(router.query?.trackId ? router.query.trackId[1] : null);
   useEffect(() => {
     install('G-LDDJ32MXZ1'); 
+    setLoading(true);
     fetch('/api/authSpotify').then(resp => resp.json()).then(resp => {
-        if(!track) {
-            fetch('/api/getTrackData?id='+router.query.trackId).then(resp => resp.json()).then(resp => {
-              console.log(resp)
+        if(!track || (router.query && router.query.trackId &&  currentTrackId !== router.query.trackId[1])) {
+            fetch('/api/getTrackData?id='+router.query.trackId[1]).then(resp => resp.json()).then(resp => {
                 setTrack(resp);
+                setCurrentTrackId(resp.id)
+                setLoading(false);
             }).catch(err => {
                 console.log(err)
                 console.log('redirect to 404')
+                setLoading(false);
+
             })
         }
     }).catch(err => {
       console.log(err)
+      setLoading(false);
       console.log('cannot authorize with spotify!!!')
     })
-  })
+  }, [router.asPath, currentTrackId])
+
+  const selectTrack = (url, track) => {
+    setLoading(true)
+    setTrack(null);
+    setCurrentTrackId(track.id);
+    router.push(url)
+  }
+
   return (
     <div lang="en" className={styles.container}>
       <Head> 
@@ -60,9 +76,9 @@ export default function Home() {
           <meta itemProp="image" content="./favicon3.png" />
       </Head>
       <main lang="en" className={styles.main}>
-      <Image onClick={() => router.push('/')} src={logo2} />
+        <Image alt="logo" onClick={() => router.push('/')} src={logo2} />
 
-        <Link href="/">
+        <Link href="/" passHref>
           <h1 className={styles.title}>
               Song key bpm finder
           </h1>
@@ -70,11 +86,12 @@ export default function Home() {
         <Typography variant="h2" style={{ maxWidth: '668px', fontSize: '0.85rem', lineHeight: '20px', opacity: '0.4', textAlign: 'center', margin: '16px 0 40px 0' }}>
             Find your track BPM & song key by just typing the song title or you can also upload your track to analyze, if you could not find it in our database!
         </Typography>
-        {track ? <TrackDetails track={track} /> : 
-        <Box sx={{ display: 'flex' }}>
+        <SearchInput />
+        {loading && <Box sx={{ display: 'flex' }}>
           <CircularProgress />
         </Box>}
-        <SearchInput />
+        {track && <TrackDetails isFetching={loading} onSelectTrack={selectTrack} track={track} />}
+        <UploadTrack />
       </main>
     </div>
   )
