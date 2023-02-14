@@ -26,7 +26,7 @@ export default function TrackCard({track, onSelectTrack}) {
                     <Grid item xs={2}>
                         <Image className={styles.artwork2} alt={track.artists && track.artists[0].name+' - '+track.name} width={85} height={85} src={track.album?.images && track.album.images[0].url} />
                     </Grid>
-                    <Grid item md={3} xs={10} sm={3}>
+                    <Grid item md={3} xs={9} sm={3}>
                         <Typography className={styles.trackTitle} style={{width: '100%'}} gutterBottom variant="h5" component="div" noWrap>
                             {track.name}
                         </Typography>

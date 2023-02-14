@@ -16,12 +16,19 @@ import TrackSkeleton from './TrackSkeleton';
 import TrackCardPrimary from './TrackCardPrimary';
 
 export default function TrackDetails({track, isFetching, onSelectTrack}) {
-    const [recommendations, setRecommendations] = useState([])
-    const [loading, setLoading] = useState(true)
     const router = useRouter()
 
+    const [recommendations, setRecommendations] = useState([])
+    const [loading, setLoading] = useState(isFetching)
+    const [trackId, setTrackId] = useState(router.query.trackId[router.query.trackId.length - 1]);
+
+    console.log(router.query.trackId[router.query.trackId.length - 1])
+    console.log(trackId)
+    console.log(router.query.trackId[router.query.trackId.length - 1] !== trackId)
+    console.log('=====')
+    console.log(recommendations)
     useEffect(() => {
-        if(recommendations.length === 0) {
+        if(router.query.trackId[router.query.trackId.length - 1] !== trackId || recommendations.length === 0) {
             setLoading(true);
             const query = {
                 seed_artists: [track.artists ? track.artists[0].id : ""],
@@ -47,10 +54,10 @@ export default function TrackDetails({track, isFetching, onSelectTrack}) {
             }).catch(err => {
                 console.log(err)
                 setLoading(false);
-                console.log('show emoty recommendation')
-              })
+                console.log('show empty recommendation')
+            })
         }
-    }, [router.asPath, track, router.query, recommendations])
+    }, [router.asPath, router.query, trackId])
 
     const selectTrack = (url, track) => {
         setLoading(true)
@@ -58,8 +65,8 @@ export default function TrackDetails({track, isFetching, onSelectTrack}) {
         onSelectTrack(url, track)
     }
       
-    if(isFetching || !track || !track.artists ) {
-        return (<Box sx={{maxWidth: '768px', width: '100%', mb: 8}}><TrackSkeleton /></Box>)
+    if(loading || !track || !track.artists ) {
+        return (<Box sx={{maxWidth: '768px', width: '100%', mb: 8}}><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /></Box>)
     }
     return (
       <Box sx={{maxWidth: '768px', width: '100%', mb: 8}}>
@@ -74,14 +81,12 @@ export default function TrackDetails({track, isFetching, onSelectTrack}) {
             <Divider sx={{textAlign: 'center', width: '100%', mt: 6, mb: 4}}>
                 <Chip sx={{ fontSize: '0.9rem'}} label={`Recommendations for Harmonic Mixing`} />
             </Divider>
-
-            {(loading) && <><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /></>}
-            
-            {(recommendations && recommendations.length > 0) && 
             <Typography mt={4} mb={4} style={{opacity: 0.6}} variant='subtitle2'>
                 The following tracks will sound good when mixed with <Chip color="info" size="small" label={`${track.name} - ${track.artists && track.artists[0].name}`} />  because they have similar tempos, simlar key range, time signature (beat), loudness, energy, mode for djing purposes. Recommendation aligorithms via Spotify API.
-            </Typography>}
+            </Typography>
 
+            {(loading) && <><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /></>}
+           
 
             {(recommendations && recommendations.length !== 0) && recommendations.map(recommendedTrack => 
                 <TrackCard onSelectTrack={selectTrack} key={recommendedTrack.id} track={recommendedTrack} />)

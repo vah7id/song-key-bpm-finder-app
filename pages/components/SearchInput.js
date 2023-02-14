@@ -1,22 +1,13 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import DownloadIcon from '@mui/icons-material/Download';
-import AudioFileIcon from '@mui/icons-material/AudioFile';
-import SaveIcon from '@mui/icons-material/Save';
-import PlayIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
-import LoopIcon from '@mui/icons-material/Loop';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import {TextField, Button, Typography, Card, CardMedia, CardContent, BottomNavigation, BottomNavigationAction, Stack, IconButton, Skeleton, LinearProgress, Backdrop, CircularProgress, Grid, Divider, Breadcrumbs, Link, Chip, CardActions, List, ListItem, ListItemButton, ListItemText, ListItemIcon, Autocomplete, Badge, FormControl, FormLabel, FormControlLabel, Switch, FormGroup} from '@mui/material';
-import SettingsIcon from '@mui/icons-material/Settings';
 import HomeIcon from '@mui/icons-material/Home';
 import ShareURL from './ShareURL';
 import styles from '../../styles/Home.module.css'
 import SearchIcon from '@mui/icons-material/Search';
 import { PianoOutlined, Router } from '@mui/icons-material';
-import MusicTempo from 'music-tempo'
-import SpeedIcon from '@mui/icons-material/Speed';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { useRouter } from 'next/router';
@@ -148,15 +139,14 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
             showNotification('error', 'Oops!! Please type your song title first :)')
             return;
         }
-        if(title === router.query.query) {
-           
+
+        if((router.query && router.query.query) && title.trim() === router.query.query.trim()) {
             return;
         }
 
         if(router.query.query === title && tracksData.length !== 0) {
             handleNewSearch(false);
             setIsFetching(false);
-            console.log('trraaaapppp')
             return;
         }
 
@@ -173,7 +163,9 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
     const handleSelectAutoComplete = (id, label) => {
         // fetch track and set data
         if(id) {
+            setIsFetching(false);
             const url = label.replace(/ /g, '-').replace('&','').replace('&','').replace('&','').replace('&','').replace('&','-').replace('&','-').replace('&','-').replace('?','').replace('?','').replace('?','').replace('?','').replace('.','-').replace('.','-').replace('/','').replace('/','').replace('/','').replace('#','').replace('#','').replace('(','').replace('(','').replace('(','').replace('(','').replace(')','').replace(')','').replace(')','').replace(')','').replace(')','').replace('+','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','');
+            setAutocompleteItems([])
             router.push(`/tracks/${url}/${id}`);
         }
     }
@@ -202,7 +194,6 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
                             onKeyDown={(e) => {
                                 if(e.keyCode == 13){
                                     e.preventDefault()
-                                    console.log(e.target.value)
                                     handleChange(e.target.value)
                                 }
                             }}
@@ -212,7 +203,7 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
                             options={autocompleteItems}
                             disableClearable
                             sx={{ width: '100%' }}
-                            renderInput={(params) => <TextField {...params} label={`${(router.query && router.query.query) ? router.query.query : 'Type another song title here...'}`} />}
+                            renderInput={(params) => <TextField {...params} label={`${(router.query && router.query.query) ? router.query.query : 'Type a song title here...'}`} />}
                         />
                         
                     </Grid>
@@ -231,7 +222,7 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
                 
                 <Box sx={{ width: '100%', mt: '10px', opacity: '0.3', fontSize: '14px' }}>
                     <Typography variant="subtitle">
-                    exp: Bob Marley - Ganja :)
+                    Exp: It Was A Good Day Ice Cube :)
                     </Typography>
                 </Box>
                 {(isFetching || isSearching) && <Box sx={{ width: '100%', mt: '15px' }}>

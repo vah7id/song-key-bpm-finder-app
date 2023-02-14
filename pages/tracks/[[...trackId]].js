@@ -23,7 +23,6 @@ export default function Home() {
     fetch('/api/authSpotify').then(resp => resp.json()).then(resp => {
         if(!track || (router.query && router.query.trackId &&  currentTrackId !== router.query.trackId[router.query.trackId.length-1])) {
             fetch('/api/getTrackData?id='+router.query.trackId[router.query.trackId.length-1]).then(resp => resp.json()).then(resp => {
-                setLoading(false);
                 setTrack(resp);
                 setCurrentTrackId(resp.id)
             }).catch(err => {
@@ -90,10 +89,7 @@ export default function Home() {
         <Typography variant="h2" style={{ maxWidth: '668px', fontSize: '0.85rem', lineHeight: '20px', opacity: '0.4', textAlign: 'center', margin: '16px 0 40px 0' }}>
             Find your track BPM & song key by just typing the song title or you can also upload your track to analyze, if you could not find it in our database!
         </Typography>
-        <SearchInput handleNewSearch={handleNewSearch} isSearching={loading} />
-        {loading && <Box sx={{ display: 'flex' }}>
-          <CircularProgress />
-        </Box>}
+        <SearchInput handleNewSearch={handleNewSearch} isSearching={false} />
         {track && <TrackDetails isFetching={loading} onSelectTrack={selectTrack} track={track} />}
         <UploadTrack />
       </main>

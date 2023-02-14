@@ -23,10 +23,10 @@ export default function Search() {
     fetch('/api/authSpotify').then(resp => resp.json()).then(resp => {
       if(router.query.query !== "") {
         fetch(`/api/findBpm?title=${router.query.query || ""}`).then(response => response.json()).then(response => {
-          setIsFetching(false);
           if(response.err) {
              
           } else {
+              setIsFetching(false);
               setTracksData(response);
           }
         }).catch(err => {

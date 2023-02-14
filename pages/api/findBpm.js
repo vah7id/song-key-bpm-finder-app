@@ -14,6 +14,7 @@ var spotifyApi = new SpotifyWebApi({
     redirectUri: 'https://scfetch.app/api/callback'
 });
 
+const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
 export default function handler(req, res) {
     //spotifyApi.setAccessToken('BQAXwZmR8C_inD7iYX0ViC-RRDYPOhWuK5o-BMcQwm8VYrR0daYlu8FeZG1dgfYx5I1Y9CDy1a3elJ03Nge6R1VTeOCAK3wgTVKs6bunHBz0p1hPo8OQ0lNPQpPDN2vR5xHJU5E4hJVGEKjAEd4F5vxxUqccr6SDLpxlR0fBGfhx-cAfEUm0JCmTRelaligpu-xSDTh2KB9Xs0zZWWQ');
@@ -34,24 +35,25 @@ export default function handler(req, res) {
         
                 const tracks = data.body.tracks.items;
 
-                tracks.forEach((track, index) => {
-                    setTimeout(() => {
-                        spotifyApi.getAudioFeaturesForTrack(track.id).then((featuresData) => {
-                            tracks[index].key = featuresData.body.key;
-                            tracks[index].tempo = featuresData.body.tempo;
-                            tracks[index].duration_ms = featuresData.body.duration_ms;
-                            tracks[index].mode = featuresData.body.mode;
-                            tracks[index].danceability = featuresData.body.danceability;
-                            tracks[index].energy = featuresData.body.energy;
-                            tracks[index].loudness = featuresData.body.loudness;
-                            tracks[index].happiness = featuresData.body.valence;
-                            tracks[index].instrumentalness = featuresData.body.instrumentalness
-                            tracks[index].time_signature = featuresData.body.time_signature
-                            if(index === tracks.length - 1) {
-                                res.status(200).json(tracks); 
-                            }
-                        })
-                    },500);
+                tracks.forEach(async(track, index) => {
+                    spotifyApi.getAudioFeaturesForTrack(track.id).then(async(featuresData) => {
+                        tracks[index].key = featuresData.body.key;
+                        tracks[index].tempo = featuresData.body.tempo;
+                        tracks[index].duration_ms = featuresData.body.duration_ms;
+                        tracks[index].mode = featuresData.body.mode;
+                        tracks[index].danceability = featuresData.body.danceability;
+                        tracks[index].energy = featuresData.body.energy;
+                        tracks[index].loudness = featuresData.body.loudness;
+                        tracks[index].happiness = featuresData.body.valence;
+                        tracks[index].instrumentalness = featuresData.body.instrumentalness
+                        tracks[index].time_signature = featuresData.body.time_signature
+                        await sleep(2000);
+
+                        if(index === tracks.length - 1) {
+                            res.status(200).json(tracks); 
+                        }
+                    })
+                    await sleep(1000);
                 });
               },
               function(err) {
