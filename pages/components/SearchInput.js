@@ -40,7 +40,6 @@ export function msToTime(duration) {
   }
 
 export const getSongKeyTitle = (key, mode) => {
-    console.log(key)
     let modeTitle = "";
     if(mode === 1) 
         modeTitle = "Major";
@@ -89,6 +88,32 @@ export default function SearchInput() {
     const [analyseResult, setAnalyseResult] = React.useState(null) 
     const [fileUploaded, setFileUpload] = React.useState([])
     const router = useRouter()
+
+    const handleAutoComplete = () => {
+        if(url.length > 3) {
+            fetch(`/api/search?title=${url || ""}`).then(response => response.json()).then(response => {
+                if(response.err) {
+                    setAutocompleteItems([])
+                } else {
+                    let options = []
+                    response.map((track, index) => {
+                        options[index] = { id: track.id, label: track.name   +' '+track.artists[0].name   }
+                    })
+                    console.log(options)
+                    setAutocompleteItems(options)
+                }
+            }).catch(err => {
+                setAutocompleteItems([])
+            });
+        }
+    }
+
+    React.useEffect(() => {
+        if(url !== "" && autocompleteItems.length === 0) {
+            console.log(autocompleteItems)
+            handleAutoComplete()
+        }
+    }, [url, autocompleteItems])
     
     const showNotification = (type, message) => {
         setSnackbarOpen(true);
@@ -114,7 +139,6 @@ export default function SearchInput() {
         setAnalyseResult(null);
         const title = query 
         setIsFetching(true);
-        console.log(title)
         if(title === "") {
             showNotification('error', 'Oops!! Please type your song title first :)')
         }
@@ -139,26 +163,10 @@ export default function SearchInput() {
         handleChange(event.clipboardData.getData('text/plain'));
     }
 
-    const handleAutoComplete = (e) => {
-        setURL(e.target.value)
-        if(e.target.value.length > 3) {
-            fetch(`/api/search?title=${e.target.value || ""}`).then(response => response.json()).then(response => {
-                if(response.err) {
-                    setAutocompleteItems([])
-                } else {
-                    let options = []
-                    response.map((track, index) => {
-                        options[index] = { id: track.id, label: track.name   +' '+track.artists[0].name   }
-                    })
-                    setAutocompleteItems(options)
-                }
-            }).catch(err => {
-                setAutocompleteItems([])
-            });
-        }
-    }
+    
 
     const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+   
 
     const handleSelectAutoComplete = (id, label) => {
         // fetch track and set data
@@ -191,20 +199,26 @@ export default function SearchInput() {
                             disablePortal
                             id="combo-box-demo"
                             freeSolo
-                            onKeyUp={handleAutoComplete}
+                            onInputChange={(event, newInputValue) => {
+                                if (event?.type === "change") {
+                                    setAutocompleteItems([])
+                                    setURL(newInputValue)
+                                }
+                            }}
                             onKeyDown={(e) => {
                                 if(e.keyCode == 13){
                                     console.log(e.target.value)
                                     handleChange(e.target.value)
                                 }
                             }}
-                            onChange={(e, value) => (value && value !== "" && value.id) ? handleSelectAutoComplete(value.id,value.label) : handleChange(value.label)}
+                            getOptionLabel={(option) => option.label}
+                            onChange={(e, value) => {console.log(value);(value && value !== "" && value.id) ? handleSelectAutoComplete(value.id,value.label) : handleChange(value.label)}}
                             onPaste={handlePaste}
                             options={autocompleteItems}
                             disableClearable
                             sx={{ width: '100%' }}
                             renderInput={(params) => <TextField {...params} label="Type a song title here..." />}
-                            />
+                        />
                         
                     </Grid>
                     <Grid item xs={2}>

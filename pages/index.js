@@ -51,7 +51,7 @@ export default function Home() {
       </Head>
       <main lang="en" className={styles.main}>
         <Link href="/" passHref>
-          <Image style={{ minWidth: "200px"}} alt="logo" onClick={() => router.push('/')} src={logo2} />
+          <Image style={{ minWidth: "225px", cursor: 'pointer'}} alt="logo" onClick={() => router.push('/')} src={logo2} />
         </Link>
 
         <Link href="/" passHref>

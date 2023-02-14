@@ -213,7 +213,7 @@
     flex-direction: column;
   }
   .trackTitle {
-    margin-top: 0 !important;
+    margin-top: 0;
   }
 }
 
@@ -222,9 +222,6 @@
     margin-top: 20px !important;
     margin-bottom: 20px !important;
     width: 100% !important;
-  }
-  .trackTitle {
-    margin-top: 0 !important;
   }
   .cardImage {
     display: none !important
