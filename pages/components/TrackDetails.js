@@ -20,16 +20,11 @@ export default function TrackDetails({track, isFetching, onSelectTrack}) {
 
     const [recommendations, setRecommendations] = useState([])
     const [loading, setLoading] = useState(isFetching)
-    const [trackId, setTrackId] = useState(router.query.trackId[router.query.trackId.length - 1]);
+    const [trackId, setTrackId] = useState((router.query && router.query.trackId) ? router.query.trackId[router.query.trackId.length - 1] : "");
 
-    console.log(router.query.trackId[router.query.trackId.length - 1])
-    console.log(trackId)
-    console.log(router.query.trackId[router.query.trackId.length - 1] !== trackId)
-    console.log('=====')
-    console.log(recommendations)
 
     useEffect(() => {
-        if(router.query.trackId[router.query.trackId.length - 1] !== trackId || recommendations.length === 0) {
+        if((router.query && router.query.trackId && router.query.trackId[router.query.trackId.length - 1] !== trackId) || (recommendations && recommendations.length === 0)) {
             setLoading(true);
             const query = {
                 seed_artists: [track.artists ? track.artists[0].id : ""],
