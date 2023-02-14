@@ -38,10 +38,10 @@ export default function TrackCardPrimary({track}) {
         <Card  key={track.id} sx={{ width: '100%', display: 'flex', mb: 2 }}>
             <CardContent sx={{flex: '1 0 auto', paddingBottom: '16px !important'}}>
                 <Grid container spacing={2}>
-                    <Grid item md={3} sm={3} xs={3}>
-                        <Image alt={track.artists && track.artists[0].name+' - '+track.name} width={160} height={160} src={track.album?.images && track.album.images[0].url} />
+                    <Grid item md={3} sm={3} xs={12}>
+                        <Image className={styles.artwork} alt={track.artists && track.artists[0].name+' - '+track.name} width={160} height={160} src={track.album?.images && track.album.images[0].url} />
                     </Grid>
-                    <Grid item md={4} sm={4} xs={9}>
+                    <Grid item md={4} sm={4} xs={12}>
                         <Typography className={styles.trackTitle} style={{marginTop: 8,width: '100%'}} gutterBottom variant="h5" component="div" noWrap>
                             {track.name}
                         </Typography>
@@ -54,12 +54,8 @@ export default function TrackCardPrimary({track}) {
                         <Typography noWrap style={{width: '100%', display: 'block', margin: '-5px 0 0px 0'}} gutterBottom sx={{fontSize: '14px', paddingTop: '2px'}} variant="subtitle1" color="text.secondary">
                             Released: <b>{track.album && track.album.release_date}</b>
                         </Typography>
-                        <Link target="_blank" href={track.external_urls && track.external_urls.spotify}><Button style={{margin: '12px 15px 0 0'}} color="success" size='small' variant="outlined" startIcon={<PlayCircleFilledWhiteIcon />}>
-                            Play
-                        </Button></Link>
-                        <Button aria-describedby={id} onClick={(e) => handleClick(e)} style={{margin: '12px 15px 0 0'}} color="warning" size='small' variant="outlined" startIcon={<ShareOutlined />}>
-                            Share
-                        </Button>
+                        <Link target="_blank" href={track.external_urls && track.external_urls.spotify}><Button sx={{margin: '12px 15px 0 0', minWidth: '40px !important', width: '40px', paddingLeft: '24px !important'}} color="success" variant="outlined" startIcon={<PlayCircleFilledWhiteIcon />} /></Link>
+                        <Button aria-describedby={id} onClick={(e) => handleClick(e)} sx={{margin: '12px 15px 0 0', minWidth: '40px !important', width: '40px !important', paddingLeft: '24px !important'}} color="warning"  variant="outlined" startIcon={<ShareOutlined />} />
                         <Popover
                             id={id}
                             open={open}
@@ -73,7 +69,7 @@ export default function TrackCardPrimary({track}) {
                            <ShareURL title={`Song key & BPM of the track `+track.artists && track.artists[0].name+' - '+track.name} url={window.location.href} />
                         </Popover>
                     </Grid>
-                    <Grid item md={2} sm={2} xs={3}  mt={1}>
+                    <Grid item md={2} sm={2} xs={2}  mt={1}>
                         <Typography style={{width: '100%', textAlign: 'center'}} gutterBottom variant="h5" component="div">
                         {`${track.tempo ? Math.round(track.tempo) : 'N/A'}`}
                         </Typography>

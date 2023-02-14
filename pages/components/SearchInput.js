@@ -133,11 +133,14 @@ export default function SearchInput() {
 
     const handleChange = (query) => {
         console.log(query)
-        if(!query) {
+        console.log(url)
+
+        if(!query && (!url || url === "") ) {
             return;
         }
         setAnalyseResult(null);
-        const title = query 
+        const title = query || url; 
+
         setIsFetching(true);
         if(title === "") {
             showNotification('error', 'Oops!! Please type your song title first :)')
@@ -147,7 +150,6 @@ export default function SearchInput() {
             setIsFetching(false);
             if(response.err) {
                 showNotification('error', response.err.message);
-
             } else {
                 setTracksData(response);
             }
@@ -162,11 +164,6 @@ export default function SearchInput() {
     const handlePaste = (event) => {
         handleChange(event.clipboardData.getData('text/plain'));
     }
-
-    
-
-    const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
-   
 
     const handleSelectAutoComplete = (id, label) => {
         // fetch track and set data
@@ -185,6 +182,7 @@ export default function SearchInput() {
             });
         }
     }
+    
     const selectTrack = (url, track) => {
         setIsFetching(true);
         router.push(url)
@@ -201,17 +199,19 @@ export default function SearchInput() {
                             freeSolo
                             onInputChange={(event, newInputValue) => {
                                 if (event?.type === "change") {
+                                    console.log(newInputValue)
                                     setAutocompleteItems([])
                                     setURL(newInputValue)
                                 }
                             }}
                             onKeyDown={(e) => {
                                 if(e.keyCode == 13){
+                                    e.preventDefault()
                                     console.log(e.target.value)
                                     handleChange(e.target.value)
                                 }
                             }}
-                            getOptionLabel={(option) => option.label}
+                            getOptionLabel={(option) => !option.label ? option : option.label}
                             onChange={(e, value) => {console.log(value);(value && value !== "" && value.id) ? handleSelectAutoComplete(value.id,value.label) : handleChange(value.label)}}
                             onPaste={handlePaste}
                             options={autocompleteItems}

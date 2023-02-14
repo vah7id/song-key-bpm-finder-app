@@ -65,17 +65,23 @@ export default function TrackDetails({track, isFetching, onSelectTrack}) {
       <Box sx={{maxWidth: '768px', width: '100%', mb: 8}}>
             <Grid xs={12}>
                 <Divider sx={{textAlign: 'center', width: '100%', mt: 4, mb: 4}}>
-                    <Chip label={`BPM, Song Key of ${track.name} - ${track.artists && track.artists[0].name}`} />
+                    <Chip sx={{ width: '320px'}} label={<Typography style={{width: '300px',fontSize: '0.85rem'}} noWrap>{`BPM, Song Key: ${track.name} - ${track.artists && track.artists[0].name}`}</Typography>} />
                 </Divider>
             </Grid>
            
             <TrackCardPrimary track={track} />
            
-            <Divider sx={{textAlign: 'center', width: '100%', mt: 4, mb: 4}}>
-                <Chip label={`Recommendations for Harmonic Mixing`} />
+            <Divider sx={{textAlign: 'center', width: '100%', mt: 6, mb: 4}}>
+                <Chip sx={{ fontSize: '0.9rem'}} label={`Recommendations for Harmonic Mixing`} />
             </Divider>
 
             {(loading) && <><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /></>}
+            
+            {(recommendations && recommendations.length > 0) && 
+            <Typography mt={4} mb={4} style={{opacity: 0.6}} variant='subtitle2'>
+                The following tracks will sound good when mixed with <Chip color="info" size="small" label={`${track.name} - ${track.artists && track.artists[0].name}`} />  because they have similar tempos, simlar key range, time signature (beat), loudness, energy, mode for djing purposes. Recommendation aligorithms via Spotify API.
+            </Typography>}
+
 
             {(recommendations && recommendations.length !== 0) && recommendations.map(recommendedTrack => 
                 <TrackCard onSelectTrack={selectTrack} key={recommendedTrack.id} track={recommendedTrack} />)

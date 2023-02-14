@@ -85,10 +85,7 @@
   padding: 12px;
 }
 
-.artwork {
-  max-width: 150px;
-  min-width: 150px;
-}
+
 .logo {
   vertical-align: middle;
 }
@@ -198,6 +195,11 @@
   height:32px;
 }
 
+.artwork {
+  width: 160px;
+  height: 160px;
+}
+
 .exportButton {
   float:right; 
   margin-top: -42px !important;
@@ -215,6 +217,10 @@
   .trackTitle {
     margin-top: 0;
   }
+  .artwork {
+    width: 50px !important;
+    height: 50px !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -227,9 +233,6 @@
     display: none !important
   }
   .uploadBtn {
-    display: none !important;
-  }
-  .artwork {
     display: none !important;
   }
   .cardObject {
