@@ -109,20 +109,7 @@ export default function ShareURL({shareUrl, title}) {
   };
     return (
       <>
-      <Button
-      style={{ padding: '0px 10px 0px 20px'}}
-        id="demo-customized-button"
-        aria-controls={open ? 'demo-customized-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        color="secondary"
-        disableElevation
-        endIcon={<KeyboardArrowDownIcon />}
-        onClick={handleClick}
-      >
-        SHARE WITH...
-      </Button>
-      {open && <div className={styles.ShareContainer}>
+      {<div className={styles.ShareContainer}>
         <div className={styles.shareNetwork}>
           <FacebookShareButton
             url={shareUrl}

@@ -38,7 +38,7 @@ export default function Home() {
       setLoading(false);
       console.log('cannot authorize with spotify!!!')
     })
-  }, [router.asPath, currentTrackId])
+  }, [router.asPath, currentTrackId, router.query, track])
 
   const selectTrack = (url, track) => {
     setLoading(true)
