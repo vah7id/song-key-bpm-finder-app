@@ -177,6 +177,9 @@ console.log(tracksData && tracksData.length === 0 && !isFetching)
                       <MenuItem onClick={() => handleSort('key')}>Sort By Key</MenuItem>
                       <MenuItem onClick={() => handleSort('tempo')}>Sort By Tempo</MenuItem>
                       <MenuItem onClick={() => handleSort('time_signature')}>Sort By Beat</MenuItem>
+                      <MenuItem onClick={() => handleSort('happiness')}>Sort By Happiness</MenuItem>
+                      <MenuItem onClick={() => handleSort('energy')}>Sort By Energy</MenuItem>
+                      <MenuItem onClick={() => handleSort('danceability')}>Sort By Danceability</MenuItem>
 
                     </Menu>
                   </Grid>
