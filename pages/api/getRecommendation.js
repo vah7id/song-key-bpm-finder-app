@@ -45,6 +45,7 @@ export default function handler(req, res) {
                             resp[index].energy = featuresData.body.energy;
                             resp[index].loudness = featuresData.body.loudness;
                             resp[index].happiness = featuresData.body.valence;
+                            resp[index].popularity = featuresData.body.popularity;
                             resp[index].instrumentalness = featuresData.body.instrumentalness
                             resp[index].time_signature = featuresData.body.time_signature
                             await sleep(2000);

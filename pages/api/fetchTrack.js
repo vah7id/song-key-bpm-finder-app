@@ -44,6 +44,7 @@ export default function handler(req, res) {
                     resp.energy = featuresData.body.energy;
                     resp.loudness = featuresData.body.loudness;
                     resp.happiness = featuresData.body.valence;
+                    resp.popularity = featuresData.body.popularity;
                     resp.instrumentalness = featuresData.body.instrumentalness
                     resp.time_signature = featuresData.body.time_signature
 

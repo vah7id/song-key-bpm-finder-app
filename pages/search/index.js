@@ -35,7 +35,12 @@ export default function Search() {
             if(response.err) {
             } else {
               setIsFetching(false);
-              setTracksData(response);
+              let tmp = response
+              let sorted = tmp.slice(0);
+              sorted.sort(function(a,b) {
+                  return a['popularity'] - b['popularity'];
+              });
+              setTracksData(sorted);
             }
         }).catch(err => {
             console.log(err.message)
@@ -168,7 +173,7 @@ console.log(tracksData && tracksData.length === 0 && !isFetching)
                       open={open}
                       onClose={handleClose}
                     >
-                      <MenuItem onClick={() => handleSort('happiness')}>Sort By Popularity</MenuItem>
+                      <MenuItem onClick={() => handleSort('popularity')}>Sort By Popularity</MenuItem>
                       <MenuItem onClick={() => handleSort('key')}>Sort By Key</MenuItem>
                       <MenuItem onClick={() => handleSort('tempo')}>Sort By Tempo</MenuItem>
                       <MenuItem onClick={() => handleSort('time_signature')}>Sort By Beat</MenuItem>
