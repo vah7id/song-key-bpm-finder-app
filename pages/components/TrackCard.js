@@ -20,21 +20,21 @@ export default function TrackCard({track, onSelectTrack}) {
     const url = (track.artists && track.artists[0].name+'-'+track.name).replace(/ /g, '').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('?','').replace('?','').replace('?','').replace('?','').replace('.','-').replace('.','-').replace('/','').replace('/','').replace('/','').replace('#','').replace('#','').replace('(','').replace('(','').replace('(','').replace('(','').replace(')','').replace(')','').replace(')','').replace(')','').replace(')','').replace('+','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','');
     return (
       <>
-        <Card onClick={() => onSelectTrack('/tracks/'+url+'/'+track.id, track)} key={track.id} className={styles.cardW} sx={{ width: '100%', display: 'flex', mb: 2 }}>
-            <CardContent sx={{flex: '1 0 auto', paddingBottom: '16px !important'}}>
+        <Card onClick={() => onSelectTrack('/tracks/'+url+'/'+track.id, track)} key={track.id} className={styles.cardW} sx={{ width: '100%',  mb: 2 }}>
+            <CardContent style={{width: '100% !important', paddingBottom: '0 !important'}}>
                 <Grid container spacing={2}>
-                    <Grid item xs={2}>
+                    <Grid item sm={2} xs={2}>
                         <Image className={styles.artwork2} alt={track.artists && track.artists[0].name+' - '+track.name} width={85} height={85} src={track.album?.images && track.album.images[0].url} />
                     </Grid>
-                    <Grid item md={3} xs={9} sm={3}>
-                        <Typography className={styles.trackTitle} style={{width: '100%', marginTop: '16px'}} gutterBottom variant="h5" component="div" noWrap>
+                    <Grid item md={4} xs={9} sm={4}>
+                        <Typography className={styles.trackTitle} style={{width: '100%'}} gutterBottom variant="h5" component="div" noWrap>
                             {track.name}
                         </Typography>
                         <Typography noWrap style={{width: '100%', display: 'block', margin: '-5px 0 0px 0'}} gutterBottom sx={{fontSize: '14px', paddingTop: '0'}} variant="subtitle1" color="text.secondary">
                             {track.artists && track.artists[0].name}
                         </Typography>
                     </Grid>
-                    <Grid item xs={2}  mt={2}>
+                    <Grid item xs={4} sm={2}  mt={2}>
                         <Typography style={{width: '100%', textAlign: 'center'}} gutterBottom variant="h5" component="div">
                         {`${track.tempo ? Math.round(track.tempo) : 'N/A'}`}
                         </Typography>
@@ -42,7 +42,7 @@ export default function TrackCard({track, onSelectTrack}) {
                             BPM
                         </Typography>
                     </Grid>
-                    <Grid item xs={3}  mt={2}>
+                    <Grid item xs={4} sm={2}  mt={2}>
                         <Typography style={{width: '100%', textAlign: 'center'}} gutterBottom variant="h6" component="div">
                             {`${track.key ? getSongKeyTitle(track.key,track.mode) : 'N/A'}`}
                         </Typography>
@@ -50,7 +50,7 @@ export default function TrackCard({track, onSelectTrack}) {
                             Key
                         </Typography>
                     </Grid>
-                    <Grid item xs={2}  mt={2}>
+                    <Grid item xs={4} sm={2}  mt={2}>
                         <Typography style={{width: '100%', textAlign: 'center'}} gutterBottom variant="h5" component="div">
                         {`${track.time_signature ? track.time_signature + '/4' : '4/4'}`}
                         </Typography>

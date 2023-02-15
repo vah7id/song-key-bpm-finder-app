@@ -142,27 +142,23 @@ console.log(tracksData && tracksData.length === 0 && !isFetching)
    
         {(tracksData && tracksData.length > 0) && 
           <Box sx={{ maxWidth: '768px',width: '100%', mt: '25px' }}>
-              <Grid container spacing={2}>
-                  <Grid xs={12}>
-                      <Divider sx={{textAlign: 'center', width: '100%', mt: 4, mb: 4}}>
-                          <Chip label={`BPM, Song Key Results of ${router.query.query}`} />
-                      </Divider>
+              <Grid  spacing={2}>
+                  <Grid xs={12} mt={4} mb={1}>
+                          <Typography sx={{fontSize: '24px', width: '100%'}} variant="h5">BPM, Song Key Results of {router.query.query}</Typography>
                   </Grid>
-
-                  <Grid xs={6} md={6}>
-                      <Typography style={{textAlign: 'left', padding: '4px 0', opacity: 0.4}} variant="subtitle2">{tracksData.length} result for {router.query.query}</Typography>
+                  <Grid xs={4} sm={4} md={6}>
+                      <Typography style={{ width: '100%',textAlign: 'left', padding: '0', opacity: 0.4}} variant="subtitle2"><b>({tracksData.length})</b> results found via spotify API</Typography>
                   </Grid>
-                  <Grid xs={6} md={6} mb={4}>
+                  <Grid xs={12} sm={12} md={6} mb={4} mt={2}>
                     <Button
                       color={'info'}
                       startIcon={<SortRounded />}
-                      style={{float: 'right'}}
                       aria-controls={open ? 'fade-menu' : undefined}
                       aria-haspopup="true"
                       aria-expanded={open ? 'true' : undefined}
                       onClick={handleOpenSortBy}
                     >
-                      Sort By ...
+                      Sort The List By ...
                     </Button>
                     <Menu
                       id="fade-menu"

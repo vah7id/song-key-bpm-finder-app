@@ -178,7 +178,7 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
     return (
         <Box sx={{maxWidth: '768px', width: '100%'}}>
              <Box sx={{ flexGrow: 1 }}>
-                <Grid container spacing={2}>
+                <Grid container spacing={1}>
                     <Grid item xs={10}>
                         <Autocomplete
                             disablePortal
@@ -211,7 +211,7 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
                         <Button 
                             onClick={() => handleChange(url)} 
                             size='large'  
-                            style={{ width: '90%', minWidth: '48px !important', padding: '15px'}} 
+                            style={{ width: '90%', minWidth: '42px !important', padding: '15px'}} 
                             variant='contained'
                             >
                                 <SearchIcon />
