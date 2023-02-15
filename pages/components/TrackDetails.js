@@ -39,7 +39,7 @@ export default function TrackDetails({track, onSelectTrack}) {
         if(isRefreshing || (router.query && router.query.trackId && router.query.trackId[router.query.trackId.length - 1] !== trackId) || (recommendations && recommendations.length === 0)) {
             setLoading(true);
             const query = {
-                seed_artists: [track.artists ? track.artists[0].id : ""],
+                seed_artists: [track && track.artists[0] ? track.artists[0].id : ""],
                 seed_tracks: [track.id],
                 limit: 30,
                 min_popularity: 10,
@@ -96,19 +96,19 @@ export default function TrackDetails({track, onSelectTrack}) {
     }
 
     return (<>
-    <Backdrop
+        <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1000 }}
           open={loading}
         >
           <CircularProgress color="inherit" />
         </Backdrop>
-        {!track || !track.artists && <Box sx={{maxWidth: '768px', width: '100%', mb: 8}}><TrackSkeleton /></Box>}
+        {!track && <Box sx={{maxWidth: '768px', width: '100%', mb: 8}}><TrackSkeleton /></Box>}
         {(loading && !track) && <Box sx={{maxWidth: '768px', width: '100%', mb: 8}}><TrackSkeleton /></Box>}
         <Box sx={{maxWidth: '768px', width: '100%', mb: 8}}>
             <Grid xs={12}>
                 <Divider sx={{textAlign: 'center', width: '100%', mt: 4, mb: 4}}>
                     <Chip sx={{ width: '320px'}} label={<Typography style={{width: '300px',fontSize: '0.85rem'}} noWrap>
-                      {`BPM, Song Key: ${track.name} - ${track.artists && track.artists[0].name}`}</Typography>} />
+                      {`BPM, Song Key: ${track && track.name} - ${track && track.artists && track.artists[0].name}`}</Typography>} />
                 </Divider>
             </Grid>
            
@@ -118,14 +118,14 @@ export default function TrackDetails({track, onSelectTrack}) {
                 <Chip sx={{ fontSize: '0.9rem'}} label={`Recommendations for Harmonic Mixing`} />
             </Divider>
             <Typography mt={4} mb={4} style={{opacity: 0.6}} variant='subtitle2'>
-                The following tracks will sound good when mixed with <Chip color="info" size="small" label={`${track.name} - ${track.artists && track.artists[0].name}`} />  because they have similar tempos, simlar key range, time signature (beat), loudness, energy, mode for djing purposes. Recommendation aligorithms via Spotify API.
+                The following tracks will sound good when mixed with <Chip color="info" size="small" label={`${track && track.name} - ${track && track.artists && track.artists[0].name}`} />  because they have similar tempos, simlar key range, time signature (beat), loudness, energy, mode for djing purposes. Recommendation aligorithms via Spotify API.
             </Typography>
 
             {(loading) ? <><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /></> : 
             <Grid container mb={2} spacing={2}>
               <Grid item xs={12} sm={12} md={12}>
                   <Typography style={{width: '100%',fontSize: '18px', padding: '0'}} variant="h5">
-                    ({recommendations.length}) recommendation (relative) songs found for {track.name}</Typography>
+                    ({recommendations.length}) recommendation (relative) songs found for {track && track.name}</Typography>
               </Grid>
               <Grid item xs={12} sm={6} md={6} mb={1}>
                 <Button
