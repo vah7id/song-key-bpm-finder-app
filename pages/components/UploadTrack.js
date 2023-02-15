@@ -206,7 +206,7 @@ Drop / Upload your audio file below and instantly get the song key & tempo. Dete
                 <CardActions>
                 <Button style={{width:'100%', padding: '15px'}} startIcon={<DriveFolderUploadIcon /> }  color="success" variant="outlined" component="label">
                      Upload Your Track (MP3)
-                    <input id="fileinput" onChange={handleUpload} hidden accept="audio/*" type="file" />
+                    <input id="fileinput" onChange={handleUpload} hidden accept="audio/mpeg,audio/*,.mp3" type="file" />
                 </Button>
             </CardActions>
             </Card> 
