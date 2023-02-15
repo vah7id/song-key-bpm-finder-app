@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Backdrop, Box, CircularProgress, Typography } from '@mui/material'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../../styles/Home.module.css'
@@ -15,7 +15,7 @@ import UploadTrack from '../components/UploadTrack'
 export default function Home() {
   const router = useRouter()
   const [track, setTrack] = useState(null);
-  const [loading,setLoading] = useState(false);
+  const [loading,setLoading] = useState(true);
   const [currentTrackId, setCurrentTrackId] = useState(router.query?.trackId ? router.query.trackId[router.query.trackId.length-1] : null);
   useEffect(() => {
     install('G-LDDJ32MXZ1'); 
@@ -92,8 +92,14 @@ export default function Home() {
         </Typography>
         <SearchInput handleNewSearch={handleNewSearch} isSearching={false} />
         {loading && <TrackSkeleton />}
-        {track && <TrackDetails isFetching={loading} onSelectTrack={selectTrack} track={track} />}
+        {track && <TrackDetails onSelectTrack={selectTrack} track={track} />}
         <UploadTrack />
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1000 }}
+          open={loading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </main>
     </div>
   )

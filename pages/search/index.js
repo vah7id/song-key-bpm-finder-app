@@ -11,9 +11,12 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import UploadTrack from '../components/UploadTrack'
 import TrackCard from '../components/TrackCard'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+
 export default function Search() {
   const router = useRouter()
   const [isFetching, setIsFetching] = useState(true);
+  const [sortType, setSortType] = useState('popularity');
   const [tracksData, setTracksData] = useState(null) 
   const [openSnackbar, setSnackbarOpen] = useState(false);
   const [notification, setNotification] = useState({ type: null, message: ""});
@@ -83,8 +86,8 @@ export default function Search() {
   }
   
   const handleSort = (type) => {
+    setSortType(type);
     const tmp = tracksData;
-
     if(tmp.length > 0) {
       let sorted = tmp.slice(0);
       sorted.sort(function(a,b) {
@@ -158,7 +161,7 @@ console.log(tracksData && tracksData.length === 0 && !isFetching)
                       aria-expanded={open ? 'true' : undefined}
                       onClick={handleOpenSortBy}
                     >
-                      Sort The List By ...
+                      Sorted By: {sortType} <ArrowDropDownIcon size={'small'} />
                     </Button>
                     <Menu
                       id="fade-menu"
@@ -170,12 +173,12 @@ console.log(tracksData && tracksData.length === 0 && !isFetching)
                       onClose={handleClose}
                     >
                       <MenuItem onClick={() => handleSort('popularity')}>Sort By Popularity</MenuItem>
-                      <MenuItem onClick={() => handleSort('key')}>Sort By Key</MenuItem>
-                      <MenuItem onClick={() => handleSort('tempo')}>Sort By Tempo</MenuItem>
-                      <MenuItem onClick={() => handleSort('time_signature')}>Sort By Beat</MenuItem>
-                      <MenuItem onClick={() => handleSort('happiness')}>Sort By Happiness</MenuItem>
-                      <MenuItem onClick={() => handleSort('energy')}>Sort By Energy</MenuItem>
-                      <MenuItem onClick={() => handleSort('danceability')}>Sort By Danceability</MenuItem>
+                  <MenuItem onClick={() => handleSort('key')}>Sort By Key</MenuItem>
+                  <MenuItem onClick={() => handleSort('tempo')}>Sort By Tempo</MenuItem>
+                  <MenuItem onClick={() => handleSort('time_signature')}>Sort By Beat</MenuItem>
+                  <MenuItem onClick={() => handleSort('happiness')}>Sort By Happiness</MenuItem>
+                  <MenuItem onClick={() => handleSort('energy')}>Sort By Energy</MenuItem>
+                  <MenuItem onClick={() => handleSort('danceability')}>Sort By Danceability</MenuItem>
 
                     </Menu>
                   </Grid>

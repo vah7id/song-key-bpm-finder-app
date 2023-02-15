@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 /* eslint-disable import/no-unresolved, import/extensions, import/no-extraneous-dependencies */
-import { PianoOutlined, SortRounded } from '@mui/icons-material';
-import { Avatar, Box, Button, Card, CardContent, CardHeader, CardMedia, Chip, Divider, Grid, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Skeleton, Typography } from '@mui/material';
+import { PianoOutlined, RefreshOutlined, SortRounded } from '@mui/icons-material';
+import { Avatar, Backdrop, Box, Button, Card, CardContent, CardHeader, CardMedia, Chip, CircularProgress, Divider, Grid, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Skeleton, Typography } from '@mui/material';
 import React, { Component, useEffect, useState } from 'react';
 import SpeedIcon from '@mui/icons-material/Speed';
 import LoopIcon from '@mui/icons-material/Loop';
@@ -14,14 +14,18 @@ import TrackCard from './TrackCard';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import TrackSkeleton from './TrackSkeleton';
 import TrackCardPrimary from './TrackCardPrimary';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-export default function TrackDetails({track, isFetching, onSelectTrack}) {
+export default function TrackDetails({track, onSelectTrack}) {
     const router = useRouter()
 
     const [recommendations, setRecommendations] = useState([])
-    const [loading, setLoading] = useState(isFetching)
+    const [loading, setLoading] = useState(true)
     const [trackId, setTrackId] = useState((router.query && router.query.trackId) ? router.query.trackId[router.query.trackId.length - 1] : "");
     const [anchorEl, setAnchorEl] = useState(null);
+    const [sortType, setSortType] = useState('popularity');
+    const [isRefreshing, setIsRefreshing] = useState(false);
+
     const open = Boolean(anchorEl);
     const handleOpenSortBy = (event) => {
       setAnchorEl(event.currentTarget);
@@ -32,7 +36,7 @@ export default function TrackDetails({track, isFetching, onSelectTrack}) {
   
 
     useEffect(() => {
-        if((router.query && router.query.trackId && router.query.trackId[router.query.trackId.length - 1] !== trackId) || (recommendations && recommendations.length === 0)) {
+        if(isRefreshing || (router.query && router.query.trackId && router.query.trackId[router.query.trackId.length - 1] !== trackId) || (recommendations && recommendations.length === 0)) {
             setLoading(true);
             const query = {
                 seed_artists: [track.artists ? track.artists[0].id : ""],
@@ -56,13 +60,16 @@ export default function TrackDetails({track, isFetching, onSelectTrack}) {
             fetch('/api/getRecommendation?qs='+JSON.stringify(query)).then(resp => resp.json()).then(resp => {
                 setRecommendations(resp)
                 setLoading(false);
+                setIsRefreshing(false);
+
             }).catch(err => {
                 console.log(err)
                 setLoading(false);
+                setIsRefreshing(false);
                 console.log('show empty recommendation')
             })
         }
-    }, [router.asPath, router.query, trackId])
+    }, [router.asPath, router.query, trackId, isRefreshing])
 
     const selectTrack = (url, track) => {
         setLoading(true)
@@ -71,8 +78,8 @@ export default function TrackDetails({track, isFetching, onSelectTrack}) {
     }
 
     const handleSort = (type) => {
+        setSortType(type);
         const tmp = recommendations;
-    
         if(tmp.length > 0) {
           let sorted = tmp.slice(0);
           sorted.sort(function(a,b) {
@@ -82,14 +89,26 @@ export default function TrackDetails({track, isFetching, onSelectTrack}) {
         }
       }
 
-    if(loading || !track || !track.artists ) {
-        return (<Box sx={{maxWidth: '768px', width: '100%', mb: 8}}><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /></Box>)
+
+    const refreshTheList = () => {
+      setRecommendations([]);
+      setIsRefreshing(true);
     }
-    return (
+
+    return (<>
+    <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1000 }}
+          open={loading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        {!track || !track.artists && <Box sx={{maxWidth: '768px', width: '100%', mb: 8}}><TrackSkeleton /></Box>}
+        {(loading && !track) && <Box sx={{maxWidth: '768px', width: '100%', mb: 8}}><TrackSkeleton /></Box>}
         <Box sx={{maxWidth: '768px', width: '100%', mb: 8}}>
             <Grid xs={12}>
                 <Divider sx={{textAlign: 'center', width: '100%', mt: 4, mb: 4}}>
-                    <Chip sx={{ width: '320px'}} label={<Typography style={{width: '300px',fontSize: '0.85rem'}} noWrap>{`BPM, Song Key: ${track.name} - ${track.artists && track.artists[0].name}`}</Typography>} />
+                    <Chip sx={{ width: '320px'}} label={<Typography style={{width: '300px',fontSize: '0.85rem'}} noWrap>
+                      {`BPM, Song Key: ${track.name} - ${track.artists && track.artists[0].name}`}</Typography>} />
                 </Divider>
             </Grid>
            
@@ -102,47 +121,60 @@ export default function TrackDetails({track, isFetching, onSelectTrack}) {
                 The following tracks will sound good when mixed with <Chip color="info" size="small" label={`${track.name} - ${track.artists && track.artists[0].name}`} />  because they have similar tempos, simlar key range, time signature (beat), loudness, energy, mode for djing purposes. Recommendation aligorithms via Spotify API.
             </Typography>
 
-            {(loading) ? <><TrackSkeleton /></> : <Grid container mb={4} spacing={2}>
-            <Grid item xs={12} sm={12} md={6}>
-                <Typography style={{width: '100%',textAlign: 'left', padding: '8px 0', opacity: 0.4}} variant="subtitle2">{recommendations.length} recommended (Relative) songs for {track.name}</Typography>
+            {(loading) ? <><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /></> : 
+            <Grid container mb={2} spacing={2}>
+              <Grid item xs={12} sm={12} md={12}>
+                  <Typography style={{width: '100%',fontSize: '18px', padding: '0'}} variant="h5">
+                    ({recommendations.length}) recommendation (relative) songs found for {track.name}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6} md={6} mb={1}>
+                <Button
+                  color={'info'}
+                  startIcon={<SortRounded />}
+                  style={{textTransform: 'capitalize', padding: '5px 10px 5px 10px'}}
+                  aria-controls={open ? 'fade-menu' : undefined}
+                  aria-haspopup="true"
+                  variant={'outlined'}
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={handleOpenSortBy}
+                >
+                  Sorted By: {sortType} <ArrowDropDownIcon size={'small'} />
+                </Button>
+                <Menu
+                  id="fade-menu"
+                  MenuListProps={{
+                    'aria-labelledby': 'fade-button',
+                  }}
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={() => handleSort('popularity')}>Sort By Popularity</MenuItem>
+                  <MenuItem onClick={() => handleSort('key')}>Sort By Key</MenuItem>
+                  <MenuItem onClick={() => handleSort('tempo')}>Sort By Tempo</MenuItem>
+                  <MenuItem onClick={() => handleSort('time_signature')}>Sort By Beat</MenuItem>
+                  <MenuItem onClick={() => handleSort('happiness')}>Sort By Happiness</MenuItem>
+                  <MenuItem onClick={() => handleSort('energy')}>Sort By Energy</MenuItem>
+                  <MenuItem onClick={() => handleSort('danceability')}>Sort By Danceability</MenuItem>
+
+                </Menu>
+              </Grid>
+                <Grid item mb={1} xs={12} sm={6} md={6}>
+                  <Button onClick={refreshTheList}  startIcon={<RefreshOutlined />} sx={{opacity: 0.6, float:'right'}} color={'inherit'}>Refresh The List</Button>
+                </Grid>
             </Grid>
-            <Grid item xs={12} sm={12} md={6} >
-                    <Button
-                      color={'info'}
-                      startIcon={<SortRounded />}
-                      style={{float: 'right'}}
-                      aria-controls={open ? 'fade-menu' : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={open ? 'true' : undefined}
-                      onClick={handleOpenSortBy}
-                    >
-                      Sort The Playlist By ...
-                    </Button>
-                    <Menu
-                      id="fade-menu"
-                      MenuListProps={{
-                        'aria-labelledby': 'fade-button',
-                      }}
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                    >
-                      <MenuItem onClick={() => handleSort('popularity')}>Sort By Popularity</MenuItem>
-                      <MenuItem onClick={() => handleSort('key')}>Sort By Key</MenuItem>
-                      <MenuItem onClick={() => handleSort('tempo')}>Sort By Tempo</MenuItem>
-                      <MenuItem onClick={() => handleSort('time_signature')}>Sort By Beat</MenuItem>
-                      <MenuItem onClick={() => handleSort('happiness')}>Sort By Happiness</MenuItem>
-                      <MenuItem onClick={() => handleSort('energy')}>Sort By Energy</MenuItem>
-                      <MenuItem onClick={() => handleSort('danceability')}>Sort By Danceability</MenuItem>
+          }
 
-                    </Menu>
-                  </Grid>
-                </Grid>}
-
-            {(recommendations && recommendations.length !== 0) && recommendations.map(recommendedTrack => 
-                <TrackCard onSelectTrack={selectTrack} key={recommendedTrack.id} track={recommendedTrack} />)
+            {(recommendations && recommendations.length !== 0) && recommendations.map(recommendedTrack => <>
+                <TrackCard onSelectTrack={selectTrack} key={recommendedTrack.id} track={recommendedTrack} />
+                </>)
             }
+            {(recommendations && recommendations.length !== 0) && <Box mt={4} sx={{width: '100%', float: 'left', 'textAlign': 'center'}}>
+                  <Button variant={'outlined'} onClick={refreshTheList} startIcon={<RefreshOutlined />} sx={{opacity: 0.7}} color={'inherit'}>Refresh The List</Button>
+                </Box>}
         </Box>
+        
+        </>
     );
   
 }
