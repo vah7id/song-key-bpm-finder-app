@@ -14,7 +14,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import TrackSkeleton from './TrackSkeleton';
 import TrackCardPrimary from './TrackCardPrimary';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import AudioPlayer from './Recordbox/AudioPlayer';
 
 export default function TrackDetails({track, onSelectTrack}) {
     const router = useRouter()
