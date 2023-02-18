@@ -1,0 +1,259 @@
+.audio-player {
+  padding-top: 16px;
+  padding-bottom: 8px;
+  background: #fafafa;
+  border-top: 3px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+
+}
+
+.tempo_label {
+  padding-top: 0px;
+  text-transform: uppercase;
+}
+
+#waveform2 {
+  margin-top: -7px !important;
+}
+
+.inner {
+  max-width: 90%;
+  margin: 0 auto;
+  padding: 0px 0;
+  position: relative;
+}
+
+.tempoWrapper {
+  position: absolute;
+  right: -17px;
+  top: 0px;
+  height: 100px;
+  width: 32px;
+}
+
+
+/* audio info */
+.audio-info {
+  display: flex;
+}
+
+.text {
+  color: #999;
+  padding-left: 18px;
+  line-height: 14px;
+}
+
+.text .artistName {
+  padding-top: 0;
+  font-size: 13px;
+  color: '#666'
+}
+
+.text .tempo {
+  font-size: 12px !important;
+  margin-top: 4px;
+  float: left;
+}
+
+.eq {
+  padding: 0;
+  position: absolute;
+  right: -8px;
+}
+
+.eq1 {
+  top: 0
+}
+
+.title {
+  color: black;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  margin-top: -4px;
+  width: 200px;
+}
+
+/* audio image */
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.audio-image {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  background: #1e1e1e; 
+}
+
+.audio-icon {
+  font-size: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  background: #989898;
+}
+
+.audio-image img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+}
+
+
+
+/* controls */
+
+.controls-wrapper {
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+.controls {
+  margin-top: -50px;
+  z-index: 2;
+  position: absolute;
+  width: 100%;
+}
+#waveform {
+  width: 100%;
+  margin-top: 0px;
+}
+.ovr {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background: rgba(0,0,0,0.4);
+  top: 0;
+  left: 0;
+}
+#wave-timeline{
+  width: 100%;
+  margin-top: -8px;
+  margin-bottom:8px !important;
+}
+.controls button {
+  width: 32px;
+}
+.controls .eq {
+  width: 68px !important;
+  letter-spacing: 1.5px;
+  padding-bottom: 4px !important;
+  padding-top: 4px !important;
+  font-weight: 700;
+  font-size: 12px !important;
+  margin-right: 4px;
+  margin-top: -14px !important;
+}
+.controls .playBtn {
+  width: 115px;
+  margin-top: 42px !important;
+  background-color: transparent !important;
+  margin-right: 0px;
+}
+
+.controls .playBtn svg{
+  font-size: 2.5rem !important;
+  color: #fff;
+  margin-top: -45px;
+  float: left;
+  margin-left: 8px;
+}
+.controls button {
+  border: none;
+  background-color: #eee;
+  border-radius: 4px;
+  padding-bottom: 0;
+  margin-right: 6px;
+  margin-top: -4px !important;
+  cursor: pointer;
+}
+
+.volume button {
+  border: none;
+  background-color: transparent !important;
+  border-radius: 4px;
+  padding-bottom: 0;
+  margin-right: 6px;
+  margin-top: -4px !important;
+  cursor: pointer;
+}
+
+button svg {
+  font-size: 1.2rem !important;
+}
+
+.volume {
+  display: flex;
+  align-items: center;
+  margin-bottom:16px;
+  margin-top: -8px !important;
+
+}
+
+.volume button {
+  margin: 0;
+  margin-right: -12px !important;
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  z-index: 3;
+  position: absolute;
+  bottom: 20px;
+  height: 50px;
+}
+
+/* time */
+.time {
+  color: #333;
+  font-size: 13px;
+}
+
+.time.current {
+  position: absolute;
+  color: #000;
+  font-weight: bold;
+  text-align: center;
+  float: right;
+  width: 50px;
+  height: 20px;
+  bottom: -28px;
+  font-size: 13px;
+  right: 0;
+}
+
+.time.start {
+  position: absolute;
+  color: #000;
+  font-weight: bold;
+  text-align: center;
+  float: left;
+  width: 50px;
+  height: 20px;
+  bottom: -28px;
+  font-size: 13px;
+}
+
+
+.top__bar a {
+  color: inherit;
+}
+
+.top__bar p {
+  margin: 0;
+}
+

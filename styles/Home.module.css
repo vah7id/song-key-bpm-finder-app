@@ -208,6 +208,14 @@
   margin-top: 16px;
 }
 
+.playerWrapper {
+  position: fixed;
+  bottom: -5px;
+  width: 100%;
+  max-width: 768px;
+  z-index: 1001;
+}
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;
@@ -225,7 +233,6 @@
     margin-bottom: 20px !important;
     width: 100% !important;
   }
-
   .cardImage {
     display: none !important
   }

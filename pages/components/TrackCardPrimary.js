@@ -42,20 +42,22 @@ export default function TrackCardPrimary({track}) {
                         <Image className={styles.artwork} alt={track.artists && track.artists[0].name+' - '+track.name} width={window.innerWidth < 600 ? 280 : 160} height={window.innerWidth < 600 ? 280 : 160} src={track.album?.images && track.album.images[0].url} />
                     </Grid>
                     <Grid item md={4} sm={4} ml={1} xs={11}>
-                        <Typography className={styles.trackTitle} sx={{marginTop: '8px',width: '90%', maxWidth: '320px'}} gutterBottom variant="h5" component="div">
+                        <Typography className={styles.trackTitle} sx={{marginTop: '8px',width: '90%'}} gutterBottom variant="h5" component="div">
                             {track.name}
                         </Typography>
-                        <Typography noWrap style={{width: '100%', display: 'block', margin: '-5px 0 0px 0', fontSize: '14px !important'}} gutterBottom sx={{fontSize: '16px !important', paddingTop: '0'}} variant="subtitle1" color="text.primary">
+                        <Typography noWrap style={{width: '100%', display: 'block', margin: '-5px 0 0px 0', fontSize: '14px !important'}} gutterBottom sx={{fontSize: '16px !important', paddingTop: '0'}} variant="h5" color="text.primary">
                             {track.artists && track.artists[0].name}
                         </Typography>
                         <Typography noWrap style={{width: '100%', display: 'block', margin: '-5px 0 0px 0', fontSize: '13px !important'}} gutterBottom sx={{fontSize: '12px !important', paddingTop: '8px'}} color="text.secondary">
-                            Album: <b>{track.album && track.album.name}</b>
+                            Album: {track.album && track.album.name}
                         </Typography>
                         <Typography noWrap style={{width: '100%', display: 'block', margin: '-5px 0 0px 0', fontSize: '13px !important'}} gutterBottom sx={{fontSize: '12px !important', paddingTop: '4px'}} color="text.secondary">
-                            Released: <b>{track.album && track.album.release_date}</b>
+                            Released: {track.album && track.album.release_date}
                         </Typography>
                         <Link target="_blank" href={track.external_urls && track.external_urls.spotify}><Button sx={{margin: '12px 15px 0 0', minWidth: '40px !important', width: '40px', paddingLeft: '24px !important'}} color="success" variant="outlined" startIcon={<PlayCircleFilledWhiteIcon />} /></Link>
                         <Button aria-describedby={id} onClick={(e) => handleClick(e)} sx={{margin: '12px 15px 0 0', minWidth: '40px !important', width: '40px !important', paddingLeft: '24px !important'}} color="warning"  variant="outlined" startIcon={<ShareOutlined />} />
+                        <audio  src={track.preview_url} />
+                        
                         <Popover
                             id={id}
                             open={open}

@@ -92,7 +92,7 @@ export default function Home() {
         </Typography>
         <SearchInput handleNewSearch={handleNewSearch} isSearching={false} />
         {loading && <TrackSkeleton />}
-        {track && <TrackDetails onSelectTrack={selectTrack} track={track} />}
+        {track && <TrackDetails isFetching={loading} onSelectTrack={selectTrack} track={track} />}
         <UploadTrack />
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1000 }}

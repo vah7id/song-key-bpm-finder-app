@@ -85,6 +85,8 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
             setTimeout(() => {
                 fetch(`/api/search?title=${url || ""}`).then(response => response.json()).then(response => {
                     if(response.err) {
+                    console.log('injaa3')
+
                         setAutocompleteItems([])
                     } else {
                         let options = []
@@ -92,14 +94,17 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
                             options[index] = { id: track.id, label: track.name   +' '+track.artists[0].name   }
                         })
                         console.log(options)
+                    console.log('injaa2')
+
                         setAutocompleteItems(options)
                     }
                 }).catch(err => {
+                    console.log('injaa1')
                     setAutocompleteItems([])
                 });
-            }, 500)
+            }, 500);
         }
-    }
+    };
 
     React.useEffect(() => {
         if(url !== "" && autocompleteItems.length === 0 && ((router.query && url !== router.query.query))) {
@@ -107,6 +112,7 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
             handleAutoComplete()
         }
     }, [url])
+
     
     const showNotification = (type, message) => {
         setSnackbarOpen(true);
@@ -183,6 +189,7 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
                         <Autocomplete
                             disablePortal
                             id="combo-box-demo"
+                            filterOptions={(options) => options}
                             freeSolo
                             onInputChange={(event, newInputValue) => {
                                 if (event?.type === "change") {
@@ -205,16 +212,15 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
                             sx={{ width: '100%' }}
                             renderInput={(params) => <TextField {...params} label={`${(router.query && router.query.query && window.location.pathname.indexOf('search') > -1) ? router.query.query : 'Type a song title here...'}`} />}
                         />
-                        
                     </Grid>
                     <Grid item xs={2}>
                         <Button 
                             onClick={() => handleChange(url)} 
                             size='large'  
-                            style={{ width: '90%', minWidth: '42px !important', padding: '15px'}} 
+                            sx={{ width: '90%', minWidth: '42px !important', padding: '15px'}} 
                             variant='contained'
                             >
-                                <SearchIcon />
+                                <SearchIcon sx={{fontSize: '1.5rem !important'}} />
                         </Button>
                     </Grid>
                 </Grid>
@@ -232,7 +238,7 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
             </Box>
             {(tracksData && tracksData.length === 1) && <Box sx={{ width: '100%', mt: '25px' }}>
                 <Grid  container spacing={2}>
-                    <Grid  xs={12}>
+                    <Grid xs={12}>
                         <Divider sx={{textAlign: 'center', width: '100%', mt: 4, mb: 4}}>
                             <Chip label={`BPM, Song Key Results of ${url}`} />
                         </Divider>

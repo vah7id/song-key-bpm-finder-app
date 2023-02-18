@@ -21,3 +21,11 @@ h1,h2,h4,h6,p,span {
 * {
   box-sizing: border-box;
 }
+
+
+.MuiSlider-valueLabelOpen {
+  padding: 0.1rem 0.4rem !important;
+  right: -10px !important;
+  top: -2px !important;
+  font-size: 11px !important
+}

@@ -6,7 +6,6 @@ import React, { Component, useEffect, useState } from 'react';
 import SpeedIcon from '@mui/icons-material/Speed';
 import LoopIcon from '@mui/icons-material/Loop';
 import styles from '../../styles/Home.module.css'
-import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { getSongKeyTitle, msToTime } from './SearchInput';
 import { useRouter } from 'next/router';
@@ -15,16 +14,19 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import TrackSkeleton from './TrackSkeleton';
 import TrackCardPrimary from './TrackCardPrimary';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import AudioPlayer from './Recordbox/AudioPlayer';
 
 export default function TrackDetails({track, onSelectTrack}) {
     const router = useRouter()
 
     const [recommendations, setRecommendations] = useState([])
     const [loading, setLoading] = useState(true)
+    const [trackOnDeck2, setTrackOnDeck2] = useState(null)
     const [trackId, setTrackId] = useState((router.query && router.query.trackId) ? router.query.trackId[router.query.trackId.length - 1] : "");
     const [anchorEl, setAnchorEl] = useState(null);
     const [sortType, setSortType] = useState('popularity');
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [selectedTrack, setSelectedTrack] = useState(null)
 
     const open = Boolean(anchorEl);
     const handleOpenSortBy = (event) => {
@@ -33,7 +35,15 @@ export default function TrackDetails({track, onSelectTrack}) {
     const handleClose = () => {
       setAnchorEl(null);
     };
-  
+    
+    const handleCloseDeck = () => {
+      setTrackOnDeck2(null)
+    }
+
+    const OnPlayDeck2 = (track) => {
+      setSelectedTrack(track);
+      //setTrackOnDeck2(track)
+    }
 
     useEffect(() => {
         if(isRefreshing || (router.query && router.query.trackId && router.query.trackId[router.query.trackId.length - 1] !== trackId) || (recommendations && recommendations.length === 0)) {
@@ -123,6 +133,8 @@ export default function TrackDetails({track, onSelectTrack}) {
 
             {(loading) ? <><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /><TrackSkeleton /></> : 
             <Grid container mb={2} spacing={2}>
+
+              
               <Grid item xs={12} sm={12} md={12}>
                   <Typography style={{width: '100%',fontSize: '18px', padding: '0'}} variant="h5">
                     ({recommendations.length}) recommendation (relative) songs found for {track && track.name}</Typography>
@@ -165,8 +177,17 @@ export default function TrackDetails({track, onSelectTrack}) {
             </Grid>
           }
 
+          {/*selectedTrack && 
+          <Box className={styles.playerWrapper}>
+            <Grid container spacing={0}>
+                <Grid xs={12} md={12}>
+                  <AudioPlayer deck={1} tracks={[selectedTrack]} />
+                </Grid>
+            </Grid>
+        </Box>*/}
+
             {(recommendations && recommendations.length !== 0) && recommendations.map(recommendedTrack => <>
-                <TrackCard onSelectTrack={selectTrack} key={recommendedTrack.id} track={recommendedTrack} />
+                <TrackCard playOnDeck={OnPlayDeck2} onSelectTrack={selectTrack} key={recommendedTrack.id} track={recommendedTrack} />
                 </>)
             }
             {(recommendations && recommendations.length !== 0) && <Box mt={4} sx={{width: '100%', float: 'left', 'textAlign': 'center'}}>

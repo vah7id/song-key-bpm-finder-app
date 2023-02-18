@@ -97,15 +97,14 @@ export default function Search() {
     }
   }
 
-console.log(tracksData && tracksData.length === 0 && !isFetching)
   return (
     <div lang="en" className={styles.container}>
       <Head> 
-        <title>Song key & Tempo BPM Finder Tool</title>
-        <meta name="description" content="Song key & Tempo BPM Finder Tool, Find the bpm and key of every song" />
+        <title>BPM, Song Key of track ${router.query.query}, Song key & Tempo BPM Finder Tool</title>
+        <meta name="description" content={`BPM, Song Key Results of track ${router.query.query},Song key & Tempo BPM Finder Tool`} />
         <link rel="icon" href="/favicon3.png" />
         <link rel="alternate" href="http://songkeyfinder.app" hrefLang="en"/>
-        <meta name="keywords" content="Song key & Tempo BPM Finder Tool, song key finder, bpm tempo finder" />
+        <meta name="keywords" content={`BPM, Song Key of track ${router.query.query}, song key finder, bpm tempo finder`} />
           <meta name="googlebot" content="index, follow" />
           <meta name="robots" content="index, follow" />
           <link rel="apple-touch-icon-precomposed" href="/favicon3.png" />

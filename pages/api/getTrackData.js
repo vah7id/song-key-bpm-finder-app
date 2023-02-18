@@ -33,7 +33,7 @@ export default function handler(req, res) {
                 }
                 
                 let resp = data.body;
-                
+                console.log(resp)
                 spotifyApi.getAudioFeaturesForTrack(data.body.id).then((featuresData) => {
                     resp.key = featuresData.body.key;
                     resp.tempo = featuresData.body.tempo;
