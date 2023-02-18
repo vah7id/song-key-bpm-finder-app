@@ -34,7 +34,7 @@ export default function TrackCard({track, onSelectTrack, playOnDeck = null}) {
                         <Image  className={styles.artwork2} alt={track.artists && track.artists[0].name+' - '+track.name} width={85} height={85} src={track.album?.images && track.album.images[0].url} />
                     </Grid>
                     <Grid item md={4} xs={9} sm={4}>
-                        <Typography  className={styles.trackTitle} style={{width: '100%'}} gutterBottom variant="h5" component="div" noWrap>
+                        <Typography  className={styles.trackTitle} style={{width: '100%', marginTop: '16px !important'}} gutterBottom variant="h5" component="div" noWrap>
                             {track.name}
                         </Typography>
                         <Typography  noWrap style={{width: '100%', display: 'block', margin: '-5px 0 0px 0'}} gutterBottom sx={{fontSize: '14px', paddingTop: '0'}} variant="subtitle1" color="text.secondary">
