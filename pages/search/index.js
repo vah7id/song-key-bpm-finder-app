@@ -12,6 +12,7 @@ import { useRouter } from 'next/router'
 import UploadTrack from '../components/UploadTrack'
 import TrackCard from '../components/TrackCard'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import Header from '../components/Header'
 
 export default function Search() {
   const router = useRouter()
@@ -101,10 +102,10 @@ export default function Search() {
     <div lang="en" className={styles.container}>
       <Head> 
         <title>BPM, Song Key of track {router.query.query}, Song key & Tempo BPM Finder Tool</title>
-        <meta name="description" content={`BPM, Song Key Results of track ${router.query.query},Song key & Tempo BPM Finder Tool`} />
+        <meta name="description" content={`BPM, Song Key Results of track ${router.query.query},Find bpm/key of song and its similar songs`} />
         <link rel="icon" href="/favicon3.png" />
         <link rel="alternate" href="http://songkeyfinder.app" hrefLang="en"/>
-        <meta name="keywords" content={`BPM, Song Key of track ${router.query.query}, song key finder, bpm tempo finder`} />
+        <meta name="keywords" content={`BPM, Song Key of track ${router.query.query}, song key finder, bpm tempo finder, similar tracks for mixing`} />
           <meta name="googlebot" content="index, follow" />
           <meta name="robots" content="index, follow" />
           <link rel="apple-touch-icon-precomposed" href="/favicon3.png" />
@@ -126,22 +127,8 @@ export default function Search() {
           <meta itemProp="image" content="./favicon3.png" />
       </Head>
       <main lang="en" className={styles.main}>
-        <Link href="/" passHref>
-          <Image style={{ minWidth: "225px", cursor: 'pointer'}} alt="logo" onClick={() => router.push('/')} src={logo2} />
-        </Link>
-
-        <Link href="/" passHref>
-          <h1 className={styles.title}>
-              Song key bpm finder
-          </h1>
-        </Link>
-        <Typography variant="h2" style={{ maxWidth: '668px', fontSize: '0.85rem', lineHeight: '20px', opacity: '0.4', textAlign: 'center', margin: '16px 0 40px 0' }}>
-            Find your track BPM & song key by just typing the song title or you can also upload your track to analyze, if you could not find it in our database!
-        </Typography>
-
+        <Header />
         <SearchInput handleNewSearch={handleNewSearch} isSearching={isFetching} />
-       
-   
         {(tracksData && tracksData.length > 0) && 
           <Box sx={{ maxWidth: '768px',width: '100%', mt: '25px' }}>
               <Grid  spacing={2}>
@@ -181,9 +168,6 @@ export default function Search() {
 
                     </Menu>
                   </Grid>
-
-                  
-                  
                   {tracksData.map((track, index) => {
                       return (<TrackCard onSelectTrack={selectTrack} key={'tr-'+index} track={track} />) })}
               </Grid>

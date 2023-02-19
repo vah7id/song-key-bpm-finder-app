@@ -12,6 +12,7 @@ import TrackDetails from '../components/TrackDetails'
 import { useRouter } from 'next/router'
 import TrackSkeleton from '../components/TrackSkeleton'
 import UploadTrack from '../components/UploadTrack'
+import Header from '../components/Header'
 export default function Home({ trackDetails }) {
   const router = useRouter()
   const [track, setTrack] = useState(trackDetails);
@@ -72,16 +73,7 @@ export default function Home({ trackDetails }) {
           <meta itemProp="image" content="./favicon3.png" />
       </Head>
       <main lang="en" className={styles.main}>
-        <Image alt="logo" onClick={() => router.push('/')} src={logo2} />
-
-        <Link href="/" passHref>
-          <h1 className={styles.title}>
-              Song key bpm finder
-          </h1>
-        </Link>
-        <Typography variant="h2" style={{ maxWidth: '668px', fontSize: '0.85rem', lineHeight: '20px', opacity: '0.4', textAlign: 'center', margin: '16px 0 40px 0' }}>
-            Find your track BPM & song key by just typing the song title or you can also upload your track to analyze, if you could not find it in our database!
-        </Typography>
+        <Header />
         <SearchInput handleNewSearch={handleNewSearch} isSearching={false} />
         {loading && <TrackSkeleton />}
         {track && <TrackDetails isFetching={loading} onSelectTrack={selectTrack} track={track} />}
