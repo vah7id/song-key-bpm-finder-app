@@ -100,7 +100,7 @@ const StyledMenu = styled((props) => (
 export default function ShareURL({shareUrl, title}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
-
+  console.log(shareUrl)
   const handleClick = (event) => {
     setOpen(!open);
   };

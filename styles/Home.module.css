@@ -197,6 +197,8 @@
 
 .artwork {
   border-radius: 8px !important;
+  height: 160px;
+  width: 160px;
 }
 
 .exportButton {
@@ -224,7 +226,10 @@
   .trackTitle {
     margin-top: 0;
   }
-
+  .artwork {
+    height: 280px !important;
+    width: 280px !important;
+  }
 }
 
 @media (max-width: 768px) {

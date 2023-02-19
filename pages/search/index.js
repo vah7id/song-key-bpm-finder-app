@@ -100,7 +100,7 @@ export default function Search() {
   return (
     <div lang="en" className={styles.container}>
       <Head> 
-        <title>BPM, Song Key of track ${router.query.query}, Song key & Tempo BPM Finder Tool</title>
+        <title>BPM, Song Key of track {router.query.query}, Song key & Tempo BPM Finder Tool</title>
         <meta name="description" content={`BPM, Song Key Results of track ${router.query.query},Song key & Tempo BPM Finder Tool`} />
         <link rel="icon" href="/favicon3.png" />
         <link rel="alternate" href="http://songkeyfinder.app" hrefLang="en"/>
