@@ -51,7 +51,7 @@ export default function TrackDetails({track, onSelectTrack, handlePlayTrack}) {
             const query = {
                 seed_artists: [track && track.artists[0] ? track.artists[0].id : ""],
                 seed_tracks: [track.id],
-                limit: 30,
+                limit: 25,
                 min_popularity: 10,
                 max_popularity: 100,
                 max_danceability: track.danceability + 0.2,

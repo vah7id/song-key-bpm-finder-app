@@ -49,19 +49,12 @@ export default function Search({ tracksDetails,loginResp }) {
 
   useEffect(() => {
     install('G-LDDJ32MXZ1'); 
-    if(!tracksData || (tracksData && tracksData.length > 0 && tracksData[0].id !== tracksDetails[0].id)) {
-      /*let tmp = tracksDetails
-      let sorted = tmp.slice(0);
-      sorted.sort(function(a,b) {
-          return a['popularity'] - b['popularity'];
-      });*/
-      setTracksData(tracksDetails);
-    }
+    setTracksData(tracksDetails);
     setIsFetching(false);
   }, [router.query.query, router.asPath, tracksDetails])
 
   const handleNewSearch = (isFetching) => {
-    setIsFetching(isFetching)
+    //setIsFetching(isFetching)
   }
       
   const showNotification = (type, message) => {
@@ -130,6 +123,9 @@ export default function Search({ tracksDetails,loginResp }) {
       <main lang="en" className={styles.main}>
         <Header />
         <SearchInput handleNewSearch={handleNewSearch} isSearching={isFetching} />
+        {!tracksDetails && <Box sx={{ maxWidth: '768px',width: '100%', mt: '25px' }}>
+          <Typography sx={{fontSize: '24px', width: '100%'}} variant="h5">Ooppss!! We could not find any data from out database for the keyword ${router.query.query}</Typography>
+        </Box>} 
         {(tracksData && tracksData.length > 0) && 
           <Box sx={{ maxWidth: '768px',width: '100%', mt: '25px' }}>
               <Grid  spacing={2}>
@@ -169,6 +165,7 @@ export default function Search({ tracksDetails,loginResp }) {
 
                     </Menu>
                   </Grid>
+                  
                   {tracksData.map((track, index) => {
                       return (<TrackCard handlePlayTrack={handlePlayTrack} onSelectTrack={selectTrack} key={'tr-'+index} track={track} />) })}
               </Grid>
@@ -187,12 +184,12 @@ export default function Search({ tracksDetails,loginResp }) {
                 <CircularProgress color="inherit" />
             </Backdrop>}
 
-            {(currentPlayingTrack !== "" && token !== null && token !== "") &&
+            {/*(currentPlayingTrack !== "" && token !== null && token !== "") &&
             <SpotifyWebPlayer
               autoPlay={true}
               token={token}
               uris={[currentPlayingTrack]}
-            />}
+            />*/}
         <UploadTrack />
       </main>
     </div>

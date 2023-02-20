@@ -31,7 +31,9 @@ export default function handler(req, res) {
                 if(!data.body.tracks || data.body.tracks.items.length === 0) {
                     res.status(200).json([]); 
                 }
+        
                 res.status(200).json(data.body.tracks.items); 
+                
               },
               function(err) {
                 console.log(err)

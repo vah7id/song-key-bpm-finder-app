@@ -23,7 +23,6 @@ export default function handler(req, res) {
     res.setHeader('Authorization', 'Basic ' + (new Buffer("6233cf5397864e0abb091744ea919486" + ':' + "5d967a86893f46299a46ea4c94695ddf").toString('base64')))
     res.setHeader('Content-Type', 'application/x-www-form-urlencoded')
    
-    console.log(req.query.qs)
     // Retrieve an access token.
     spotifyApi.clientCredentialsGrant().then(
         function(data) {
@@ -47,7 +46,7 @@ export default function handler(req, res) {
                             resp[index].popularity = featuresData.body.popularity;
                             resp[index].instrumentalness = featuresData.body.instrumentalness
                             resp[index].time_signature = featuresData.body.time_signature
-                            await sleep(2000);
+                            await sleep(1000);
     
                             if(index === resp.length - 1) {
                                 res.status(200).json(resp); 

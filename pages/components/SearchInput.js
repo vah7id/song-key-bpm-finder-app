@@ -117,6 +117,12 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
         }
     }, [url])
 
+
+    React.useEffect(() => {
+        setIsFetching(false);
+    }, [router.query, router.asPath, router.query.query])
+
+
     
     const showNotification = (type, message) => {
         setSnackbarOpen(true);
