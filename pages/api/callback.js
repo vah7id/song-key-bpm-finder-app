@@ -9,9 +9,9 @@ var SpotifyWebApi = require('spotify-web-api-node');
 
 // credentials are optional
 var spotifyApi = new SpotifyWebApi({
-    clientId: '6233cf5397864e0abb091744ea919486',
-    clientSecret: '5d967a86893f46299a46ea4c94695ddf',
-    redirectUri: 'https://scfetch.app/api/callback'
+    clientId: 'd9c66fc39b734c679c44a4378aa30a84',
+    clientSecret: '3dfab8332d36469a8a23116dc22f5815',
+    redirectUri: 'https://songkeyfinder.app/api/callback'
 });
 
 

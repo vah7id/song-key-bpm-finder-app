@@ -9,8 +9,8 @@ const SpotifyWebApi = require('spotify-web-api-node');
 
 export default function handler(req, res) {
 
-    const clientId = '6233cf5397864e0abb091744ea919486',
-    clientSecret = '5d967a86893f46299a46ea4c94695ddf';
+    const clientId = 'd9c66fc39b734c679c44a4378aa30a84',
+    clientSecret = '3dfab8332d36469a8a23116dc22f5815';
 
     // Create the api object with the credentials
     const spotifyApi = new SpotifyWebApi({
@@ -27,12 +27,13 @@ export default function handler(req, res) {
         // Save the access token so that it's used in future calls
         spotifyApi.setAccessToken(data.body['access_token']);
         res.status(200).json({ 
-            status: 'logged-in'
+            status: 'logged-in',
+            token: data.body['access_token']
         });  
     },
     function(err) {
         console.log('Something went wrong when retrieving an access token', err);
-        const scopes = ['user-read-private', 'user-read-email'],
+        const scopes = ['streaming','user-read-private', 'user-read-email', 'user-read-playback-state', 'user-modify-playback-state'],
         state = 'some-state-of-my-choice';
 
         // Create the authorization URL

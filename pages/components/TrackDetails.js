@@ -15,7 +15,8 @@ import TrackSkeleton from './TrackSkeleton';
 import TrackCardPrimary from './TrackCardPrimary';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-export default function TrackDetails({track, onSelectTrack}) {
+
+export default function TrackDetails({track, onSelectTrack, handlePlayTrack}) {
     const router = useRouter()
 
     const [recommendations, setRecommendations] = useState([])
@@ -186,14 +187,14 @@ export default function TrackDetails({track, onSelectTrack}) {
         </Box>*/}
 
             {(recommendations && recommendations.length !== 0) && recommendations.map(recommendedTrack => <>
-                <TrackCard playOnDeck={OnPlayDeck2} onSelectTrack={selectTrack} key={recommendedTrack.id} track={recommendedTrack} />
+                <TrackCard handlePlayTrack={handlePlayTrack} hideSimilarIcon={true} playOnDeck={OnPlayDeck2} onSelectTrack={selectTrack} key={recommendedTrack.id} track={recommendedTrack} />
                 </>)
             }
             {(recommendations && recommendations.length !== 0) && <Box mt={4} sx={{width: '100%', float: 'left', 'textAlign': 'center'}}>
                   <Button variant={'outlined'} onClick={refreshTheList} startIcon={<RefreshOutlined />} sx={{opacity: 0.7}} color={'inherit'}>Refresh The List</Button>
                 </Box>}
         </Box>
-        
+       
         </>
     );
   

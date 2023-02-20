@@ -1,18 +1,21 @@
 import { Alert, Backdrop, Box, Button, Chip, CircularProgress, Divider, FormGroup, Grid, Menu, MenuItem, Snackbar, Typography } from '@mui/material'
 import Head from 'next/head'
-import Link from 'next/link'
 import styles from '../../styles/Home.module.css'
 import SearchInput from '../components/SearchInput'
 import { gtag, install } from 'ga-gtag';
 import { useEffect, useState } from 'react'
 import {  PianoOutlined, SortByAlphaRounded, SortRounded, UploadFile } from '@mui/icons-material';
-import logo2 from '../../public/logo2.jpg';
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import UploadTrack from '../components/UploadTrack'
 import TrackCard from '../components/TrackCard'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Header from '../components/Header'
+import dynamic from 'next/dynamic'
+
+const SpotifyWebPlayer = dynamic(() => import('react-spotify-web-playback'), {
+  loading: () => 'Loading...',
+  ssr: false,
+})
 
 export default function Search() {
   const router = useRouter()
@@ -22,6 +25,19 @@ export default function Search() {
   const [openSnackbar, setSnackbarOpen] = useState(false);
   const [notification, setNotification] = useState({ type: null, message: ""});
   const [anchorEl, setAnchorEl] = useState(null);
+  const [token, setToken] = useState(null);
+  const [currentPlayingTrack, setCurrentPlayingTrack] = useState("");
+
+  const handlePlayTrack = (event, uri) => {
+    event.preventDefault();
+    setCurrentPlayingTrack(uri);
+  }
+
+  const handleClosePlayer = () => {
+    setCurrentPlayingTrack("")
+  }
+
+
   const open = Boolean(anchorEl);
   const handleOpenSortBy = (event) => {
     setAnchorEl(event.currentTarget);
@@ -32,26 +48,30 @@ export default function Search() {
 
   useEffect(() => {
     install('G-LDDJ32MXZ1'); 
-    console.log(router.query.query )
     fetch('/api/authSpotify').then(resp => resp.json()).then(resp => {
-      if(router.query.query !== "" || !tracksData || tracksData.length === 0) {
-        fetch(`/api/findBpm?title=${router.query.query || ""}`).then(response => response.json()).then(response => {
-            if(response.err) {
-            } else {
+      if(resp && resp.token) {
+        setToken(resp.token);
+        if(router.query.query !== "" || !tracksData || tracksData.length === 0) {
+          fetch(`/api/findBpm?title=${router.query.query || ""}`).then(response => response.json()).then(response => {
+              if(response.err) {
+              } else {
+                setIsFetching(false);
+                let tmp = response
+                let sorted = tmp.slice(0);
+                sorted.sort(function(a,b) {
+                    return a['popularity'] - b['popularity'];
+                });
+                setTracksData(sorted);
+              }
+          }).catch(err => {
+              console.log(err.message)
+              setTracksData([])
               setIsFetching(false);
-              let tmp = response
-              let sorted = tmp.slice(0);
-              sorted.sort(function(a,b) {
-                  return a['popularity'] - b['popularity'];
-              });
-              setTracksData(sorted);
-            }
-        }).catch(err => {
-            console.log(err.message)
-            setTracksData([])
-            setIsFetching(false);
-            showNotification('warning', 'Oops!! :( We cannot fetch the song data from our database!! Please enter the correct song title + artist name :)');
-        });
+              showNotification('warning', 'Oops!! :( We cannot fetch the song data from our database!! Please enter the correct song title + artist name :)');
+          });
+        }
+      } else {
+
       }
     }).catch(err => {
       console.log(err)
@@ -169,7 +189,7 @@ export default function Search() {
                     </Menu>
                   </Grid>
                   {tracksData.map((track, index) => {
-                      return (<TrackCard onSelectTrack={selectTrack} key={'tr-'+index} track={track} />) })}
+                      return (<TrackCard handlePlayTrack={handlePlayTrack} onSelectTrack={selectTrack} key={'tr-'+index} track={track} />) })}
               </Grid>
           </Box>}
 
@@ -185,6 +205,13 @@ export default function Search() {
                 >
                 <CircularProgress color="inherit" />
             </Backdrop>}
+
+            {(currentPlayingTrack !== "" && token !== null && token !== "") &&
+            <SpotifyWebPlayer
+              autoPlay={true}
+              token={token}
+              uris={[currentPlayingTrack]}
+            />}
         <UploadTrack />
       </main>
     </div>
