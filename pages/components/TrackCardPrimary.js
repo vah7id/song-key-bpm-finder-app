@@ -4,16 +4,16 @@
 import { PianoOutlined, ShareOutlined, ShareRounded } from '@mui/icons-material';
 import { Box, Button, Card, CardContent, CardMedia,  Grid,  Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Popover, Typography } from '@mui/material';
 import React, { Component, useEffect, useState } from 'react';
-import SpeedIcon from '@mui/icons-material/Speed';
-import LoopIcon from '@mui/icons-material/Loop';
+
 import styles from '../../styles/Home.module.css'
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 import { getSongKeyTitle, msToTime } from './SearchInput';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import ShareURL from './ShareURL';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
-export default function TrackCardPrimary({track}) {
+export default function TrackCardPrimary({track, handlePlayTrack}) {
     const router = useRouter();
     const [shareVisible, setShareVisible] = useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -39,7 +39,7 @@ export default function TrackCardPrimary({track}) {
             <CardContent sx={{flex: '1 0 auto', paddingBottom: '16px !important'}}>
                 <Grid container spacing={2}>
                     <Grid item md={3} sm={2} xs={12} mt={1}>
-                        <Image className={styles.artwork} alt={track.artists && track.artists[0].name+' - '+track.name} width={160} height={ 160} src={track.album?.images && track.album.images[0].url} />
+                        <Image className={styles.artwork} alt={track.artists && track.artists[0].name+' - '+track.name} width={170} height={ 170} src={track.album?.images && track.album.images[0].url} />
                     </Grid>
                     <Grid item md={4} sm={4} ml={1} xs={11}>
                         <Typography className={styles.trackTitle} sx={{marginTop: '8px',width: '90%'}} gutterBottom variant="h5" component="div">
@@ -48,15 +48,18 @@ export default function TrackCardPrimary({track}) {
                         <Typography noWrap style={{width: '100%', display: 'block', margin: '-5px 0 0px 0', fontSize: '14px !important'}} gutterBottom sx={{fontSize: '16px !important', paddingTop: '0'}} variant="h5" color="text.primary">
                             {track.artists && track.artists[0].name}
                         </Typography>
-                        <Typography noWrap style={{width: '100%', display: 'block', margin: '-5px 0 0px 0', fontSize: '13px !important'}} gutterBottom sx={{fontSize: '12px !important', paddingTop: '8px'}} color="text.secondary">
+                        <Typography noWrap gutterBottom sx={{width: '100%', display: 'block', margin: '-5px 0 0px 0', fontSize: '12px !important', paddingTop: '8px'}} color="text.secondary">
                             Album: {track.album && track.album.name}
                         </Typography>
-                        <Typography noWrap style={{width: '100%', display: 'block', margin: '-5px 0 0px 0', fontSize: '13px !important'}} gutterBottom sx={{fontSize: '12px !important', paddingTop: '4px'}} color="text.secondary">
+                        <Typography noWrap gutterBottom sx={{width: '100%', display: 'block', margin: '-5px 0 0px 0', fontSize: '12px !important', paddingTop: '4px'}} color="text.secondary">
                             Released: {track.album && track.album.release_date}
                         </Typography>
-                        <Link target="_blank" href={track.external_urls && track.external_urls.spotify}><Button sx={{margin: '12px 15px 0 0', minWidth: '40px !important', width: '40px', paddingLeft: '24px !important'}} color="success" variant="outlined" startIcon={<PlayCircleFilledWhiteIcon />} /></Link>
+                        
+                        {<Button onClick={(e) => handlePlayTrack(e, track)} sx={{margin: '12px 15px 0 0', minWidth: '40px !important', width: '40px', paddingLeft: '24px !important'}} color="primary" variant="outlined" startIcon={<PlayCircleFilledWhiteIcon />} />}
                         <Button aria-describedby={id} onClick={(e) => handleClick(e)} sx={{margin: '12px 15px 0 0', minWidth: '40px !important', width: '40px !important', paddingLeft: '24px !important'}} color="warning"  variant="outlined" startIcon={<ShareOutlined />} />
-                        <audio  src={track.preview_url} />
+                        {<Link target="_blank" href={track.external_urls && track.external_urls.spotify}>
+                        <Button size={"small"} sx={{margin: '8px 0 0 0'}} color="success" variant="text" startIcon={<OpenInNewIcon />}>Listen On Spotify</Button></Link>}
+                        
                         
                         <Popover
                             id={id}

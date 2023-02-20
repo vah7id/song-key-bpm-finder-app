@@ -14,6 +14,7 @@ import TrackSkeleton from '../components/TrackSkeleton'
 import UploadTrack from '../components/UploadTrack'
 import Header from '../components/Header'
 import dynamic from 'next/dynamic'
+import {Player} from 'react-simple-player';
 
 const SpotifyWebPlayer = dynamic(() => import('react-spotify-web-playback'), {
   loading: () => 'Loading...',
@@ -28,9 +29,9 @@ export default function Home({ trackDetails,loginResp }) {
   const [token, setToken] = useState(loginResp ? loginResp.token : null);
   const [currentPlayingTrack, setCurrentPlayingTrack] = useState("");
 
-  const handlePlayTrack = (event, uri) => {
+  const handlePlayTrack = (event, track) => {
     event.preventDefault();
-    setCurrentPlayingTrack(uri);
+    setCurrentPlayingTrack(track);
   }
 
   const handleClosePlayer = () => {
@@ -105,12 +106,11 @@ export default function Home({ trackDetails,loginResp }) {
         >
           <CircularProgress color="inherit" />
         </Backdrop>
-        {(currentPlayingTrack !== "" && token !== null && token !== "") &&
-            <SpotifyWebPlayer
-              autoPlay={true}
-              token={token}
-              uris={[currentPlayingTrack]}
-            />}
+        {(currentPlayingTrack !== null && currentPlayingTrack.album) && <Box sx={{position: 'fixed !important', display: 'flex', padding: '10px 0 10px 10px', background: 'rgb(246, 248, 250)',  borderTop: '1px solid #ddd', bottom: '0px', left: 0, width: '100%'}} >
+              <Image  alt={'playerPhoto'+currentPlayingTrack.name} width={60} height={40} src={currentPlayingTrack.album?.images && currentPlayingTrack.album.images[0].url} />
+              <Player autoPlay src={currentPlayingTrack.preview_url} height={60} />
+            </Box>
+            }
       </main>
     </div>
   )

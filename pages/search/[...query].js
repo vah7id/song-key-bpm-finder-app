@@ -11,6 +11,8 @@ import TrackCard from '../components/TrackCard'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Header from '../components/Header'
 import dynamic from 'next/dynamic'
+import {Player} from 'react-simple-player';
+import Image from 'next/image';
 
 const SpotifyWebPlayer = dynamic(() => import('react-spotify-web-playback'), {
   loading: () => 'Loading...',
@@ -27,15 +29,15 @@ export default function Search({ tracksDetails,loginResp }) {
   const [notification, setNotification] = useState({ type: null, message: ""});
   const [anchorEl, setAnchorEl] = useState(null);
   const [token, setToken] = useState(loginResp ? loginResp?.token : null);
-  const [currentPlayingTrack, setCurrentPlayingTrack] = useState("");
+  const [currentPlayingTrack, setCurrentPlayingTrack] = useState(null);
 
-  const handlePlayTrack = (event, uri) => {
+  const handlePlayTrack = (event, track) => {
     event.preventDefault();
-    setCurrentPlayingTrack(uri);
+    setCurrentPlayingTrack(track);
   }
 
   const handleClosePlayer = () => {
-    setCurrentPlayingTrack("")
+    setCurrentPlayingTrack(null)
   }
 
 
@@ -184,12 +186,11 @@ export default function Search({ tracksDetails,loginResp }) {
                 <CircularProgress color="inherit" />
             </Backdrop>}
 
-            {/*(currentPlayingTrack !== "" && token !== null && token !== "") &&
-            <SpotifyWebPlayer
-              autoPlay={true}
-              token={token}
-              uris={[currentPlayingTrack]}
-            />*/}
+            {(currentPlayingTrack !== null) && <Box sx={{position: 'fixed !important', display: 'flex', padding: '10px 0 10px 10px', background: 'rgb(246, 248, 250)',  borderTop: '1px solid #ddd', bottom: '0px', left: 0, width: '100%'}} >
+              <Image alt={'playerPhoto'+currentPlayingTrack.name} width={85} height={50} src={currentPlayingTrack.album?.images && currentPlayingTrack.album.images[0].url} />
+              <Player autoPlay src={currentPlayingTrack.preview_url} height={80} />
+            </Box>
+            }
         <UploadTrack />
       </main>
     </div>

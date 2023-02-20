@@ -26,6 +26,7 @@
     "react-dom": "17.0.2",
     "react-share": "^4.4.1",
     "react-simple-knob": "0.0.6",
+    "react-simple-player": "^1.1.0",
     "react-spotify-web-playback": "^0.12.1",
     "soundcloud-downloader": "^1.0.0",
     "spotify-web-api-node": "^5.0.2",

@@ -122,7 +122,7 @@ export default function TrackDetails({track, onSelectTrack, handlePlayTrack}) {
                 </Divider>
             </Grid>
            
-            <TrackCardPrimary track={track} />
+            <TrackCardPrimary handlePlayTrack={handlePlayTrack} track={track} />
            
             <Divider sx={{textAlign: 'center', width: '100%', mt: 6, mb: 4}}>
                 <Chip sx={{ fontSize: '0.9rem'}} label={`Recommendations for Harmonic Mixing`} />
