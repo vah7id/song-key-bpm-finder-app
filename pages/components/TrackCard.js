@@ -41,7 +41,7 @@ export default function TrackCard({track, onSelectTrack, playOnDeck = null, hand
                         <Typography  onClick={() => onSelectTrack('/tracks/'+url+'/'+track.id, track)} noWrap style={{width: '100%', display: 'block', margin: '0px 0 0px 0'}} gutterBottom sx={{fontSize: '14px', paddingTop: '0'}} variant="subtitle1" color="text.secondary">
                             {track.artists && track.artists[0].name}
                         </Typography>
-                        <Button size={'small'} color={'success'} startIcon={<PlayCircle fontSize="inherit" />} onClick={(event) => handlePlayTrack(event, track.uri)} style={{padding: '2px 6px',fontSize: '12px !important',margin: '5px 12px 0 0'}}  variant={'outlined'}>Play</Button>
+                        {/*<Button size={'small'} color={'success'} startIcon={<PlayCircle fontSize="inherit" />} onClick={(event) => handlePlayTrack(event, track.uri)} style={{padding: '2px 6px',fontSize: '12px !important',margin: '5px 12px 0 0'}}  variant={'outlined'}>Play</Button>*/}
                         {!hideSimilarIcon && <Button size={'small'} color={'info'} startIcon={<QueueMusicIcon fontSize="inherit" />}  onClick={() => onSelectTrack('/tracks/'+url+'/'+track.id, track)} style={{padding: '2px 6px',fontSize: '12px !important',marginTop: '5px'}}  variant={'text'}>Similar Songs</Button>}
 
                     </Grid>

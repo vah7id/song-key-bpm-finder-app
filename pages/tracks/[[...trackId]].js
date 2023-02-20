@@ -120,15 +120,15 @@ export default function Home({ trackDetails,loginResp }) {
 // This function gets called at build time
 export async function getServerSideProps({ params }) {
   // Call an external API endpoint to get posts
-  const login = await fetch('https://songkeyfinder.app/api/authSpotify')
-  const loginResp = await login.json();
+  //const login = await fetch('https://songkeyfinder.app/api/authSpotify')
+  //const loginResp = await login.json();
   const track = await fetch('https://songkeyfinder.app/api/getTrackData?id='+params.trackId[params.trackId.length-1])
   const trackDetails = await track.json();
 
   return {
     props: {
       trackDetails,
-      loginResp
+      loginResp: null
     },
   }
 }
