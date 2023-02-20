@@ -97,7 +97,7 @@ export default function Search({ tracksDetails,loginResp }) {
   return (
     <div lang="en" className={styles.container}>
       <Head> 
-        <title>BPM, Song Key of track {router.query.query}, Song key & Tempo BPM Finder Tool</title>
+        <title>BPM, Song Key of track {router.query.query}, Similar songs to {router.query.query} for Harmonic Mixing</title>
         <meta name="description" content={`BPM, Song Key Results of track ${router.query.query},Find bpm/key of song and its similar songs`} />
         <link rel="icon" href="/favicon3.png" />
         <link rel="alternate" href="http://songkeyfinder.app" hrefLang="en"/>
