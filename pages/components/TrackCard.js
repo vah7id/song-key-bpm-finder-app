@@ -18,7 +18,6 @@ export default function TrackCard({track, onSelectTrack, playOnDeck = null, hand
     if(!track) {
         return (<></>)
     }
-    console.log(track)
     const playOnDjController = () => {
         if(playOnDeck) {
             playOnDeck(track);
@@ -29,7 +28,7 @@ export default function TrackCard({track, onSelectTrack, playOnDeck = null, hand
     return (
       <>
         <Card key={track.id} className={styles.cardW} sx={{ width: '100%',  mb: 2 }}>
-            <CardContent style={{width: '100% !important', paddingBottom: '0 !important'}}>
+            <CardContent style={{width: '100% !important', paddingBottom: '16px !important'}}>
                 <Grid container spacing={2}>
                     <Grid item sm={2} xs={2}>
                         <Image onClick={() => onSelectTrack('/tracks/'+url+'/'+track.id, track)} className={styles.artwork2} alt={track.artists && track.artists[0].name+' - '+track.name} width={85} height={85} src={track.album?.images && track.album.images[0].url} />

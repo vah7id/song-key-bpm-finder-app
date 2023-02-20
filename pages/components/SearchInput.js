@@ -78,28 +78,33 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
     const [autocompleteItems, setAutocompleteItems] = React.useState([]) 
     const [analyseResult, setAnalyseResult] = React.useState(null) 
     const [fileUploaded, setFileUpload] = React.useState([])
-    const router = useRouter()
+    const router = useRouter();
+
+    let queryLabel = '';
+
+    if(router && router.query) {
+        if(router.asPath.indexOf('tracks') > -1 && router.query.trackId) {
+            queryLabel = router.query.trackId[0];
+        }
+        if(router.asPath.indexOf('search') > -1 && router.query.trackId) {
+            queryLabel = router.query.query[0];
+        }
+    }
 
     const handleAutoComplete = () => {
         if(url.length > 3) {
             setTimeout(() => {
                 fetch(`/api/search?title=${url || ""}`).then(response => response.json()).then(response => {
                     if(response.err) {
-                    console.log('injaa3')
-
                         setAutocompleteItems([])
                     } else {
                         let options = []
                         response.map((track, index) => {
                             options[index] = { id: track.id, label: track.name   +' '+track.artists[0].name   }
                         })
-                        console.log(options)
-                    console.log('injaa2')
-
                         setAutocompleteItems(options)
                     }
                 }).catch(err => {
-                    console.log('injaa1')
                     setAutocompleteItems([])
                 });
             }, 500);
@@ -107,8 +112,7 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
     };
 
     React.useEffect(() => {
-        if(url !== "" && autocompleteItems.length === 0 && ((router.query && url !== router.query.query))) {
-            console.log(autocompleteItems)
+        if(url !== "" && autocompleteItems.length === 0 && ((router.query && url !== queryLabel))) {
             handleAutoComplete()
         }
     }, [url])
@@ -133,33 +137,32 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
     const handleChange = (query) => {
 
         if(!query && (!url || url === "") ) {
+            showNotification('error', 'Oops!! Please type your song title first :)')
             return;
         }
 
-        setAnalyseResult(null);
         const title = query || url; 
+        setAnalyseResult(null);
         setURL(title);
-        //setIsFetching(true);
-
+        
         if(title === "") {
             showNotification('error', 'Oops!! Please type your song title first :)')
             return;
         }
 
-        if((router.query && router.query.query) && title.trim() === router.query.query.trim()) {
+        if((router.query && queryLabel) && title.trim() === queryLabel.trim()) {
             return;
         }
 
-        if(router.query.query === title && tracksData.length !== 0) {
+        if(queryLabel === title && tracksData.length !== 0) {
             handleNewSearch(false);
             setIsFetching(false);
             return;
         }
-
+        setIsFetching(true);
         handleNewSearch(true);
         setTracksData([]);
-        router.push('/search?query='+title);
-       
+        router.push('/search/'+title);
     }
     
     const handlePaste = (event) => {
@@ -169,7 +172,7 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
     const handleSelectAutoComplete = (id, label) => {
         // fetch track and set data
         if(id) {
-            setIsFetching(false);
+            setIsFetching(true);
             const url = label.replace(/ /g, '-').replace('&','').replace('&','').replace('&','').replace('&','').replace('&','-').replace('&','-').replace('&','-').replace('?','').replace('?','').replace('?','').replace('?','').replace('.','-').replace('.','-').replace('/','').replace('/','').replace('/','').replace('#','').replace('#','').replace('(','').replace('(','').replace('(','').replace('(','').replace(')','').replace(')','').replace(')','').replace(')','').replace(')','').replace('+','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','');
             setAutocompleteItems([])
             router.push(`/tracks/${url}/${id}`);
@@ -205,12 +208,12 @@ export default function SearchInput({isSearching = false, handleNewSearch}) {
                                 }
                             }}
                             getOptionLabel={(option) => !option.label ? option : option.label}
-                            onChange={(e, value) => {console.log(value);(value && value !== "" && value.id) ? handleSelectAutoComplete(value.id,value.label) : handleChange(value.label)}}
+                            onChange={(e, value) => {(value && value !== "" && value.id) ? handleSelectAutoComplete(value.id,value.label) : handleChange(value.label)}}
                             onPaste={handlePaste}
                             options={autocompleteItems}
                             disableClearable
                             sx={{ width: '100%' }}
-                            renderInput={(params) => <TextField {...params} label={`${(router.query && router.query.query && window.location.pathname.indexOf('search') > -1) ? router.query.query : 'Type a song title here...'}`} />}
+                            renderInput={(params) => <TextField {...params} label={`${(router.query && queryLabel && router.asPath.indexOf('search') > -1) ? queryLabel : 'Type a song title here...'}`} />}
                         />
                     </Grid>
                     <Grid item xs={2}>

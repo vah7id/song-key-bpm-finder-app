@@ -30,7 +30,7 @@ export default function handler(req, res) {
             spotifyApi.setAccessToken(data.body['access_token']);
             spotifyApi.search(req.query.title, ['track'], { limit : 50 }).then(function(data) {
                 if(!data.body.tracks || data.body.tracks.items.length === 0) {
-                    res.status(200).json({data: []}); 
+                    res.status(200).json({data: [], err: 'Oops!! it seems we cannot fetch any result from our database atm!! Try Again :)'}); 
                 }
         
                 const tracks = data.body.tracks.items;
@@ -48,6 +48,7 @@ export default function handler(req, res) {
                         tracks[index].popularity = featuresData.body.popularity;
                         tracks[index].instrumentalness = featuresData.body.instrumentalness
                         tracks[index].time_signature = featuresData.body.time_signature
+                        
                         await sleep(2000);
 
                         if(index === tracks.length - 1) {
@@ -59,11 +60,11 @@ export default function handler(req, res) {
               },
               function(err) {
                 console.log(err)
-                res.status(400).json({err: err, data: []}); 
+                res.status(200).json({data: [], err: 'Oops!! it seems we cannot fetch any result from our database atm!! Try Again :)'}); 
              });
         },
         function(err) {
-            res.status(200).json({err: err, data: []}); 
+            res.status(200).json({data: [], err: 'AUTHORIZATION_REQUIRED'}); 
         });
    
   }

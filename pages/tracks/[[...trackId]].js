@@ -21,17 +21,15 @@ const SpotifyWebPlayer = dynamic(() => import('react-spotify-web-playback'), {
 })
 
 export default function Home({ trackDetails,loginResp }) {
-  console.log(loginResp)
   const router = useRouter()
   const [track, setTrack] = useState(trackDetails);
   const [loading,setLoading] = useState(true);
   const [currentTrackId, setCurrentTrackId] = useState(router.query?.trackId ? router.query.trackId[router.query.trackId.length-1] : null);
   const [token, setToken] = useState(loginResp ? loginResp.token : null);
   const [currentPlayingTrack, setCurrentPlayingTrack] = useState("");
-  console.log(token)
+
   const handlePlayTrack = (event, uri) => {
     event.preventDefault();
-    console.log(uri)
     setCurrentPlayingTrack(uri);
   }
 
@@ -44,6 +42,7 @@ export default function Home({ trackDetails,loginResp }) {
     setLoading(false);
     if(!track || track.id !== trackDetails.id) {
       setTrack(trackDetails)
+      setLoading(false)
     }
   }, [router.asPath, router.query, trackDetails])
 
@@ -98,7 +97,7 @@ export default function Home({ trackDetails,loginResp }) {
         <Header />
         <SearchInput handleNewSearch={handleNewSearch} isSearching={false} />
         {loading && <TrackSkeleton />}
-        {track && <TrackDetails handlePlayTrack={handlePlayTrack} isFetching={loading} onSelectTrack={selectTrack} track={track} />}
+        {track && <TrackDetails key={track.id} handlePlayTrack={handlePlayTrack} isFetching={loading} onSelectTrack={selectTrack} track={track} />}
         <UploadTrack />
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1000 }}
@@ -120,15 +119,32 @@ export default function Home({ trackDetails,loginResp }) {
 // This function gets called at build time
 export async function getServerSideProps({ params }) {
   // Call an external API endpoint to get posts
-  //const login = await fetch('https://songkeyfinder.app/api/authSpotify')
-  //const loginResp = await login.json();
+  const login = await fetch('https://songkeyfinder.app/api/authSpotify')
+  const loginResp = await login.json();
   const track = await fetch('https://songkeyfinder.app/api/getTrackData?id='+params.trackId[params.trackId.length-1])
   const trackDetails = await track.json();
-
-  return {
-    props: {
-      trackDetails,
-      loginResp: null
-    },
+  
+  if(trackDetails.err) {
+    if(trackDetails.err === "AUTHORIZATION_REQUIRED") {
+      return {
+        redirect: {
+          destination: "/api/authSpotify",
+        },
+      }
+    } else {
+      return {
+        props: {
+          trackDetails: trackDetails,
+          loginResp: trackDetails.err
+        },
+      }
+    }
+  } else {
+    return {
+      props: {
+        trackDetails,
+        loginResp: loginResp
+      },
+    }
   }
 }

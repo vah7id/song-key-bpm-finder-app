@@ -17,15 +17,16 @@ const SpotifyWebPlayer = dynamic(() => import('react-spotify-web-playback'), {
   ssr: false,
 })
 
-export default function Search() {
+export default function Search({ tracksDetails,loginResp }) {
+  console.log(tracksDetails)
   const router = useRouter()
   const [isFetching, setIsFetching] = useState(true);
   const [sortType, setSortType] = useState('popularity');
-  const [tracksData, setTracksData] = useState(null) 
+  const [tracksData, setTracksData] = useState(tracksDetails || []) 
   const [openSnackbar, setSnackbarOpen] = useState(false);
   const [notification, setNotification] = useState({ type: null, message: ""});
   const [anchorEl, setAnchorEl] = useState(null);
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState(loginResp ? loginResp?.token : null);
   const [currentPlayingTrack, setCurrentPlayingTrack] = useState("");
 
   const handlePlayTrack = (event, uri) => {
@@ -48,36 +49,16 @@ export default function Search() {
 
   useEffect(() => {
     install('G-LDDJ32MXZ1'); 
-    fetch('/api/authSpotify').then(resp => resp.json()).then(resp => {
-      if(resp && resp.token) {
-        setToken(resp.token);
-        if(router.query.query !== "" || !tracksData || tracksData.length === 0) {
-          fetch(`/api/findBpm?title=${router.query.query || ""}`).then(response => response.json()).then(response => {
-              if(response.err) {
-              } else {
-                setIsFetching(false);
-                let tmp = response
-                let sorted = tmp.slice(0);
-                sorted.sort(function(a,b) {
-                    return a['popularity'] - b['popularity'];
-                });
-                setTracksData(sorted);
-              }
-          }).catch(err => {
-              console.log(err.message)
-              setTracksData([])
-              setIsFetching(false);
-              showNotification('warning', 'Oops!! :( We cannot fetch the song data from our database!! Please enter the correct song title + artist name :)');
-          });
-        }
-      } else {
-
-      }
-    }).catch(err => {
-      console.log(err)
-      console.log('cannot authorize with spotify!!!')
-    })
-  }, [router.query.query, router.asPath])
+    if(!tracksData || (tracksData && tracksData.length > 0 && tracksData[0].id !== tracksDetails[0].id)) {
+      /*let tmp = tracksDetails
+      let sorted = tmp.slice(0);
+      sorted.sort(function(a,b) {
+          return a['popularity'] - b['popularity'];
+      });*/
+      setTracksData(tracksDetails);
+    }
+    setIsFetching(false);
+  }, [router.query.query, router.asPath, tracksDetails])
 
   const handleNewSearch = (isFetching) => {
     setIsFetching(isFetching)
@@ -216,4 +197,48 @@ export default function Search() {
       </main>
     </div>
   )
+}
+
+
+// This function gets called at build time
+export async function getServerSideProps({ params }) {
+  // Call an external API endpoint to get posts
+  const login = await fetch('https://songkeyfinder.app/api/authSpotify')
+
+  if(!login || login.length < 1) {
+    return {
+      redirect: {
+        destination: "/api/authSpotify",
+      },
+    }
+  }
+
+  const loginResp = await login.json();
+
+  const searchResult = await fetch('https://songkeyfinder.app/api/findBpm?title='+params.query)
+  const tracksData = await searchResult.json();
+  
+  if(tracksData.err) {
+    if(tracksData.err === "AUTHORIZATION_REQUIRED") {
+      return {
+        redirect: {
+          destination: "/api/authSpotify",
+        },
+      }
+    } else {
+      return {
+        props: {
+          tracksDetails: null,
+          loginResp: tracksData.err
+        },
+      }
+    }
+  } else {
+    return {
+      props: {
+        tracksDetails: tracksData,
+        loginResp: loginResp
+      },
+    }
+  }
 }

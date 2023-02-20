@@ -36,7 +36,6 @@ export default function handler(req, res) {
 
                 data.body.tracks.forEach(async(track, index) => {
                         spotifyApi.getAudioFeaturesForTrack(track.id).then(async(featuresData) => {
-                            console.log(featuresData.body)
                             resp[index].key = featuresData.body.key;
                             resp[index].tempo = featuresData.body.tempo;
                             resp[index].duration_ms = featuresData.body.duration_ms;

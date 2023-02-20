@@ -29,11 +29,11 @@ export default function handler(req, res) {
             spotifyApi.setAccessToken(data.body['access_token']);
             spotifyApi.getTrack(req.query.id).then(function(data) {
                 if(!data.body) {
-                    res.status(200).json([]); 
+                    res.status(200).json({body: [], err: 'Oops!! it seems we cannot fetch this certain tracks data model atm!! Try to refresh the page :)'}); 
                 }
                 
                 let resp = data.body;
-                console.log(resp)
+
                 spotifyApi.getAudioFeaturesForTrack(data.body.id).then((featuresData) => {
                     resp.key = featuresData.body.key;
                     resp.tempo = featuresData.body.tempo;
@@ -52,11 +52,11 @@ export default function handler(req, res) {
               },
               function(err) {
                 console.log(err)
-                res.status(200).json([]);   
+                res.status(200).json({body: [], err: 'Oops!! it seems we cannot fetch this certain tracks data model atm!! Try to refresh the page :)'}); 
              });
         },
         function(err) {
-            res.status(200).json([]);   
+            res.status(200).json({body: [], err: 'AUTHORIZATION_REQUIRED'}); 
         });
    
   }

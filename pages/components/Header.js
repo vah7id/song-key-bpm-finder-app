@@ -5,8 +5,10 @@ import { Link, Typography } from '@mui/material';
 import logo2 from '../../public/logo2.jpg'
 import Image from 'next/image'
 import styles from '../../styles/Home.module.css'
+import { useRouter } from 'next/router';
 
 export default function Header() {
+    const router = useRouter();
     return (
       <>
         <Link href="/" passHref>
