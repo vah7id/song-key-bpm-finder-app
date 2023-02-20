@@ -11,9 +11,7 @@ export default function Header() {
     const router = useRouter();
     return (
       <>
-        <Link href="/" passHref>
           <Image style={{ cursor: 'pointer'}} alt="logo" onClick={() => router.push('/')} src={logo2} />
-        </Link>
 
         <Link href="/" passHref>
           <h1 className={styles.title}>

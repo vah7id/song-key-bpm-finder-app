@@ -28,34 +28,35 @@ export default function handler(req, res) {
     spotifyApi.clientCredentialsGrant().then(
         function(data) {
             spotifyApi.setAccessToken(data.body['access_token']);
-            spotifyApi.search(req.query.title, ['track'], { limit : 50 }).then(function(data) {
+            spotifyApi.search(req.query.title, ['track'], { limit : 25 }).then(function(data) {
                 if(!data.body.tracks || data.body.tracks.items.length === 0) {
                     res.status(200).json({data: [], err: 'Oops!! it seems we cannot fetch any result from our database atm!! Try Again :)'}); 
                 }
-        
                 const tracks = data.body.tracks.items;
+                spotifyApi.getAudioFeaturesForTracks(tracks.map(t => t.id)).then(async(featuresData, index) => {
+                    console.log(featuresData.body.audio_features[0])
 
-                tracks.forEach(async(track, index) => {
-                    spotifyApi.getAudioFeaturesForTrack(track.id).then(async(featuresData) => {
-                        tracks[index].key = featuresData.body.key;
-                        tracks[index].tempo = featuresData.body.tempo;
-                        tracks[index].duration_ms = featuresData.body.duration_ms;
-                        tracks[index].mode = featuresData.body.mode;
-                        tracks[index].danceability = featuresData.body.danceability;
-                        tracks[index].energy = featuresData.body.energy;
-                        tracks[index].loudness = featuresData.body.loudness;
-                        tracks[index].happiness = featuresData.body.valence;
-                        tracks[index].popularity = featuresData.body.popularity;
-                        tracks[index].instrumentalness = featuresData.body.instrumentalness
-                        tracks[index].time_signature = featuresData.body.time_signature
-                        
-                        await sleep(2000);
-
-                        if(index === tracks.length - 1) {
-                            res.status(200).json(tracks); 
-                        }
-                    })
-                    await sleep(1000);
+                    if(featuresData.body && featuresData.body.audio_features) {
+                        featuresData.body.audio_features.map((featureData, index) => {
+                            tracks[index].key = featureData.key;
+                            tracks[index].tempo = featureData.tempo;
+                            tracks[index].duration_ms = featureData.duration_ms;
+                            tracks[index].mode = featureData.mode;
+                            tracks[index].danceability = featureData.danceability;
+                            tracks[index].energy = featureData.energy;
+                            tracks[index].loudness = featureData.loudness;
+                            tracks[index].happiness = featureData.valence;
+                            tracks[index].popularity = featureData.popularity;
+                            tracks[index].instrumentalness = featureData.instrumentalness
+                            tracks[index].time_signature = featureData.time_signature
+        
+                            if(index === tracks.length - 1) {
+                                res.status(200).json(tracks); 
+                            }
+                        })
+                    } else {
+                        res.status(200).json(tracks); 
+                    }
                 });
               },
               function(err) {

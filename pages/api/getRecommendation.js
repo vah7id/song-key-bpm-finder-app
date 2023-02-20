@@ -32,29 +32,30 @@ export default function handler(req, res) {
                     res.status(200).json([]); 
                 }
                 let resp = data.body.tracks;
-
-                data.body.tracks.forEach(async(track, index) => {
-                        spotifyApi.getAudioFeaturesForTrack(track.id).then(async(featuresData) => {
-                            resp[index].key = featuresData.body.key;
-                            resp[index].tempo = featuresData.body.tempo;
-                            resp[index].duration_ms = featuresData.body.duration_ms;
-                            resp[index].mode = featuresData.body.mode;
-                            resp[index].danceability = featuresData.body.danceability;
-                            resp[index].energy = featuresData.body.energy;
-                            resp[index].loudness = featuresData.body.loudness;
-                            resp[index].happiness = featuresData.body.valence;
-                            resp[index].popularity = featuresData.body.popularity;
-                            resp[index].instrumentalness = featuresData.body.instrumentalness
-                            resp[index].time_signature = featuresData.body.time_signature
-                            await sleep(1000);
-    
+                spotifyApi.getAudioFeaturesForTracks(resp.map(t => t.id)).then(async(featuresData, index) => {
+             
+                    if(featuresData.body && featuresData.body.audio_features) {
+                        featuresData.body.audio_features.map((featureData, index) => {
+                            resp[index].key = featureData.key;
+                            resp[index].tempo = featureData.tempo;
+                            resp[index].duration_ms = featureData.duration_ms;
+                            resp[index].mode = featureData.mode;
+                            resp[index].danceability = featureData.danceability;
+                            resp[index].energy = featureData.energy;
+                            resp[index].loudness = featureData.loudness;
+                            resp[index].happiness = featureData.valence;
+                            resp[index].popularity = featureData.popularity;
+                            resp[index].instrumentalness = featureData.instrumentalness
+                            resp[index].time_signature = featureData.time_signature
+        
                             if(index === resp.length - 1) {
                                 res.status(200).json(resp); 
                             }
-
                         })
-                        await sleep(1000);
-                    })
+                    } else {
+                        res.status(200).json(resp); 
+                    }
+                });
               },
               function(err) {
                 console.log(err)
