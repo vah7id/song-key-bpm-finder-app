@@ -251,6 +251,16 @@ Drop / Upload your audio file below and instantly get the song key & tempo. Dete
                     <a href="https://twitter.com/intent/tweet?screen_name=songkeybpmfinder-app&ref_src=twsrc%5Etfw" style={{color: '#1d9bf0'}} data-show-count="false">Send Feedback</a><script async src="https://platform.twitter.com/widgets.js"></script>
                 </Breadcrumbs>
                 
+                <Typography style={{opacity: 0.1, width: '100%'}} variant={"body1"}>
+song key finder 
+bpm finder online 
+bpm and key finder 
+song bpm finder 
+mp3 to bpm 
+song bpm and key 
+song key finder online 
+key finder mp3 
+                </Typography>
                 
                 </Box>
 

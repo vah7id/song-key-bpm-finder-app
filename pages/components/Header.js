@@ -15,7 +15,7 @@ export default function Header() {
 
         <Link href="/" passHref>
           <h1 className={styles.title}>
-              Song key bpm finder
+              Song key bpm finder / Find Similar songs for mixing
           </h1>
         </Link>
         <Typography variant="h2" style={{ maxWidth: '768px', fontSize: '0.85rem', lineHeight: '20px', opacity: '0.4', textAlign: 'center', margin: '16px 0 40px 0' }}>

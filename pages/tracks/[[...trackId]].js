@@ -1,4 +1,4 @@
-import { Backdrop, Box, CircularProgress, Typography } from '@mui/material'
+import { Alert, Backdrop, Box, CircularProgress, Snackbar, Typography } from '@mui/material'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../../styles/Home.module.css'
@@ -27,15 +27,39 @@ export default function Home({ trackDetails,loginResp }) {
   const [loading,setLoading] = useState(true);
   const [currentTrackId, setCurrentTrackId] = useState(router.query?.trackId ? router.query.trackId[router.query.trackId.length-1] : null);
   const [token, setToken] = useState(loginResp ? loginResp.token : null);
-  const [currentPlayingTrack, setCurrentPlayingTrack] = useState("");
+  const [currentPlayingTrack, setCurrentPlayingTrack] = useState(null);
+  const [openSnackbar, setSnackbarOpen] = useState(false);
+  const [notification, setNotification] = useState({ type: null, message: ""});
+
+  const showNotification = (type, message) => {
+    setSnackbarOpen(true);
+    setNotification({
+        type: type,
+        message
+    })
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
 
   const handlePlayTrack = (event, track) => {
     event.preventDefault();
-    setCurrentPlayingTrack(track);
+    console.log(track)
+    if(!track.preview_url) {
+      showNotification('error','Oops, we cannot play the preview for this specific track!!')
+      setCurrentPlayingTrack(null);
+    } else {
+      setCurrentPlayingTrack(track);
+    }
   }
 
   const handleClosePlayer = () => {
-    setCurrentPlayingTrack("")
+    setCurrentPlayingTrack(null)
   }
   
   useEffect(() => {
@@ -90,8 +114,8 @@ export default function Home({ trackDetails,loginResp }) {
           <meta property="og:image" content="/favicon3.png"/>
           <meta property="og:description" content={`Song key & Tempo BPM of track ${((track && track.artists) ? track.artists[0].name : "")} ${track ? track.name : ""} , Similar tracks for mixing`}/>
           <meta property="og:site_name" content="songkeyfinder.app" />
-          <meta itemProp="name" content="Song key & Tempo BPM Finder Tool" />
-          <meta itemProp="description" content="Song key & Tempo BPM Finder Tool" />
+          <meta itemProp="name" content={`Song key & Tempo BPM of track ${((track && track.artists) ? track.artists[0].name : "")} ${track ? track.name : ""}`} />
+          <meta itemProp="description" content={`Song key & Tempo BPM of track ${((track && track.artists) ? track.artists[0].name : "")} ${track ? track.name : ""} , Similar tracks for mixing`} />
           <meta itemProp="image" content="./favicon3.png" />
       </Head>
       <main lang="en" className={styles.main}>
@@ -106,11 +130,18 @@ export default function Home({ trackDetails,loginResp }) {
         >
           <CircularProgress color="inherit" />
         </Backdrop>
-        {(currentPlayingTrack !== null && currentPlayingTrack.album) && <Box sx={{position: 'fixed !important', display: 'flex', padding: '10px 0 10px 10px', background: 'rgb(246, 248, 250)',  borderTop: '1px solid #ddd', bottom: '0px', left: 0, width: '100%'}} >
+        {(currentPlayingTrack !== null && currentPlayingTrack.artists) && <Box sx={{position: 'fixed !important', display: 'flex', padding: '10px 0 10px 10px', background: 'rgb(246, 248, 250)',  borderTop: '1px solid #ddd', bottom: '0px', left: 0, width: '100%'}} >
               <Image  alt={'playerPhoto'+currentPlayingTrack.name} width={60} height={40} src={currentPlayingTrack.album?.images && currentPlayingTrack.album.images[0].url} />
               <Player autoPlay src={currentPlayingTrack.preview_url} height={60} />
             </Box>
             }
+
+          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={openSnackbar} autoHideDuration={5000} onClose={handleSnackbarClose}>
+              <Alert onClose={handleSnackbarClose} severity={notification.type || 'error'} sx={{ width: '100%' }}>
+                  {notification.message || ''}
+              </Alert>
+          </Snackbar>
+            
       </main>
     </div>
   )
