@@ -19,7 +19,7 @@ export default function Header() {
           </h1>
         </Link>
         <Typography variant="h2" style={{ maxWidth: '768px', fontSize: '0.85rem', lineHeight: '20px', opacity: '0.4', textAlign: 'center', margin: '16px 0 40px 0' }}>
-            Find your song BPM & song key, and similar songs for mixing, by just typing the song title or you can also upload your track to analyze, if you could not find it in our database!
+            Find your song BPM & song key, and similar songs for mixing, by just typing the song title or you can also upload your audio file to analyze, if you could not find it in our database!
         </Typography>
       </>
     );

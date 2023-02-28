@@ -93,7 +93,7 @@ export default function Home({ trackDetails,loginResp }) {
   return (
     <div lang="en" className={styles.container}>
       <Head> 
-        <title>Song key & Tempo BPM of track {((track && track.artists) ? track.artists[0].name : '')+' '+(track ? track.name : '')}, Similar songs for Harmonic Mixing</title>
+        <title>Song key & Tempo BPM of song {((track && track.artists) ? track.artists[0].name : '')+' '+(track ? track.name : '')}, Similar songs for Harmonic Mixing</title>
         <meta name="description" content={`Song key & Tempo BPM of track ${((track && track.artists) ? track.artists[0].name : "")} ${track ? track.name : ""} , Similar tracks for mixing`} />
         <link rel="icon" href="/favicon3.png" />
         <link rel="alternate" href="http://songkeyfinder.app" hrefLang="en"/>

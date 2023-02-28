@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <div lang="en" className={styles.container}>
       <Head> 
-        <title>Song key & Tempo BPM Finder Tool, Find similar songs for mixing tool online</title>
+        <title>Song key & Tempo BPM Finder Tool, Find similar songs for mixing </title>
         <meta name="description" content="Song key & Tempo BPM Finder Tool, Find bpm/key of song and its similar songs" />
         <link rel="icon" href="/favicon3.png" />
         <link rel="alternate" href="http://songkeyfinder.app" hrefLang="en"/>
