@@ -34,6 +34,8 @@ npm run dev
 ## ClientID
 
 Replace your spotify API CLIENT_ID 
+Replace your spotify GOOGLE_APPLICATION_CREDENTIALS  (optional)
+
 
 
 ## License
