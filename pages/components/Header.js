@@ -11,9 +11,9 @@ export default function Header() {
     const router = useRouter();
     return (
       <>
-          <Image style={{ cursor: 'pointer'}} alt="logo" onClick={() => router.push('/')} src={logo2} />
+          <Image style={{ cursor: 'pointer'}} alt="logo" onClick={() => router.push('/search')} src={logo2} />
 
-        <Link href="/" passHref>
+        <Link href="/search" passHref>
           <h1 className={styles.title}>
               Song key bpm finder / Find Similar songs for mixing
           </h1>

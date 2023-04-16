@@ -221,7 +221,7 @@ Drop / Upload your audio file below and instantly get the song key & tempo. Dete
                         title="Home"
                         underline="hover"
                         sx={{ display: 'flex', alignItems: 'center' }}
-                        href="/"
+                        href="/search"
                     >
                     <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
                     Home
@@ -234,9 +234,30 @@ Drop / Upload your audio file below and instantly get the song key & tempo. Dete
                         color="inherit"
                         href="/"
                     >
-                    Find song key via file upload
+                    Find song key
                     </Link>
-                   
+                    <Link
+                        title="Find song key via file upload"
+                        rel={"noopener"}
+                        target={"_blank"}
+                        underline="hover"
+                        sx={{ display: 'flex', alignItems: 'center' }}
+                        color="inherit"
+                        href="https://mikrotakt.app"
+                    >
+                    AI Audio Splitter Tool
+                    </Link>
+                    <Link
+                        title="Find song key via file upload"
+                        rel={"noopener"}
+                        target={"_blank"}
+                        underline="hover"
+                        sx={{ display: 'flex', alignItems: 'center' }}
+                        color="inherit"
+                        href="https://mikrotakt.app"
+                    >
+                    Vocal Remover
+                    </Link>
                     <Link
                         rel={"noopener"}
                         title="Github"

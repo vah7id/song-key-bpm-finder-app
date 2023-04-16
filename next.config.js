@@ -11,6 +11,15 @@ function Proxy(options) {
 proxy.exports = Proxy
 
 module.exports = {
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/search',
+        permanent: true,
+      },
+    ]
+  },
   images: {
     domains: ['i.scdn.co'],
     remotePatterns: [
