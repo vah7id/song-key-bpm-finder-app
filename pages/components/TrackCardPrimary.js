@@ -39,7 +39,7 @@ export default function TrackCardPrimary({track, handlePlayTrack}) {
             <CardContent sx={{flex: '1 0 auto', paddingBottom: '16px !important'}}>
                 <Grid container spacing={2}>
                     <Grid item md={3} sm={2} xs={12} mt={1}>
-                        <Image className={styles.artwork} alt={track.artists && track.artists[0].name+' - '+track.name} width={170} height={ 170} src={track.album?.images && track.album.images[0].url} />
+                        <Image unoptimized className={styles.artwork} alt={track.artists && track.artists[0].name+' - '+track.name} width={170} height={ 170} src={track.album?.images && track.album.images[0].url} />
                     </Grid>
                     <Grid item md={4} sm={4} ml={1} xs={11}>
                         <Typography className={styles.trackTitle} sx={{marginTop: '8px',width: '90%'}} gutterBottom variant="h5" component="div">

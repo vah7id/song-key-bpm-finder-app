@@ -31,7 +31,7 @@ export default function TrackCard({track, onSelectTrack, playOnDeck = null, hand
             <CardContent style={{width: '100% !important', paddingBottom: '16px !important'}}>
                 <Grid container spacing={2}>
                     <Grid item sm={2} xs={2}>
-                        <Image onClick={() => onSelectTrack('/tracks/'+url+'/'+track.id, track)} className={styles.artwork2} alt={track.artists && track.artists[0].name+' - '+track.name} width={85} height={85} src={track.album?.images && track.album.images[0].url} />
+                        <Image unoptimized onClick={() => onSelectTrack('/tracks/'+url+'/'+track.id, track)} className={styles.artwork2} alt={track.artists && track.artists[0].name+' - '+track.name} width={85} height={85} src={track.album?.images && track.album.images[0].url} />
                     </Grid>
                     <Grid item md={4} xs={9} sm={4}>
                         <Typography onClick={() => onSelectTrack('/tracks/'+url+'/'+track.id, track)} className={styles.trackTitle} style={{width: '100%', marginTop: '0px !important'}}  variant="h5" component="div" noWrap>
