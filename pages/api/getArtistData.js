@@ -32,22 +32,43 @@ export default function handler(req, res) {
                     res.status(200).json([]); 
                 }
                 spotifyApi.getArtistTopTracks(req.query.id,"ES").then(function(artistTracks) {
-                    if(artistTracks.body) {
-                        res.status(200).json({
-                            artist: artistData.body,
-                            tracks: artistTracks.body
-                        }); 
+                    let resp = artistTracks.body.tracks;
+                    spotifyApi.getAudioFeaturesForTracks(resp.map(t => t.id)).then(async(featuresData, index) => {
+            
+                    if(featuresData.body && featuresData.body.audio_features) {
+                        featuresData.body.audio_features.map((featureData, index) => {
+                            resp[index].key = featureData.key;
+                            resp[index].tempo = featureData.tempo;
+                            resp[index].duration_ms = featureData.duration_ms;
+                            resp[index].mode = featureData.mode;
+                            resp[index].danceability = featureData.danceability;
+                            resp[index].energy = featureData.energy;
+                            resp[index].loudness = featureData.loudness;
+                            resp[index].happiness = featureData.valence;
+                            resp[index].popularity = featureData.popularity;
+                            resp[index].instrumentalness = featureData.instrumentalness
+                            resp[index].time_signature = featureData.time_signature
+        
+                            if(index === resp.length - 1) {
+                                res.status(200).json({
+                                    artist: artistData.body,
+                                    tracks: resp
+                                }); 
+                            }
+                        })
                     } else {
-                        res.status(200).json([]); 
+                        res.status(200).json(resp); 
                     }
-              },
-              function(err) {
-                console.log(err)
+                   
+                },
+                function(err) {
+                    console.log(err)
+                    res.status(200).json([]);   
+                });
+            },
+            function(err) {
                 res.status(200).json([]);   
-             });
-        },
-        function(err) {
-            res.status(200).json([]);   
-        });
+            });
+        })
     })
 }
