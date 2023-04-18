@@ -37,7 +37,6 @@ export default function ArtistDetails({ artistData }) {
 
   const OnPlayDeck2 = (track) => {
     setSelectedTrack(track);
-    //setTrackOnDeck2(track)
   }
 
   const selectTrack = (url, track) => {
