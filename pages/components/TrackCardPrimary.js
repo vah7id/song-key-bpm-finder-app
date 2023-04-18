@@ -125,11 +125,11 @@ export default function TrackCardPrimary({track, handlePlayTrack}) {
             
                 <Typography variant="subtitle1">Popularity: {track.popularity}</Typography>
                 <BorderLinearProgress variant="determinate" value={track.popularity} />
-                <Typography variant="subtitle1">Happiness: {parseFloat(track.happiness*100,2)}</Typography>
+                <Typography variant="subtitle1">Happiness: {parseInt(track.happiness*100,2)}</Typography>
                 <BorderLinearProgress variant="determinate"  value={track.happiness*100} />
-                <Typography variant="subtitle1">Energy: {parseFloat(track.energy*100,2)}</Typography>
+                <Typography variant="subtitle1">Energy: {parseInt(track.energy*100,2)}</Typography>
                 <BorderLinearProgress variant="determinate" value={track.energy*100} />
-                <Typography variant="subtitle1">Danceability: {parseFloat(track.danceability*100,2)}</Typography>
+                <Typography variant="subtitle1">Danceability: {parseInt(track.danceability*100,2)}</Typography>
                 <BorderLinearProgress variant="determinate" value={track.danceability*100} />
                 <Typography variant="subtitle1">Instrumentalness: {track.instrumentalness} </Typography>
                 <BorderLinearProgress variant="determinate" value={track.instrumentalness*100} />
