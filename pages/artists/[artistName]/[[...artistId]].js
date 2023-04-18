@@ -20,6 +20,7 @@ export default function Home({artistData}) {
   const { id } = router.query
   const search = router.query;
 
+  
   useEffect(() => {
     install('G-LDDJ32MXZ1'); 
     fetch('/api/authSpotify').then(resp => resp.json()).then(resp => {
