@@ -10,18 +10,19 @@ import logo2 from '../../public/logo2.jpg'
 import Image from 'next/image'
 import ArtistDetails from '../components/ArtistDetails'
 import { useRouter } from 'next/router'
-export default function Home() {
+export default function Home({artistData}) {
 
   const router = useRouter()
-  const [artist, setArtist] = useState(null);
-
-  const { artistName } = router.query
+  const [artist, setArtist] = useState(artistData);
+  console.log(artistData)
+  const { id } = router.query
+  const search = router.query;
 
   useEffect(() => {
     install('G-LDDJ32MXZ1'); 
     fetch('/api/authSpotify').then(resp => resp.json()).then(resp => {
         if(!artist) {
-            fetch('/api/getArtistData?title='+artistName).then(resp => resp.json()).then(resp => {
+            fetch('/api/getArtistData?id='+search.query).then(resp => resp.json()).then(resp => {
                 setArtist(resp);
             }).catch(err => {
                 console.log(err)
@@ -49,8 +50,6 @@ export default function Home() {
           <meta name="twitter:title" content="Song key & Tempo BPM Finder Tool" />
           <meta name="twitter:description" content="Song key & Tempo BPM Finder and song analyzer Tool" />
           <meta name="twitter:image:src" content="/favicon3.png" />
-        {/*<meta property="fb:admins" content="100002861414139">
-          <meta property="fb:app_id" content="503426229739677">*/}
           <meta property="og:url" content="https://songkeyfinder.app" />
           <meta property="og:type" content="article" />
           <meta property="og:title" content="Song key & Tempo BPM Finder Tool" />
@@ -62,17 +61,50 @@ export default function Home() {
           <meta itemProp="image" content="./favicon3.png" />
       </Head>
       <main lang="en" className={styles.main}>
-        
       <Image src={logo2} />
         <h1 className={styles.title}>
             Song key bpm finder
         </h1>
-        <Typography variant="h2" style={{ maxWidth: '668px', fontSize: '0.85rem', lineHeight: '20px', opacity: '0.4', textAlign: 'center', margin: '16px 0 40px 0' }}>
+        <Typography variant="h2" style={{ maxWidth: '668px', fontSize: '0.85rem', lineHeight: '20px', opacity: '0.4', textAlign: 'center', margin: '8px 0 40px 0' }}>
             Find your track BPM & song key by just typing the song title or you can also upload your track to analyze, if you could not find it in our database!
         </Typography>
-        <ArtistDetails artistData={artist} />
         <SearchInput />
+        {artist && artist.tracks && <ArtistDetails artistData={artist} />}
       </main>
     </div>
   )
+}
+
+// This function gets called at build time
+export async function getServerSideProps({ params }) {
+  // Call an external API endpoint to get posts
+  const {query} = params;
+  const login = await fetch('https://songkeyfinder.app/api/authSpotify')
+  const loginResp = await login.json();
+  const artist = await fetch('https://songkeyfinder.app/api/getArtistData?id='+query)
+  const artistData = await artist.json();
+  
+  if(artistData.err) {
+    if(artistData.err === "AUTHORIZATION_REQUIRED") {
+      return {
+        redirect: {
+          destination: "/api/authSpotify",
+        },
+      }
+    } else {
+      return {
+        props: {
+          artistData: artistData,
+          loginResp: artistData.err
+        },
+      }
+    }
+  } else {
+    return {
+      props: {
+        artistData,
+        loginResp: loginResp
+      },
+    }
+  }
 }

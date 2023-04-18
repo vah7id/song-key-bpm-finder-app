@@ -22,18 +22,24 @@ export default function handler(req, res) {
     res.setHeader('Authorization', 'Basic ' + (new Buffer("6233cf5397864e0abb091744ea919486" + ':' + "5d967a86893f46299a46ea4c94695ddf").toString('base64')))
     res.setHeader('Content-Type', 'application/x-www-form-urlencoded')
    
-
+    console.log(req.query)
     // Retrieve an access token.
     spotifyApi.clientCredentialsGrant().then(
         function(data) {
             spotifyApi.setAccessToken(data.body['access_token']);
-            spotifyApi.search(req.query.title, ['artist'], { limit : 10, offset : 1 }).then(function(data) {
-                if(!data.body) {
+            spotifyApi.getArtist(req.query.id).then(function(artistData) {
+                if(!artistData.body) {
                     res.status(200).json([]); 
                 }
-                
-                res.status(200).json(data.body); 
-                
+                spotifyApi.getArtistTopTracks(req.query.id,"ES").then(function(artistTracks) {
+                    if(artistTracks.body) {
+                        res.status(200).json({
+                            artist: artistData.body,
+                            tracks: artistTracks.body
+                        }); 
+                    } else {
+                        res.status(200).json([]); 
+                    }
               },
               function(err) {
                 console.log(err)
@@ -43,5 +49,5 @@ export default function handler(req, res) {
         function(err) {
             res.status(200).json([]);   
         });
-   
-  }
+    })
+}
