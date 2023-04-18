@@ -45,8 +45,8 @@ export default function TrackCardPrimary({track, handlePlayTrack}) {
                         <Typography className={styles.trackTitle} sx={{marginTop: '8px',width: '90%'}} gutterBottom variant="h5" component="div">
                             {track.name}
                         </Typography>
-                        <Typography noWrap style={{width: '100%', display: 'block', margin: '-5px 0 0px 0', fontSize: '14px !important'}} gutterBottom sx={{fontSize: '16px !important', paddingTop: '0'}} variant="h5" color="text.primary">
-                            {track.artists && track.artists[0].name}
+                        <Typography noWrap gutterBottom style={{width: '100%', display: 'block', margin: '-5px 0 0px 0', fontSize: '14px !important'}} sx={{fontSize: '16px !important', paddingTop: '0'}} variant="h5" color="text.primary">
+                            {track.artists && (<a href={`/artists/${track.artists[0].name}/${track.artists[0].id}`}>Artist: {track.artists[0].name}</a>)}
                         </Typography>
                         <Typography noWrap gutterBottom sx={{width: '100%', display: 'block', margin: '-5px 0 0px 0', fontSize: '12px !important', paddingTop: '8px'}} color="text.secondary">
                             Album: {track.album && track.album.name}
