@@ -2,7 +2,7 @@
 /* eslint-disable react/prefer-stateless-function */
 /* eslint-disable import/no-unresolved, import/extensions, import/no-extraneous-dependencies */
 import { PianoOutlined, ShareOutlined, ShareRounded } from '@mui/icons-material';
-import { Box, Button, Card, CardContent, CardMedia,  Grid,  Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Popover, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, CardMedia,  CircularProgress,  Grid,  LinearProgress,  Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Popover, Typography, linearProgressClasses, styled } from '@mui/material';
 import React, { Component, useEffect, useState } from 'react';
 
 import styles from '../../styles/Home.module.css'
@@ -13,11 +13,24 @@ import Image from 'next/image';
 import ShareURL from './ShareURL';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+    height: 5,
+    marginBottom: '12px',
+    borderRadius: 0,
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+      backgroundColor: theme.palette.grey[200],
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+      borderRadius: 0,
+      backgroundColor: '#59db81',
+    },
+  }));
+
 export default function TrackCardPrimary({track, handlePlayTrack}) {
     const router = useRouter();
     const [shareVisible, setShareVisible] = useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
-
+    console.log(track)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -107,6 +120,21 @@ export default function TrackCardPrimary({track, handlePlayTrack}) {
                 </Grid>
         </CardContent>
     </Card>
+    <Card  key={track.id} sx={{ width: '100%', display: 'flex', mb: 2 }}>
+            <CardContent sx={{flex: '1 0 auto', paddingBottom: '16px !important'}}>
+            
+                <Typography variant="subtitle1">Popularity: {track.popularity}</Typography>
+                <BorderLinearProgress variant="determinate" value={track.popularity} />
+                <Typography variant="subtitle1">Happiness: {parseFloat(track.happiness*100,2)}</Typography>
+                <BorderLinearProgress variant="determinate"  value={track.happiness*100} />
+                <Typography variant="subtitle1">Energy: {parseFloat(track.energy*100,2)}</Typography>
+                <BorderLinearProgress variant="determinate" value={track.energy*100} />
+                <Typography variant="subtitle1">Danceability: {parseFloat(track.danceability*100,2)}</Typography>
+                <BorderLinearProgress variant="determinate" value={track.danceability*100} />
+                <Typography variant="subtitle1">Instrumentalness: {track.instrumentalness} </Typography>
+                <BorderLinearProgress variant="determinate" value={track.instrumentalness*100} />
+            </CardContent>
+        </Card>
       </>
     );
   
