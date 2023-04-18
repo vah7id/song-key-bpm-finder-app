@@ -81,7 +81,7 @@ export default function ArtistDetails({ artistData }) {
             <Divider sx={{textAlign: 'center', width: '100%', mt: 6, mb: 4}}>
                 <Chip sx={{ fontSize: '0.9rem'}} label={`Top Tracks From ${artistData.artist.name}`} />
             </Divider>
-            {(artistData && artistData.tracks && artistData.tracks.tracks && artistData.tracks.tracks.length > 0) && artistData.tracks.tracks.map(topTrack => 
+            {(artistData && artistData.tracks  && artistData.tracks.length > 0) && artistData.tracks.map(topTrack => 
                 <TrackCard handlePlayTrack={handlePlayTrack} hideSimilarIcon={true} playOnDeck={OnPlayDeck2} onSelectTrack={selectTrack} key={topTrack.id} track={topTrack} />
             )}
           </>}

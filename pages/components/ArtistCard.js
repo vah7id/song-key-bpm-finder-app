@@ -41,7 +41,7 @@ export default function ArtistCard({artistData}) {
                         <Typography  className={styles.artistTitle} style={{width: '100%', marginTop: '0px !important', marginBottom: '16px !important'}}  variant="body" component="div" noWrap>
                             Genre: {artist.genres[0]}
                         </Typography>
-                        {artist?.external_urls && <Button style={{marginTop: '16px'}} variant="outlined"><Link href={artist?.external_urls.spotify} target="_blank" >Open Artist Page on Spotify</Link></Button>}
+                        {artist?.external_urls && <Button style={{marginTop: '4px'}} variant="outlined"><Link href={artist?.external_urls.spotify} target="_blank" >Open Artist Page on Spotify</Link></Button>}
                     </Grid>
                 </Grid>
         </CardContent>
