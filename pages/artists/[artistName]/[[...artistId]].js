@@ -15,6 +15,7 @@ export default function Home({artistData}) {
 
   const router = useRouter()
   const [artist, setArtist] = useState(artistData);
+
   console.log(artistData)
   const { id } = router.query
   const search = router.query;

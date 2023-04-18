@@ -13,6 +13,7 @@ export default function ArtistDetails({ artistData }) {
   const router = useRouter();
   const isLoading = !artistData;
   const [currentPlayingTrack, setCurrentPlayingTrack] = useState(null);
+  const [currentTrackId, setCurrentTrackId] = useState(null);
   const [loading, setLoading] = useState(true)
   const [selectedTrack, setSelectedTrack] = useState(null)
   const [openSnackbar, setSnackbarOpen] = useState(false);
