@@ -15,11 +15,14 @@ export default function Home({artistData}) {
 
   const router = useRouter()
   const [artist, setArtist] = useState(artistData);
+  const [isFetching, setIsFetching] = useState(false);
 
-  console.log(artistData)
   const { id } = router.query
   const search = router.query;
 
+  const handleNewSearch = (isFetching) => {
+    setIsFetching(isFetching)
+  }
 
   useEffect(() => {
     install('G-LDDJ32MXZ1'); 
@@ -44,7 +47,7 @@ export default function Home({artistData}) {
         <meta name="description" content="Song key & Tempo BPM Finder Tool, Find the bpm and key of every song" />
         <link rel="icon" href="/favicon3.png" />
         <link rel="alternate" href="http://songkeyfinder.app" hrefLang="en"/>
-        <meta name="keywords" content={`Song key & Tempo BPM Finder Tool, song key finder, bpm tempo finder,${artistData.artist.name} top songs`} />
+        <meta name="keywords" content={`Song key & Tempo BPM Finder Tool, song key finder, bpm tempo finder,${artistData.artist.name} top songs, bpm counter, bpm calculator, bpm, Find song tempo, What bpm is this`} />
           <meta name="googlebot" content="index, follow" />
           <meta name="robots" content="index, follow" />
           <link rel="apple-touch-icon-precomposed" href="/favicon3.png" />
@@ -71,7 +74,7 @@ export default function Home({artistData}) {
         <Typography variant="h2" style={{ maxWidth: '668px', fontSize: '0.85rem', lineHeight: '20px', opacity: '0.4', textAlign: 'center', margin: '8px 0 40px 0' }}>
             Find your track BPM & song key by just typing the song title or you can also upload your track to analyze, if you could not find it in our database!
         </Typography>
-        <SearchInput />
+        <SearchInput  handleNewSearch={handleNewSearch} isSearching={isFetching} />
         <ArtistDetails artistData={artist} />
         <UploadTrack />
       </main>

@@ -35,7 +35,7 @@ export default function Search() {
         <meta name="description" content="Song key & Tempo BPM Finder Tool, Find bpm/key of song and its similar songs" />
         <link rel="icon" href="/favicon3.png" />
         <link rel="alternate" href="http://songkeyfinder.app" hrefLang="en"/>
-        <meta name="keywords" content="Song key & Tempo BPM Finder Tool, song key finder, bpm tempo finder, similar songs mixing" />
+        <meta name="keywords" content="Song key & Tempo BPM Finder Tool, song key finder, bpm tempo finder, similar songs mixing,, bpm counter, bpm calculator, bpm, Find song tempo, What bpm is this" />
           <meta name="googlebot" content="index, follow" />
           <meta name="robots" content="index, follow" />
           <link rel="apple-touch-icon-precomposed" href="/favicon3.png" />

@@ -98,10 +98,10 @@ export default function Search({ tracksDetails,loginResp }) {
     <div lang="en" className={styles.container}>
       <Head> 
         <title>BPM, Song Key of track {router.query.query}, Similar songs Harmonic Mixing</title>
-        <meta name="description" content={`BPM, Song Key Results of track ${router.query.query}, similar songs`} />
+        <meta name="description" content={`BPM, Song Key Results of track ${router.query.query}, similar songs, bpm counter, bpm calculator, Find song tempo, What bpm is this`} />
         <link rel="icon" href="/favicon3.png" />
         <link rel="alternate" href="http://songkeyfinder.app" hrefLang="en"/>
-        <meta name="keywords" content={`BPM, Song Key of track ${router.query.query}, song key finder, bpm tempo finder, similar tracks for mixing`} />
+        <meta name="keywords" content={`BPM, Song Key of track ${router.query.query}, song key finder, bpm tempo finder, similar tracks for mixing, , bpm counter, bpm calculator, bpm, Find song tempo, What bpm is this`} />
           <meta name="googlebot" content="index, follow" />
           <meta name="robots" content="index, follow" />
           <link rel="apple-touch-icon-precomposed" href="/favicon3.png" />

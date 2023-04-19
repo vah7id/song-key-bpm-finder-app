@@ -30,20 +30,34 @@ export default function TrackCardPrimary({track, handlePlayTrack}) {
     const router = useRouter();
     const [shareVisible, setShareVisible] = useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
-    console.log(track)
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
 
     if(!track) {
         return (<></>)
+    }
+
+    const getEnergyLabel = (energy) => {
+        if(energy*100 > 75) {
+            return 'Very High';
+        }
+        if(energy*100 > 50) {
+            return 'High';
+        }
+        if(energy*100 > 30) {
+            return 'Chill';
+        }
+        if(energy*100 <= 30) {
+            return 'Less';
+        }
     }
     
     return (
@@ -120,19 +134,26 @@ export default function TrackCardPrimary({track, handlePlayTrack}) {
                 </Grid>
         </CardContent>
     </Card>
-    <Card  key={track.id} sx={{ width: '100%', display: 'flex', mb: 2 }}>
-            <CardContent sx={{flex: '1 0 auto', paddingBottom: '16px !important'}}>
-            
+    
+    <Card classes={'song-desc'} key={track.id} sx={{ width: '100%', mb: 2, padding: 4 }}>
+            <Typography className='song-desc' style={{padding: '0 24px 0 0',lineHeight: '24px',fontSize: '16px !important', margin: '24px 0 !important', color: '#666'}} variant='body'>
+                <b>{track.name}</b> is a song by {track.artists[0].name} with a tempo of {Math.round(track.tempo)} BPM. It can also be used half-time at {Math.round(track.tempo)/2} BPM or double-time at {Math.round(track.tempo)*2} BPM. The track runs {msToTime(track.duration_ms) } long with 
+                a {getSongKeyTitle(track.key,track.mode)} key and a {track.mode === 1 ? 'Major' : 'Minor'} mode. It has {getEnergyLabel(track.energy)} energy and is {getEnergyLabel(track.danceability)} danceable with a time signature of {track.time_signature}/4 beats per bar.
+            </Typography>
+            <CardContent sx={{flex: '1 0 auto', padding: '16px 0 0px 0 !important'}}>
                 <Typography variant="subtitle1">Popularity: {track.popularity}</Typography>
                 <BorderLinearProgress variant="determinate" value={track.popularity} />
-                <Typography variant="subtitle1">Happiness: {parseInt(track.happiness*100,2)}</Typography>
+                <Typography variant="subtitle1">Happiness: {parseInt(track.happiness*100,10)}</Typography>
                 <BorderLinearProgress variant="determinate"  value={track.happiness*100} />
-                <Typography variant="subtitle1">Energy: {parseInt(track.energy*100,2)}</Typography>
+                <Typography variant="subtitle1">Energy: {parseInt(track.energy*100,10)}</Typography>
                 <BorderLinearProgress variant="determinate" value={track.energy*100} />
-                <Typography variant="subtitle1">Danceability: {parseInt(track.danceability*100,2)}</Typography>
+                <Typography variant="subtitle1">Danceability: {parseInt(track.danceability*100,10)}</Typography>
                 <BorderLinearProgress variant="determinate" value={track.danceability*100} />
-                <Typography variant="subtitle1">Instrumentalness: {track.instrumentalness} </Typography>
-                <BorderLinearProgress variant="determinate" value={track.instrumentalness*100} />
+                <Typography variant="subtitle1">Instrumentalness: {parseInt(track.instrumentalness,10)} </Typography>
+                <BorderLinearProgress variant="determinate" value={track.instrumentalness} />
+                <Button variant="outlined" noWrap style={{ display: 'block', width: '100%', margin: '28px 0 0px 0'}} gutterBottom sx={{fontSize: '14px', padding: '8px 24px'}}>
+                    {track.artists && (<a href={`/artists/${track.artists[0].name}/${track.artists[0].id}`}>See All Recent Tracks By: {track.artists[0].name}</a>)}
+                </Button>
             </CardContent>
         </Card>
       </>

@@ -97,7 +97,7 @@ export default function Home({ trackDetails,loginResp }) {
         <meta name="description" content={`Song key & Tempo BPM of track ${((track && track.artists) ? track.artists[0].name : "")} ${track ? track.name : ""} , Similar tracks for mixing`} />
         <link rel="icon" href="/favicon3.png" />
         <link rel="alternate" href="http://songkeyfinder.app" hrefLang="en"/>
-        <meta name="keywords" content={`Song key & Tempo BPM Finder Tool,${((track && track.artists) ? track.artists[0].name : "")} ${track ? track.name : ""},Similar tracks for mixing,bpm tempo finder`} />
+        <meta name="keywords" content={`Song key & Tempo BPM Finder Tool,${((track && track.artists) ? track.artists[0].name : "")} ${track ? track.name : ""},Similar tracks for mixing,bpm tempo finder, bpm counter, bpm calculator, bpm, Find song tempo, What bpm is this`} />
           <meta name="googlebot" content="index, follow" />
           <meta name="robots" content="index, follow" />
           <link rel="apple-touch-icon-precomposed" href="/favicon3.png" />

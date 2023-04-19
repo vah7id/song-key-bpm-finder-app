@@ -32,10 +32,10 @@ export default function Home() {
     <div lang="en" className={styles.container}>
       <Head> 
         <title>Song key & Tempo BPM Finder Tool, Find similar songs for mixing </title>
-        <meta name="description" content="Song key & Tempo BPM Finder Tool, Find bpm/key of song and its similar songs" />
+        <meta name="description" content="Song key & Tempo BPM Finder Tool, Find tempo bpm/key of song and its similar songs, bpm counter, bpm calculator, Find song tempo, What bpm is this" />
         <link rel="icon" href="/favicon3.png" />
         <link rel="alternate" href="http://songkeyfinder.app" hrefLang="en"/>
-        <meta name="keywords" content="Song key & Tempo BPM Finder Tool, song key finder, bpm tempo finder, similar songs mixing" />
+        <meta name="keywords" content="Song key & Tempo BPM Finder Tool, song key finder, bpm tempo finder, similar songs mixing, bpm counter, bpm calculator, bpm, Find song tempo, What bpm is this" />
           <meta name="googlebot" content="index, follow" />
           <meta name="robots" content="index, follow" />
           <link rel="apple-touch-icon-precomposed" href="/favicon3.png" />
