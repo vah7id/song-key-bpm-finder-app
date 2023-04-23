@@ -28,7 +28,7 @@ export default function handler(req, res) {
     spotifyApi.clientCredentialsGrant().then(
         function(data) {
             spotifyApi.setAccessToken(data.body['access_token']);
-            spotifyApi.search(req.query.title, ['track'], { limit : 25 }).then(function(data) {
+            spotifyApi.search(req.query.title, ['track'], { limit : 20 }).then(function(data) {
                 if(!data.body.tracks || data.body.tracks.items.length === 0) {
                     res.status(200).json({data: [], err: 'Oops!! it seems we cannot fetch any result from our database atm!! Try Again :)'}); 
                 }
