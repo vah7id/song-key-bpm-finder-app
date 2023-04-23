@@ -27,7 +27,7 @@ export default function TrackCard({track, onSelectTrack, playOnDeck = null, hand
     const url = (track.artists && track.artists[0].name+'-'+track.name).replace(/ /g, '').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('?','').replace('?','').replace('?','').replace('?','').replace('.','-').replace('.','-').replace('/','').replace('/','').replace('/','').replace('#','').replace('#','').replace('(','').replace('(','').replace('(','').replace('(','').replace(')','').replace(')','').replace(')','').replace(')','').replace(')','').replace('+','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','');
     return (
       <>
-        <Card  className={styles.artwork2} alt={track.artists && track.artists[0].name+' - '+track.name} key={track.id} className={styles.cardW} sx={{ width: '100%',  mb: 2 }}>
+        <Card key={track.id} className={styles.cardW} sx={{ width: '100%',  mb: 2 }}>
             <CardContent style={{width: '100% !important', paddingBottom: '16px !important'}}>
                 <Grid container spacing={2}>
                     <Grid item sm={2} xs={2}>
