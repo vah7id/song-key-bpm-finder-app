@@ -66,7 +66,7 @@ export default function TrackCardPrimary({track, handlePlayTrack}) {
             <CardContent sx={{flex: '1 0 auto', paddingBottom: '16px !important'}}>
                 <Grid container spacing={2}>
                     <Grid item md={3} sm={2} xs={12} mt={1}>
-                        <Image unoptimized className={styles.artwork} alt={track.artists && track.artists[0].name+' - '+track.name} width={170} height={ 170} src={track.album?.images && track.album.images[0].url} />
+                        <Image unoptimized className={styles.artwork} alt={track.artists && track.artists[0].name+' - '+track.name} width={170} height={ 170} src={track.album?.images[0] && track.album.images[0].url} />
                     </Grid>
                     <Grid item md={4} sm={4} ml={1} xs={11}>
                         <Typography className={styles.trackTitle} sx={{marginTop: '8px',width: '90%'}} gutterBottom variant="h5" component="div">
@@ -151,7 +151,7 @@ export default function TrackCardPrimary({track, handlePlayTrack}) {
                 <BorderLinearProgress variant="determinate" value={track.danceability*100} />
                 <Typography variant="subtitle1">Instrumentalness: {parseInt(track.instrumentalness,10)} </Typography>
                 <BorderLinearProgress variant="determinate" value={track.instrumentalness} />
-                <Button variant="outlined" noWrap style={{ display: 'block', width: '100%', margin: '28px 0 0px 0'}} gutterBottom sx={{fontSize: '14px', padding: '8px 24px'}}>
+                <Button onClick={()=>router.push(`/artists/${track.artists[0].name}/${track.artists[0].id}`)} variant="outlined" noWrap style={{ display: 'block', width: '100%', margin: '28px 0 0px 0'}} gutterBottom sx={{fontSize: '14px', padding: '8px 24px'}}>
                     {track.artists && (<a href={`/artists/${track.artists[0].name}/${track.artists[0].id}`}>See All Recent Tracks By: {track.artists[0].name}</a>)}
                 </Button>
             </CardContent>

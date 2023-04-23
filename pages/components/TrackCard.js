@@ -27,18 +27,18 @@ export default function TrackCard({track, onSelectTrack, playOnDeck = null, hand
     const url = (track.artists && track.artists[0].name+'-'+track.name).replace(/ /g, '').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('&','-').replace('?','').replace('?','').replace('?','').replace('?','').replace('.','-').replace('.','-').replace('/','').replace('/','').replace('/','').replace('#','').replace('#','').replace('(','').replace('(','').replace('(','').replace('(','').replace(')','').replace(')','').replace(')','').replace(')','').replace(')','').replace('+','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','');
     return (
       <>
-        <Card key={track.id} className={styles.cardW} sx={{ width: '100%',  mb: 2 }}>
+        <Card  className={styles.artwork2} alt={track.artists && track.artists[0].name+' - '+track.name} key={track.id} className={styles.cardW} sx={{ width: '100%',  mb: 2 }}>
             <CardContent style={{width: '100% !important', paddingBottom: '16px !important'}}>
                 <Grid container spacing={2}>
                     <Grid item sm={2} xs={2}>
-                        <Image unoptimized onClick={() => onSelectTrack('/tracks/'+url+'/'+track.id, track)} className={styles.artwork2} alt={track.artists && track.artists[0].name+' - '+track.name} width={85} height={85} src={track.album?.images && track.album.images[0].url} />
+                        <Image unoptimized onClick={() => onSelectTrack('/tracks/'+url+'/'+track.id, track)} className={styles.artwork2} alt={track.artists && track.artists[0].name+' - '+track.name} width={85} height={85} src={track.album?.images[0] && track.album.images[0].url} />
                     </Grid>
                     <Grid item md={4} xs={9} sm={4}>
                         <Typography onClick={() => onSelectTrack('/tracks/'+url+'/'+track.id, track)} className={styles.trackTitle} style={{width: '100%', marginTop: '0px !important'}}  variant="h5" component="div" noWrap>
                             {track.name}
                         </Typography>
-                        <Typography noWrap style={{width: '100%', display: 'block', margin: '0px 0 0px 0'}} gutterBottom sx={{fontSize: '14px', paddingTop: '0'}} variant="subtitle1" color="text.secondary">
-                            Artist: {track.artists && (<a href={`/artists/${track.artists[0].name}/${track.artists[0].id}`}>{track.artists[0].name}</a>)}
+                        <Typography onClick={(e) => {e.preventDefault();router.push(`/artists/${track.artists[0].name}/${track.artists[0].id}`)}} noWrap style={{width: '100%', display: 'block', margin: '0px 0 0px 0'}} gutterBottom sx={{fontSize: '14px', paddingTop: '0'}} variant="subtitle1" color="text.secondary">
+                            Artist: {track.artists && (<b>{track.artists[0].name}</b>)}
                         </Typography>
                         {<Button size={'small'} color={'success'} startIcon={<PlayCircle fontSize="inherit" />} onClick={(event) => handlePlayTrack(event, track)} style={{padding: '2px 6px',fontSize: '12px !important',margin: '5px 12px 0 0'}}  variant={'outlined'}>Play</Button>}
                         <Button size={'small'} color={'info'} startIcon={<QueueMusicIcon fontSize="inherit" />}  onClick={() => onSelectTrack('/tracks/'+url+'/'+track.id, track)} style={{padding: '2px 6px',fontSize: '12px !important',marginTop: '5px'}}  variant={'text'}>Similar Songs</Button>

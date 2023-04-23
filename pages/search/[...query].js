@@ -187,7 +187,7 @@ export default function Search({ tracksDetails,loginResp }) {
             </Backdrop>}
 
             {(currentPlayingTrack !== null) && <Box sx={{position: 'fixed !important', display: 'flex', padding: '10px 0 10px 10px', background: 'rgb(246, 248, 250)',  borderTop: '1px solid #ddd', bottom: '0px', left: 0, width: '100%'}} >
-              <Image unoptimized alt={'playerPhoto'+currentPlayingTrack.name} width={85} height={50} src={currentPlayingTrack.album?.images && currentPlayingTrack.album.images[0].url} />
+              <Image unoptimized alt={'playerPhoto'+currentPlayingTrack.name} width={85} height={50} src={currentPlayingTrack.album?.images[0] && currentPlayingTrack.album.images[0].url} />
               <Player autoPlay src={currentPlayingTrack.preview_url} height={80} />
             </Box>
             }

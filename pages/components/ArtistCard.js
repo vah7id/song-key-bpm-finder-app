@@ -31,17 +31,17 @@ export default function ArtistCard({artistData}) {
         <Card key={artist.id} className={styles.cardW} sx={{ width: '100%',  mb: 2 }}>
             <CardContent style={{width: '100% !important', paddingBottom: '16px !important'}}>
                 <Grid container spacing={2}>
-                    <Grid item sm={2} xs={2}>
-                        <Image unoptimized className={styles.artwork2} alt={artist.artists && artist.artists[0].name+' - '+artist.name} width={85} height={85} src={artist.images && artist.images[0].url} />
+                    <Grid item sm={4} xs={12}>
+                        <Image unoptimized  alt={artist.artists && artist.artists[0].name+' - '+artist.name} width={220} height={220} src={artist.images && artist.images[0].url} />
                     </Grid>
-                    <Grid item md={6} xs={9} sm={6}>
+                    <Grid item md={6} mt={6} xs={12} sm={6}>
                         <Typography className={styles.artistTitle} style={{width: '100%', marginTop: '0px !important'}}  variant="h5" component="div" noWrap>
                             {artist.name}
                         </Typography>
                         <Typography  className={styles.artistTitle} style={{width: '100%', marginTop: '0px !important', marginBottom: '16px !important'}}  variant="body" component="div" noWrap>
                             Genre: {artist.genres[0]}
                         </Typography>
-                        {artist?.external_urls && <Button style={{marginTop: '4px'}} variant="outlined"><Link href={artist?.external_urls.spotify} target="_blank" >Open Artist Page on Spotify</Link></Button>}
+                        {artist?.external_urls && <Button mt={4} color={'success'} style={{marginTop: '14px'}} variant="outlined"><Link href={artist?.external_urls.spotify} target="_blank" >Open Artist Page on Spotify</Link></Button>}
                     </Grid>
                 </Grid>
         </CardContent>
