@@ -11,6 +11,8 @@ import Image from 'next/image'
 import ArtistDetails from '../../components/ArtistDetails'
 import { useRouter } from 'next/router'
 import UploadTrack from '../../components/UploadTrack'
+import { JsonLd } from "react-schemaorg";
+
 export default function Home({artistData}) {
 
   const router = useRouter()
@@ -65,6 +67,22 @@ export default function Home({artistData}) {
           <meta itemProp="name" content="Song key & Tempo BPM Finder Tool" />
           <meta itemProp="description" content="Song key & Tempo BPM Finder Tool" />
           <meta itemProp="image" content="./favicon3.png" />
+          <JsonLd
+          item={{
+            "@context": "https://schema.org",
+            "@type": "Artist",
+            name: `Song Key & Tempo of artist: ${artistData.artist ? artistData.artist.name : ''}`,
+            url: `https://songkeyfinder.app/artists/${artistData.artist.name}/${artistData.artist.id}`,
+            image: `${artistData.artist.images[0] ? artistData.artist.images[0].url : "https://songkeyfinder.app/logo2.jpg"}`,
+            description: "Song key & Tempo BPM Finder Tool, Find tempo bpm/key of song and its similar songs",
+            applicationCategory: "MultimediaApplication",
+            operatingSystem: "Any",
+            offers: {
+              "@type": "Offer",
+              price: "0",
+            },
+          }}
+          />
       </Head>
       <main lang="en" className={styles.main}>
       <Image src={logo2} />

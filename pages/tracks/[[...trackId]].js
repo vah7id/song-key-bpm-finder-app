@@ -15,6 +15,7 @@ import UploadTrack from '../components/UploadTrack'
 import Header from '../components/Header'
 import dynamic from 'next/dynamic'
 import {Player} from 'react-simple-player';
+import { JsonLd } from "react-schemaorg";
 
 const SpotifyWebPlayer = dynamic(() => import('react-spotify-web-playback'), {
   loading: () => 'Loading...',
@@ -117,6 +118,22 @@ export default function Home({ trackDetails,loginResp }) {
           <meta itemProp="name" content={`Song key & Tempo BPM of track ${((track && track.artists) ? track.artists[0].name : "")} ${track ? track.name : ""}`} />
           <meta itemProp="description" content={`Song key & Tempo BPM of track ${((track && track.artists) ? track.artists[0].name : "")} ${track ? track.name : ""} , Similar tracks for mixing`} />
           <meta itemProp="image" content="./favicon3.png" />
+          <JsonLd
+          item={{
+            "@context": "https://schema.org",
+            "@type": "Song",
+            name: `Song Key & Tempo of song: ${((track && track.artists) ? track.artists[0].name : '')+' '+(track ? track.name : '')}`,
+            url: `https://songkeyfinder.app/tracks/${track.id}/`,
+            image: `${track.album?.images[0] ? track.album.images[0].url : "https://songkeyfinder.app/logo2.jpg"}`,
+            description: "Song key & Tempo BPM Finder Tool, Find tempo bpm/key of song and its similar songs",
+            applicationCategory: "MultimediaApplication",
+            operatingSystem: "Any",
+            offers: {
+              "@type": "Offer",
+              price: "0",
+            },
+          }}
+        />
       </Head>
       <main lang="en" className={styles.main}>
         <Header />
