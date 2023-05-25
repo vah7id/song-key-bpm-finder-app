@@ -57,22 +57,7 @@ export default function Home() {
           <meta itemProp="name" content="Song key & Tempo BPM Finder Tool, Find similar songs for mixing" />
           <meta itemProp="description" content="Song key & Tempo BPM Finder Tool, Find similar songs for mixing" />
           <meta itemProp="image" content="./favicon3.png" />
-          <JsonLd
-          item={{
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            name: "Songkeyfinder",
-            url: `https://songkeyfinder.app`,
-            image: `https://songkeyfinder.app/logo2.jpg`,
-            description: "Song key & Tempo BPM Finder Tool, Find tempo bpm/key of song and its similar songs",
-            applicationCategory: "MultimediaApplication",
-            operatingSystem: "Any",
-            offers: {
-              "@type": "Offer",
-              price: "0",
-            },
-          }}
-        />
+          
       </Head>
       <main lang="en" className={styles.main}>
         <Header />

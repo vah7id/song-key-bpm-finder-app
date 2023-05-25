@@ -13,7 +13,7 @@ export default function Header() {
       <>
           <Image style={{ cursor: 'pointer'}} alt="logo" onClick={() => router.push('/search')} src={logo2} />
 
-        <Link href="/search">
+        <Link href="/search" passHref>
           <h1 className={styles.title}>
               Song key bpm finder / Find Similar songs for mixing
           </h1>
