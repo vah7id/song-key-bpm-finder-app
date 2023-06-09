@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Chip, Divider, Grid, Snackbar, Typography } from '@mui/material'
+import { Alert, Backdrop, Box, Button, Chip, CircularProgress, Divider, Grid, Snackbar, Typography } from '@mui/material'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../../styles/Home.module.css'
@@ -17,6 +17,8 @@ import { Player } from 'react-simple-player'
 export default function Search() {
   const [selectedTrack, setselectedTrack] = useState(false);
   const [selectedArtist, setselectedArtist] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+
   const router = useRouter()
   const [tracksData, setTracksData] = useState([]) 
   const [openSnackbar, setSnackbarOpen] = useState(false);
@@ -32,6 +34,7 @@ export default function Search() {
       console.log('cannot authorize with spotify!!!')
     })
   })
+
 
   const showNotification = (type, message) => {
     setSnackbarOpen(true);
@@ -73,14 +76,23 @@ export default function Search() {
   }
 
   const handleSearch = () => {
+    setIsFetching(true);
     // fetch here and set track data
-    fetch('/api/findBpm?title=track:'+selectedTrack+' artist:'+selectedArtist).then(resp => resp.json()).then(resp => {
+    fetch(`/api/findBpm?title=track:${selectedTrack} artist:${selectedArtist}`).then(resp => resp.json()).then(resp => {
+        setIsFetching(false);
         console.log(resp)
         setTracksData(resp)
-        if(resp.data.length === 0) {
+        console.log('injaaaaa')
+        console.log(resp)
+        if(resp.length === 0) {
+            setTracksData([])
+            showNotification('error','Oops, we cannot fetch any songs atm!!')
+        }
+        if(resp.err) {
             showNotification('error','Oops, we cannot fetch any songs atm!!')
         }
     }).catch(err => {
+        setIsFetching(false);
         showNotification('error','Oops, we cannot fetch any songs atm!!')
         setTracksData([])
     })
@@ -156,6 +168,13 @@ export default function Search() {
               <Player autoPlay src={currentPlayingTrack.preview_url} height={60} />
             </Box>
             }
+
+            {isFetching && <Backdrop
+                sx={{ color: '#fff', textAlign: 'center', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={isFetching}
+                >
+                <CircularProgress color="inherit" />
+              </Backdrop>}
       </main>
     </div>
   )

@@ -237,6 +237,16 @@ Drop / Upload your audio file below and instantly get the song key & tempo. Dete
                     Find song key
                     </Link>
                     <Link
+                        title="Music finder"
+                        rel={"noopener"}
+                        underline="hover"
+                        sx={{ display: 'flex', alignItems: 'center' }}
+                        color="inherit"
+                        href="/finder"
+                    >
+                    Music Finder
+                    </Link>
+                    <Link
                         title="Find song key via file upload"
                         rel={"noopener"}
                         target={"_blank"}
