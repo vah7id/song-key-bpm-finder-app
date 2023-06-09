@@ -22,26 +22,18 @@ export default function handler(req, res) {
     res.setHeader('Authorization', 'Basic ' + (new Buffer("6233cf5397864e0abb091744ea919486" + ':' + "5d967a86893f46299a46ea4c94695ddf").toString('base64')))
     res.setHeader('Content-Type', 'application/x-www-form-urlencoded')
    
-
     // Retrieve an access token.
     spotifyApi.clientCredentialsGrant().then(
         function(data) {
             spotifyApi.setAccessToken(data.body['access_token']);
-            spotifyApi.search(req.query.title, [req.query?.type || 'track'], { limit : 20 }).then(function(data) {
-                if(!data.body.tracks || data.body.tracks.items.length === 0) {
-                    res.status(200).json([]); 
-                }
-        
-                res.status(200).json(data.body.tracks.items); 
-                
-              },
-              function(err) {
-                console.log(err)
-                res.status(200).json([]);   
-             });
+            spotifyApi.getAvailableGenreSeeds()
+            .then(function(data) {
+                res.status(200).json(data.body); 
+            }, function(err) {
+                res.status(400).json({err: 'cant find the genres'}); 
+            });
         },
         function(err) {
-            res.status(200).json([]);   
+            res.status(400).json({err: 'cant find the genres'}); 
         });
-   
   }
