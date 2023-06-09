@@ -98,13 +98,21 @@ export default function SearchQeury({isSearching = false, handleNewSearch, type}
         if(url.length > 3) {
             setTimeout(() => {
                 fetch(`/api/search?type=${type}&title=${url || ""}`).then(response => response.json()).then(response => {
+                    console.log(response)
                     if(response.err) {
                         setAutocompleteItems([])
                     } else {
                         let options = []
-                        response.map((track, index) => {
-                            options[index] = { id: track.id, label: track.name   +' '+track.artists[0].name   }
-                        })
+                        if(type === 'track') {
+                            response.map((track, index) => {
+                                options[index] = { id: track.id, label: track.name   +' '+track.artists[0].name   }
+                            })
+                        } else {
+                            response.map((artist, index) => {
+                                options[index] = { id: artist.id, label: artist.name }
+                            })
+                        }
+                        console.log(options)
                         setAutocompleteItems(options)
                     }
                 }).catch(err => {
@@ -162,23 +170,18 @@ export default function SearchQeury({isSearching = false, handleNewSearch, type}
         if((router.query && queryLabel) && title.trim() === queryLabel.trim()) {
             return;
         }
-
-        if(queryLabel === title && tracksData.length !== 0) {
-            handleNewSearch(false);
-            setIsFetching(false);
-            return;
-        }
-        console.log(query)
+        console.log('===========')
+        console.log(title)
         setIsFetching(false);
         if(type === 'track') {
             setSelectedTrack(query)
+            handleNewSearch(title);
         } else {
             setSelectedArtist(query)
+            handleNewSearch(title);
+
         }
-        handleNewSearch({
-            artist: selectedArtist,
-            track: selectedTrack
-        });
+    
         //setTracksData([]);
         //router.push('/search/'+title);
     }
@@ -192,12 +195,9 @@ export default function SearchQeury({isSearching = false, handleNewSearch, type}
         if(id) {
             setIsFetching(false);
             const url = label.replace(/ /g, '-').replace('&','').replace('&','').replace('&','').replace('&','').replace('&','-').replace('&','-').replace('&','-').replace('?','').replace('?','').replace('?','').replace('?','').replace('.','-').replace('.','-').replace('/','').replace('/','').replace('/','').replace('#','').replace('#','').replace('(','').replace('(','').replace('(','').replace('(','').replace(')','').replace(')','').replace(')','').replace(')','').replace(')','').replace('+','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','').replace('%','');
-
-            if(type === 'track') {
-                setSelectedTrack(url)
-            } else {
-                setSelectedArtist(url)
-            }
+            console.log(url)
+            setSelectedTrack(label)
+            handleNewSearch(label)
             setAutocompleteItems([])
             //router.push(`/tracks/${url}/${id}`);
         }

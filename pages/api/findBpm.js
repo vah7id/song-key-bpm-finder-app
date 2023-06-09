@@ -32,32 +32,37 @@ export default function handler(req, res) {
                 if(!data.body.tracks || data.body.tracks.items.length === 0) {
                     res.status(200).json({data: [], err: 'Oops!! it seems we cannot fetch any result from our database atm!! Try Again :)'}); 
                 }
+                console.log(data.body.tracks.items)
                 const tracks = data.body.tracks.items;
-                spotifyApi.getAudioFeaturesForTracks(tracks.map(t => t.id)).then(async(featuresData, index) => {
-                    console.log(featuresData.body.audio_features[0])
+                if(tracks.length > 0) {
+                    spotifyApi.getAudioFeaturesForTracks(tracks.map(t => t.id)).then(async(featuresData, index) => {
+                        console.log(featuresData.body.audio_features[0])
 
-                    if(featuresData.body && featuresData.body.audio_features) {
-                        featuresData.body.audio_features.map((featureData, index) => {
-                            tracks[index].key = featureData.key;
-                            tracks[index].tempo = featureData.tempo;
-                            tracks[index].duration_ms = featureData.duration_ms;
-                            tracks[index].mode = featureData.mode;
-                            tracks[index].danceability = featureData.danceability;
-                            tracks[index].energy = featureData.energy;
-                            tracks[index].loudness = featureData.loudness;
-                            tracks[index].happiness = featureData.valence;
-                            tracks[index].popularity = featureData.popularity;
-                            tracks[index].instrumentalness = featureData.instrumentalness
-                            tracks[index].time_signature = featureData.time_signature
-        
-                            if(index === tracks.length - 1) {
-                                res.status(200).json(tracks); 
-                            }
-                        })
-                    } else {
-                        res.status(200).json(tracks); 
-                    }
-                });
+                        if(featuresData.body && featuresData.body.audio_features) {
+                            featuresData.body.audio_features.map((featureData, index) => {
+                                tracks[index].key = featureData.key;
+                                tracks[index].tempo = featureData.tempo;
+                                tracks[index].duration_ms = featureData.duration_ms;
+                                tracks[index].mode = featureData.mode;
+                                tracks[index].danceability = featureData.danceability;
+                                tracks[index].energy = featureData.energy;
+                                tracks[index].loudness = featureData.loudness;
+                                tracks[index].happiness = featureData.valence;
+                                tracks[index].popularity = featureData.popularity;
+                                tracks[index].instrumentalness = featureData.instrumentalness
+                                tracks[index].time_signature = featureData.time_signature
+            
+                                if(index === tracks.length - 1) {
+                                    res.status(200).json(tracks); 
+                                }
+                            })
+                        } else {
+                            res.status(200).json(tracks); 
+                        }
+                    });
+                } else {
+                    res.status(200).json({data: [], err: 'Oops!! it seems we cannot fetch any result from our database atm!! Try Again :)'}); 
+                }
               },
               function(err) {
                 console.log(err)

@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Divider, Grid, Typography } from '@mui/material'
+import { Alert, Box, Button, Chip, Divider, Grid, Snackbar, Typography } from '@mui/material'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../../styles/Home.module.css'
@@ -11,13 +11,18 @@ import UploadTrack from '../components/UploadTrack'
 import Header from '../components/Header'
 import SearchIcon from '@mui/icons-material/Search';
 import TrackCard from '../components/TrackCard'
+import Image from 'next/image'
+import { Player } from 'react-simple-player'
 
 export default function Search() {
   const [selectedTrack, setselectedTrack] = useState(false);
   const [selectedArtist, setselectedArtist] = useState(false);
   const router = useRouter()
   const [tracksData, setTracksData] = useState([]) 
+  const [openSnackbar, setSnackbarOpen] = useState(false);
+  const [notification, setNotification] = useState({ type: null, message: ""});
 
+  const [currentPlayingTrack, setCurrentPlayingTrack] = useState(null);
   useEffect(() => {
     install('G-LDDJ32MXZ1'); 
     fetch('/api/authSpotify').then(resp => resp.json()).then(resp => {
@@ -28,24 +33,61 @@ export default function Search() {
     })
   })
 
-  const handleTrackSearch = (data) => {
-    if(data) {
-        setselectedTrack(data)
+  const showNotification = (type, message) => {
+    setSnackbarOpen(true);
+    setNotification({
+        type: type,
+        message
+    })
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+
+  const handlePlayTrack = (event, track) => {
+    event.preventDefault();
+    console.log(track)
+    if(!track.preview_url) {
+      showNotification('error','Oops, we cannot play the preview for this specific track!!')
+      setCurrentPlayingTrack(null);
+    } else {
+      setCurrentPlayingTrack(track);
     }
   }
 
+  const handleClosePlayer = () => {
+    setCurrentPlayingTrack(null)
+  }
+
+  const handleTrackSearch = (data) => {
+        setselectedTrack(data)
+  }
+
   const handleArtistSearch = (data) => {
-    if(data) {
         setselectedArtist(data)
-    }
   }
 
   const handleSearch = () => {
     // fetch here and set track data
-    fetch('https://songkeyfinder.app/api/findBpm?title=track:'+selectedTrack+',artist:'+selectedArtist).then(resp => resp.json()).then(resp => {
+    fetch('/api/findBpm?title=track:'+selectedTrack+' artist:'+selectedArtist).then(resp => resp.json()).then(resp => {
         console.log(resp)
+        setTracksData(resp)
+        if(resp.data.length === 0) {
+            showNotification('error','Oops, we cannot fetch any songs atm!!')
+        }
+    }).catch(err => {
+        showNotification('error','Oops, we cannot fetch any songs atm!!')
+        setTracksData([])
     })
   }
+    const selectTrack = (url) => {
+        router.push(url)
+    }
 
   return (
     <div lang="en" className={styles.container}>
@@ -77,8 +119,8 @@ export default function Search() {
       </Head>
       <main lang="en" className={styles.main}>
         <Header />
-        <SearchQuery type={'track'} handleNewSearch={handleTrackSearch} isSearching={selectedTrack} />
-        <SearchQuery type={'artist'} handleNewSearch={handleArtistSearch} isSearching={selectedArtist} />
+        <SearchQuery type={'track'} handleNewSearch={handleTrackSearch} isSearching={false} />
+        <SearchQuery type={'artist'} handleNewSearch={handleArtistSearch} isSearching={false} />
         <Box  xs={12}>
             <Button
                 onClick={() => handleSearch()} 
@@ -90,19 +132,30 @@ export default function Search() {
                     Search for the similar songs 
             </Button>
         </Box>
-        {(tracksData && tracksData.length === 1) && <Box sx={{ width: '100%', mt: '25px' }}>
+
+        {(tracksData && tracksData.length > 0) && <Box sx={{ maxWidth: '768px',width: '100%', mt: '25px' }}>
             <Grid  container spacing={2}>
                 <Grid xs={12}>
                     <Divider sx={{textAlign: 'center', width: '100%', mt: 4, mb: 4}}>
-                        <Chip label={`BPM, Song Key Results of ${url}`} />
+                        <Chip label={`Results of advanced search, ${selectedTrack} , ${selectedArtist}`} />
                     </Divider>
                 </Grid>
                 
                 {tracksData.map((track, index) => {
-                    return (<TrackCard onSelectTrack={selectTrack} key={'tr-'+index} track={track} />) })}
-                
+                    return (<TrackCard handlePlayTrack={handlePlayTrack} onSelectTrack={selectTrack} key={'tr-'+index} track={track} />) })}
             </Grid>
         </Box>}
+        <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={openSnackbar} autoHideDuration={5000} onClose={handleSnackbarClose}>
+              <Alert onClose={handleSnackbarClose} severity={notification.type || 'error'} sx={{ width: '100%' }}>
+                  {notification.message || ''}
+              </Alert>
+          </Snackbar>
+        {(currentPlayingTrack !== null && currentPlayingTrack.artists) && 
+            <Box sx={{position: 'fixed !important', display: 'flex', padding: '10px 0 10px 10px', background: 'rgb(246, 248, 250)',  borderTop: '1px solid #ddd', bottom: '0px', left: 0, width: '100%'}} >
+              <Image unoptimized alt={'playerPhoto'+currentPlayingTrack.name} width={60} height={40} src={currentPlayingTrack.album?.images[0] && currentPlayingTrack.album.images[0].url} />
+              <Player autoPlay src={currentPlayingTrack.preview_url} height={60} />
+            </Box>
+            }
       </main>
     </div>
   )

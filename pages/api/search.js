@@ -27,18 +27,45 @@ export default function handler(req, res) {
     spotifyApi.clientCredentialsGrant().then(
         function(data) {
             spotifyApi.setAccessToken(data.body['access_token']);
-            spotifyApi.search(req.query.title, [req.query?.type || 'track'], { limit : 20 }).then(function(data) {
-                if(!data.body.tracks || data.body.tracks.items.length === 0) {
-                    res.status(200).json([]); 
+            const type = req.query?.type;
+            if(type) {
+                if(type === 'track') {
+                    spotifyApi.searchTracks(req.query.title, { limit : 20 }).then(function(data) {
+                        if(!data.body.tracks || data.body.tracks.items.length === 0) {
+                            res.status(200).json([]); 
+                        }
+                        res.status(200).json(data.body.tracks.items); 
+                      },
+                      function(err) {
+                        console.log(err)
+                        res.status(200).json([]);   
+                     });
+                } else {
+                    spotifyApi.searchArtists(req.query.title, { limit : 20 }).then(function(data) {
+                        if(!data.body.artists || data.body.artists.items.length === 0) {
+                            res.status(200).json([]); 
+                        }
+                        res.status(200).json(data.body.artists.items); 
+                      },
+                      function(err) {
+                        console.log(err)
+                        res.status(200).json([]);   
+                     });
                 }
-        
-                res.status(200).json(data.body.tracks.items); 
                 
-              },
-              function(err) {
-                console.log(err)
-                res.status(200).json([]);   
-             });
+            } else {
+                spotifyApi.search(req.query.title, ['track'], { limit : 20 }).then(function(data) {
+                    if(!data.body.tracks || data.body.tracks.items.length === 0) {
+                        res.status(200).json([]); 
+                    }
+                        res.status(200).json(data.body.tracks.items); 
+                  },
+                  function(err) {
+                    console.log(err)
+                    res.status(200).json([]);   
+                 });
+            }
+           
         },
         function(err) {
             res.status(200).json([]);   
